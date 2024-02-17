@@ -1,0 +1,1155 @@
+<?php
+
+function reports_menu()
+{
+
+	$items = array();
+	$items['reports'] = array(
+		'title'				=> 'Karmasathi Reports',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('all_reports'),
+		'file' 				=> 'includes/reports.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['duare-sarkar-reports'] = array(
+		'title'				=> 'Duare Sarkar Reports',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('duare_sarkar_reports'),
+		'file' 				=> 'includes/reports.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['all-reports-xls'] = array(
+		'title' 			=> 'Export - All Report',
+		'page callback'		=> 'all_reports_xls',
+		'page arguments' 	=> array(1),
+		'file'				=> 'includes/reports.inc',
+		'access arguments' 	=> array('access content'),
+	);
+
+	$items['reports/all'] = array(
+		'title'				=> 'All DS Reports',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('reports_all'),
+		'file' 				=> 'includes/reports_all.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['ds-report'] = array(
+		'title'				=> 'DS Application Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('ds_reports'),
+		'file' 				=> 'includes/ds_reports.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['ds-report-test'] = array(
+		'title'				=> 'DS Application Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('ds_reports_test'),
+		'file' 				=> 'includes/ds_reports_test.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['ds-reports-xls'] = array(
+		'title'				=> 'DS Application Status Report',
+		'page callback'		=> 'ds_reports_xls',
+		'file' 				=> 'includes/ds_reports.inc',
+		'access arguments' 	=> array('access content'),
+	);
+	$items['ds-reports-pdf'] = array(
+		'title'				=> 'DS Application Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('ds_reports_pdf'),
+		'file' 				=> 'includes/ds_reports.inc',
+		'access arguments' 	=> array('access content'),
+	);
+	$items['ds-migration-report'] = array(
+		'title'				=> 'DS Migration Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('ds_migration_status_report'),
+		'file' 				=> 'includes/ds_migration_status_report.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+	$items['ds-migration-reports-xls'] = array(
+		'title'				=> 'DS Migration Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('ds_migration_reports_xls'),
+		'file' 				=> 'includes/ds_migration_status_report.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+	$items['ds-migration-reports-pdf'] = array(
+		'title'				=> 'DS Migration Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('ds_migration_reports_pdf'),
+		'file' 				=> 'includes/ds_migration_status_report.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+	$items['deo-reports-xls'] = array(
+		'title'				=> 'DEO WISE APPLICATION STATUS',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('deo_count_xls'),
+		'file' 				=> 'includes/deo_report.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+	$items['ds-deo-report'] = array(
+		'title'				=> 'DEO WISE APPLICATION STATUS',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('deo_count'),
+		'file' 				=> 'includes/deo_report.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+	$items['duare-sarkar-user-list'] = array(
+		'title' 			=> 'LIST USER FOR DUARE SARKAR',
+		'page callback' 	=> 'drupal_get_form',
+		'page arguments' 	=> array('slo_list'),
+		'file' 				=> 'includes/deo_report.inc',
+		'access arguments'  => array('access content')
+	);
+	$items['duare-sarkar-user-list-xls'] = array(
+		'title' 			=> 'LIST USER FOR DUARE SARKAR',
+		'page callback' 	=> 'drupal_get_form',
+		'page arguments' 	=> array('slo_list_xls'),
+		'file' 				=> 'includes/deo_report.inc',
+		'access arguments'  => array('access content')
+	);
+	$items['view-duare-sarkar-user'] = array(
+		'title' 			=> '',
+		'page callback' 	=> 'slo_details_view',
+		'type' => MENU_CALLBACK,
+		'file' 				=> 'includes/deo_report.inc',
+		'access arguments'  => array('access content')
+	);
+
+	$items['raw-reports'] = array(
+		'title' 			=> '',
+		'page callback' 	=> 'drupal_get_form',
+		'page arguments' 	=> array('raw_reports'),
+		'type' 				=> MENU_CALLBACK,
+		'file' 				=> 'includes/raw_reports.inc',
+		'access arguments'  => array('access content')
+	);
+	$items['raw-reports-cron'] = array(
+		'title' 			=> '',
+		'page callback' 	=> 'raw_reports_cron',
+		'file' 				=> 'includes/raw_reports_cron.inc',
+		'access arguments'  => array('access content')
+	);
+
+	$items['all-block-report'] = array(
+		'title'				=> 'Duare Sarkar Static Cumulative Report till 5:00pm ',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('all_block_download_only'),
+		'file' 				=> 'includes/all_block_download_only.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+	$items['all-block-report-xls'] = array(
+		'title'				=> 'All Application Migration Report',
+		'page callback'		=> 'all_block_download_only_xls',
+		'file' 				=> 'includes/all_block_download_only.inc',
+		'access arguments' 	=> array('access content'),
+	);
+	$items['subhajeet-json'] = array(
+		'title' 			=> '',
+		'page callback' 	=> 'myfun_subhajeet',
+		'type'              => MENU_CALLBACK,
+		'file' 				=> 'includes/myfun_subhajeet.inc',
+		'access arguments'  => array('access content')
+	);
+
+	$items['cumulative-report'] = array(
+		'title'				=> 'Current Application Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('cumulative_report'),
+		'file' 				=> 'includes/cumulative_report.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['cumulative-report-xls'] = array(
+		'title'				=> 'Current Application Status Report',
+		'page callback'		=> 'cumulative_report_xls',
+		'file' 				=> 'includes/cumulative_report.inc',
+		'access arguments' 	=> array('access content'),
+	);
+
+	$items['application-migration-status'] = array(
+		'title'				=> 'Current Application Migration Status Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('application_migration_status'),
+		'file' 				=> 'includes/application_migration_status.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['application-migration-status-xls'] = array(
+		'title'				=> 'Current Application Migration Status Report',
+		'page callback'		=> 'application_migration_status_xls',
+		'file' 				=> 'includes/application_migration_status.inc',
+		'access arguments' 	=> array('access content'),
+	);
+
+	// BSK reports starts --------------------------
+
+	$items['bsk-reports'] = array(
+		'title'				=> 'BSK Reports',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('bsk_reports'),
+		'file' 				=> 'includes/reports.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['bsk-current-report'] = array(
+		'title'				=> 'BSK Application Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('bsk_application_report'),
+		'file' 				=> 'includes/bsk_application_report.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['bsk-current-report-xls'] = array(
+		'title'				=> 'BSK Application Report',
+		'page callback'		=> 'bsk_application_report_xls',
+		'file' 				=> 'includes/bsk_application_report.inc',
+		'access arguments' 	=> array('access content'),
+	);
+
+	// BSK reports ends ----------------------------
+
+	// KS Application status report starts ---------
+
+	$items['karmasathi-reports'] = array(
+		'title'				=> 'Karmasathi Reports',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('karmasathi_reports'),
+		'file' 				=> 'includes/reports.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['karmasathi-application-status-report'] = array(
+		'title'				=> 'Karmasathi Application Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('karmasathi_application_status'),
+		'file' 				=> 'includes/karmasathi_application_status.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['karmasathi-application-status-report-xls'] = array(
+		'title'				=> 'Karmasathi Application Report',
+		'page callback'		=> 'karmasathi_application_status_xls',
+		'file' 				=> 'includes/karmasathi_application_status.inc',
+		'access arguments' 	=> array('access content'),
+	);
+
+	// KS Application status report ends -----------
+
+	//-------- KS search application --------------
+	$items['search-applicant'] = array(
+		'title' => 'Search Applicant Data',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('search_applicant_data'),
+		'file' => 'includes/search_applicant_data.inc',
+		'access arguments' => array('access content'),
+		'access callback' => TRUE
+	);
+	// -------- KS search application --------------
+
+
+	// Special drive report starts -----------------
+
+	// Special drive report starts -----------------
+
+	$items['special-drive-reports'] = array(
+		'title'				=> 'Special Drive Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('drive_reports'),
+		'file' 				=> 'includes/reports.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+
+	$items['special-drive-block-static'] = array(
+		'title'				=> 'Special Drive Static Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('special_drive_data'),
+		'file' 				=> 'includes/special_drive.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['special-drive-report-xls'] = array(
+		'title'				=> 'Special Drive Static Report',
+		'page callback'		=> 'special_drive_data_xls',
+		'file' 				=> 'includes/special_drive.inc',
+		'access arguments' 	=> array('access content'),
+	);
+	$items['update-drive-id'] = array(
+		'title'				=> 'Update Drive ID (Cron)',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('update_drive_id'),
+		'file' 				=> 'includes/update_drive_id.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	$items['special-drive-datewise-report'] = array(
+		'title'				=> 'Datewise Special Drive Static Report',
+		'page callback'		=> 'drupal_get_form',
+		'page arguments'	=> array('special_drive_data_report'),
+		'file' 				=> 'includes/special_drive_datewise.inc',
+		'access arguments' 	=> array('access content'),
+		'access callback'	=> TRUE
+	);
+
+	// Special drive report ends -------------------
+
+	return $items;
+}
+// SOUVIK METHODS
+
+function get_application_count($status, $district = null, $sub_division_code = null, $block_code = null, $start_date, $end_date, $gender)
+{
+	$filter_start = date('Y-m-d', strtotime($start_date));
+	$filter_end = date('Y-m-d', strtotime($end_date));
+
+	$count = db_select('k_migrant_worker_master')->fields('k_migrant_worker_master', array('id'));
+	if ($district) {
+		$count = $count->condition('permanent_dist', $district);
+	}
+	if ($sub_division_code) {
+		$count = $count->condition('permanent_subdivision', $sub_division_code);
+	}
+	if ($block_code) {
+		$count = $count->condition('permanent_areacode', $block_code);
+	}
+	$count = $count
+		->condition('created_date', array($filter_start, $filter_end), 'BETWEEN')
+		->condition('status', $status);
+
+	if ($gender != 'A') {
+		$count = $count->condition('gender', $gender);
+	}
+	$count = $count->execute()
+		->rowCount();
+	return $count;
+}
+
+function get_worker_master_pac_count($district = null, $sub_division = null, $block_code = null, $ward_gp = null, $migration_type = null, $end_date, $gender)
+{
+	$start_date = '2023-09-01';
+	$filter_start_convert = date('Y-m-d H:i:s', strtotime($start_date));
+	$filter_start = $filter_start_convert;
+	$filter_end = date('Y-m-d H:i:s', strtotime($end_date . ' 23:59:59'));
+
+	$db_query = db_select('k_migrant_worker_master', 'map')
+		->distinct()
+		->fields('map', array('id'));
+	if ($district) {
+		$db_query->condition('map.permanent_dist', $district);
+	}
+	if ($sub_division) {
+		$db_query->condition('map.permanent_subdivision', $sub_division);
+	}
+	if ($block_code) {
+		$db_query->condition('map.permanent_areacode', $block_code);
+	}
+	if ($ward_gp) {
+		$db_query->condition('map.permanent_villward', $ward_gp);
+	}
+	if ($migration_type != 0) {
+		$db_query->join('k_migrant_work_details', 'wd', 'wd.application_id = map.id');
+	}
+	if ($gender != 'A') {
+		$db_query->condition('map.gender', $gender);
+	}
+	if ($migration_type != 0) {
+		$db_query->condition('wd.present_country', $migration_type);
+	}
+	$db_query->condition('map.created_date', [$start_date, $end_date], 'BETWEEN');
+	$db_query->condition('map.status', 'I', '<>');
+	$db_query->isNotNull('map.status');
+	$db_query->condition('map.is_active', 1);
+	$application_ids = $db_query->execute()->fetchAll();
+
+	$total_status_p = 0; // P
+	$total_status_a = 0; // A
+	$total_status_c = 0; // C
+	$total_status_r = 0; // R
+	$total_status_pr = 0; // B, BP, BI, BA
+	$total_all = 0;
+
+	foreach ($application_ids as $key => $value) {
+		$query = db_select('k_migrant_worker_remark_master', 'wrm')
+			->fields('wrm', array('status'))
+			->condition('application_id', (int)$value->id)
+			->condition('remark_date_l', [$filter_start, $filter_end], 'BETWEEN')
+			->orderBy('id', 'desc')
+			->range(0, 1);
+
+		$result = $query->execute();
+		$final_status = $result->fetchAssoc();
+
+		switch ($final_status['status']) {
+			case $final_status['status'] == 'P':
+				$total_status_p += 1;
+				break;
+			case $final_status['status'] == 'A':
+				$total_status_a += 1;
+				break;
+			case $final_status['status'] == 'C':
+				$total_status_c += 1;
+				break;
+			case $final_status['status'] == 'R':
+				$total_status_r += 1;
+				break;
+			case ($final_status['status'] == 'B' || $final_status['status'] == 'BP' || $final_status['status'] == 'BI' || $final_status['status'] == 'BA'):
+				$total_status_pr += 1;
+				break;
+		}
+	}
+
+	return array(
+		'total_p' => $total_status_p,
+		'total_a' => $total_status_a,
+		'total_c' => $total_status_c,
+		'total_r' => $total_status_r,
+		'total_pr' => $total_status_pr,
+	);
+}
+
+function worker_master_migrate_status_count($district = null, $sub_division_code = null, $block_code = null, $ward_gp = null, $filter_date, $migration_type = null, $gender)
+{
+	$mig_filter_date = date('Y-m-d', strtotime($filter_date));
+	$filter_migration_type = $migration_type ? $migration_type * 1 : null;
+
+	// MIGRATED QUERY STARTS --------------------------------------
+
+	$migrated_count = db_select('k_migrant_worker_master', 'map')->fields('map', array('id'));
+	if ($district) {
+		$migrated_count->condition('map.permanent_dist', $district);
+	}
+	if ($sub_division_code) {
+		$migrated_count->condition('map.permanent_subdivision', $sub_division_code);
+	}
+	if ($block_code) {
+		$migrated_count->condition('map.permanent_areacode', $block_code);
+	}
+	if ($ward_gp) {
+		$migrated_count->condition('map.permanent_villward', $ward_gp);
+	}
+	$migrated_count->join('k_migrant_work_details', 'wd', 'wd.application_id=map.id');
+	$migrated_count->condition('wd.migrated_from_date', $mig_filter_date, '<=');
+	if ($gender != 'A') {
+		$migrated_count->condition('map.gender', $gender);
+	}
+	if ($filter_migration_type) {
+		$migrated_count->condition('wd.present_country', $filter_migration_type);
+	}
+	$mig_count = $migrated_count->execute()->rowCount();
+
+	// MIGRATED QUERY ENDS --------------------------------------------
+
+	// LIKELY TO MIGRATE QUERY STARTS ---------------------------------
+
+	$likely_migrated_count = db_select('k_migrant_worker_master', 'map')->fields('map', array('id'));
+	if ($district) {
+		$likely_migrated_count->condition('map.permanent_dist', $district);
+	}
+	if ($sub_division_code) {
+		$likely_migrated_count->condition('map.permanent_subdivision', $sub_division_code);
+	}
+	if ($block_code) {
+		$likely_migrated_count->condition('map.permanent_areacode', $block_code);
+	}
+	if ($ward_gp) {
+		$likely_migrated_count->condition('map.permanent_villward', $ward_gp);
+	}
+	$likely_migrated_count->join('k_migrant_work_details', 'wd', 'wd.application_id=map.id');
+	$likely_migrated_count->condition('wd.migrated_from_date', $mig_filter_date, '>');
+	if ($gender != 'A') {
+		$likely_migrated_count->condition('map.gender', $gender);
+	}
+	if ($filter_migration_type) {
+		$likely_migrated_count->condition('wd.present_country', $filter_migration_type);
+	}
+	$like_mig_count = $likely_migrated_count->execute()->rowCount();
+
+	// LIKELY TO MIGRATE QUERY ENDS ---------------------------------
+
+	$data = [
+		'migrated_count' => $mig_count,
+		'likely_migrated_count' => $like_mig_count,
+	];
+
+	return $data;
+}
+
+function get_pac_status_count($district = null, $sub_division = null, $block_code = null, $ward_gp = null, $migration_type = null, $end_date, $gender)
+{
+	$total_status_p = 0; // P
+	$total_status_a = 0; // A
+	$total_status_c = 0; // C
+	$total_status_r = 0; // R
+	$total_status_pr = 0; // B, BP, BI, BA
+	$total_all = 0;
+
+	if (date('Y-m-d') === date('Y-m-d', strtotime($end_date))) {
+
+		// FOR STATUS P ----------------
+		$common_query_p = db_select('k_duaresarkar_application_mapping', 'map')
+			->distinct()
+			->fields('map', array('application_id'));
+		if ($district) {
+			$common_query_p->condition('map.camp_district', $district);
+		}
+		if ($sub_division) {
+			$common_query_p->condition('map.camp_subdivision', $sub_division);
+		}
+		if ($block_code) {
+			$common_query_p->condition('map.camp_areacode', $block_code);
+		}
+		if ($ward_gp) {
+			$common_query_p->condition('map.camp_gpward', $ward_gp);
+		}
+		// if ($migration_type != 0) {
+		// 	$common_query_p->join('k_migrant_work_details', 'wd', 'wd.application_id = map.application_id');
+		// }
+		// if ($gender != 'A') {
+		// 	$common_query_p->condition('map.gender', $gender);
+		// }
+		// if ($migration_type != 0) {
+		// 	$common_query_p->condition('wd.present_country', $migration_type);
+		// }
+		// $common_query_p->isNotNull('map.application_id');
+		$common_query_p->condition('map.is_active', 1);
+		$common_query_p->condition('application_status', 'P');
+		$total_status_p = $common_query_p->execute()->rowCount();
+
+		// FOR STATUS A ----------------
+		$common_query_a = db_select('k_duaresarkar_application_mapping', 'map')
+			//->distinct()
+			->fields('map', array('application_id'));
+		if ($district) {
+			$common_query_a->condition('map.camp_district', $district);
+		}
+		if ($sub_division) {
+			$common_query_a->condition('map.camp_subdivision', $sub_division);
+		}
+		if ($block_code) {
+			$common_query_a->condition('map.camp_areacode', $block_code);
+		}
+		if ($ward_gp) {
+			$common_query_a->condition('map.camp_gpward', $ward_gp);
+		}
+		if ($migration_type != 0) {
+			$common_query_a->join('k_migrant_work_details', 'wd', 'wd.application_id = map.application_id');
+		}
+		if ($gender != 'A') {
+			$common_query_a->condition('map.gender', $gender);
+		}
+		if ($migration_type != 0) {
+			$common_query_a->condition('wd.present_country', $migration_type);
+		}
+		$common_query_a->isNotNull('map.application_id');
+		$common_query_a->condition('map.is_active', 1);
+		$common_query_a->condition('application_status', 'A');
+		$total_status_a = $common_query_a->execute()->rowCount();
+
+		// FOR STATUS C ----------------
+		$common_query_c = db_select('k_duaresarkar_application_mapping', 'map')
+			->distinct()
+			->fields('map', array('application_id'));
+		if ($district) {
+			$common_query_c->condition('map.camp_district', $district);
+		}
+		if ($sub_division) {
+			$common_query_c->condition('map.camp_subdivision', $sub_division);
+		}
+		if ($block_code) {
+			$common_query_c->condition('map.camp_areacode', $block_code);
+		}
+		if ($ward_gp) {
+			$common_query_c->condition('map.camp_gpward', $ward_gp);
+		}
+		if ($migration_type != 0) {
+			$common_query_c->join('k_migrant_work_details', 'wd', 'wd.application_id = map.application_id');
+		}
+		if ($gender != 'A') {
+			$common_query_c->condition('map.gender', $gender);
+		}
+		if ($migration_type != 0) {
+			$common_query_c->condition('wd.present_country', $migration_type);
+		}
+		$common_query_c->isNotNull('map.application_id');
+		$common_query_c->condition('map.is_active', 1);
+		$common_query_c->condition('application_status', 'C');
+		$total_status_c = $common_query_c->execute()->rowCount();
+
+		// FOR STATUS R ----------------
+		$common_query_r = db_select('k_duaresarkar_application_mapping', 'map')
+			->distinct()
+			->fields('map', array('application_id'));
+		if ($district) {
+			$common_query_r->condition('map.camp_district', $district);
+		}
+		if ($sub_division) {
+			$common_query_r->condition('map.camp_subdivision', $sub_division);
+		}
+		if ($block_code) {
+			$common_query_r->condition('map.camp_areacode', $block_code);
+		}
+		if ($ward_gp) {
+			$common_query_r->condition('map.camp_gpward', $ward_gp);
+		}
+		if ($migration_type != 0) {
+			$common_query_r->join('k_migrant_work_details', 'wd', 'wd.application_id = map.application_id');
+		}
+		if ($gender != 'A') {
+			$common_query_r->condition('map.gender', $gender);
+		}
+		if ($migration_type != 0) {
+			$common_query_r->condition('wd.present_country', $migration_type);
+		}
+		$common_query_r->isNotNull('map.application_id');
+		$common_query_r->condition('map.is_active', 1);
+		$common_query_r->condition('application_status', 'R');
+		$total_status_r = $common_query_r->execute()->rowCount();
+
+		// FOR STATUS B, BP, BI, BA ----------------
+		$common_query_pr = db_select('k_duaresarkar_application_mapping', 'map')
+			->distinct()
+			->fields('map', array('application_id'));
+		if ($district) {
+			$common_query_pr->condition('map.camp_district', $district);
+		}
+		if ($sub_division) {
+			$common_query_pr->condition('map.camp_subdivision', $sub_division);
+		}
+		if ($block_code) {
+			$common_query_pr->condition('map.camp_areacode', $block_code);
+		}
+		if ($ward_gp) {
+			$common_query_pr->condition('map.camp_gpward', $ward_gp);
+		}
+		if ($migration_type != 0) {
+			$common_query_pr->join('k_migrant_work_details', 'wd', 'wd.application_id = map.application_id');
+		}
+		if ($gender != 'A') {
+			$common_query_pr->condition('map.gender', $gender);
+		}
+		if ($migration_type != 0) {
+			$common_query_pr->condition('wd.present_country', $migration_type);
+		}
+		$common_query_pr->isNotNull('map.application_id');
+		$common_query_pr->condition('map.is_active', 1);
+		// $common_query_pr->condition('application_status', array());
+		$common_query_pr->condition(
+			db_or()
+				->condition('application_status', 'B')
+				->condition('application_status', 'BP')
+				->condition('application_status', 'BI')
+				->condition('application_status', 'BA')
+		);
+		$total_status_pr = $common_query_pr->execute()->rowCount();
+	} else {
+		$start_date = '2023-09-01';
+		$filter_start_convert = date('Y-m-d', strtotime($start_date));
+		$filter_end = date('Y-m-d H:i:s', strtotime($end_date . '+1 days'));
+		$filter_start_convert = strtotime($filter_start_convert);
+		$filter_start = $filter_start_convert;
+		$filter_end = strtotime($filter_end);
+
+		$db_query = db_select('k_duaresarkar_application_mapping', 'map')
+			->distinct()
+			->fields('map', array('application_id'));
+		if ($district) {
+			$db_query->condition('map.camp_district', $district);
+		}
+		if ($sub_division) {
+			$db_query->condition('map.camp_subdivision', $sub_division);
+		}
+		if ($block_code) {
+			$db_query->condition('map.camp_areacode', $block_code);
+		}
+		if ($ward_gp) {
+			$db_query->condition('map.camp_gpward', $ward_gp);
+		}
+		if ($migration_type != 0) {
+			$db_query->join('k_migrant_work_details', 'wd', 'wd.application_id = map.application_id');
+		}
+		if ($gender != 'A') {
+			$db_query->condition('map.gender', $gender);
+		}
+		if ($migration_type != 0) {
+			$db_query->condition('wd.present_country', $migration_type);
+		}
+		$db_query->isNotNull('application_id');
+		$db_query->condition('application_status', 'I', '<>');
+		$db_query->condition('is_active', 1);
+		$application_ids = $db_query->execute()->fetchAll();
+
+		foreach ($application_ids as $key => $value) {
+			if ($value->application_id != '') {
+				$query = db_select('k_migrant_worker_remark_master', 'wrm')
+					->fields('wrm', array('status'))
+					->condition('application_id', (int)$value->application_id)
+					->condition('remark_date', [$filter_start, $filter_end], 'BETWEEN')
+					->orderBy('id', 'desc')
+					->range(0, 1);
+				$result = $query->execute();
+				$final_status = $result->fetchAssoc();
+
+				switch ($final_status['status']) {
+					case $final_status['status'] == 'P':
+						$total_status_p += 1;
+						break;
+					case $final_status['status'] == 'A':
+						$total_status_a += 1;
+						break;
+					case $final_status['status'] == 'C':
+						$total_status_c += 1;
+						break;
+					case $final_status['status'] == 'R':
+						$total_status_r += 1;
+						break;
+					case ($final_status['status'] == 'B' || $final_status['status'] == 'BP' || $final_status['status'] == 'BI' || $final_status['status'] == 'BA'):
+						$total_status_pr += 1;
+						break;
+				}
+			}
+		}
+	}
+
+	return array(
+		'total_p' => $total_status_p,
+		'total_a' => $total_status_a,
+		'total_c' => $total_status_c,
+		'total_r' => $total_status_r,
+		'total_pr' => $total_status_pr,
+	);
+}
+
+
+
+function get_all_status_count($district = null, $sub_division = null, $block_code = null, $ward_gp = null, $migration_type = null, $end_date, $gender)
+{
+	// $filter_start_convert = date('Y-m-d H:i:s', strtotime($start_date . ' 17:00:01'));
+	// $filter_end = date('Y-m-d H:i:s', strtotime($end_date . ' 17:00:00'));
+
+	// $filter_start_convert = strtotime($filter_start_convert);
+	// $filter_start = $filter_start_convert - 24 * 60 * 60;
+	// $filter_end = strtotime($filter_end);
+
+	// $filter_start_convert = date('Y-m-d H:i:s', strtotime($start_date . ' 17:00:01'));
+	$start_date = '2023-09-01';
+	$filter_start_convert = date('Y-m-d H:i:s', strtotime($start_date . ' 00:00:00'));
+	$filter_end = date('Y-m-d H:i:s', strtotime($end_date . ' 17:00:00'));
+
+	$filter_start_convert = strtotime($filter_start_convert);
+	// $filter_start = $filter_start_convert - 24 * 60 * 60;
+	$filter_start = $filter_start_convert;
+	$filter_end = strtotime($filter_end);
+
+	$db_query = db_select('k_duaresarkar_application_mapping', 'map')
+		->distinct()
+		->fields('map', array('application_id'));
+	if ($district) {
+		$db_query->condition('map.camp_district', $district);
+	}
+	if ($sub_division) {
+		$db_query->condition('map.camp_subdivision', $sub_division);
+	}
+	if ($block_code) {
+		$db_query->condition('map.camp_areacode', $block_code);
+	}
+	if ($ward_gp) {
+		$db_query->condition('map.camp_gpward', $ward_gp);
+	}
+	if ($migration_type != 0) {
+		$db_query->join('k_migrant_work_details', 'wd', 'wd.application_id = map.application_id');
+	}
+	if ($gender != 'A') {
+		$db_query->condition('map.gender', $gender);
+	}
+	if ($migration_type != 0) {
+		$db_query->condition('wd.present_country', $migration_type);
+	}
+	$db_query->isNotNull('application_id');
+	$db_query->condition('application_status', 'I', '<>');
+	$db_query->condition('is_active', 1);
+	$application_ids = $db_query->execute();
+
+	$all_total = 0;
+	$status_array = ['P', 'A', 'C', 'B', 'BP', 'BI', 'BA', 'R'];
+
+	foreach ($application_ids as $key => $value) {
+		$query = db_select('k_migrant_worker_remark_master', 'wrm')
+			->fields('wrm', array('status'))
+			->condition('application_id', (int)$value->application_id)
+			// ->condition(
+			// 	db_or()
+			// 		->condition('status', ' IS NOT NULL')
+			// 		->condition('status', 'I', '<>')
+			// )
+			->condition('status', $status_array, 'IN')
+			// ->condition('remark_date', [$filter_start, $filter_end], 'BETWEEN')
+			->condition('remark_date', $filter_start, '>')
+			->condition('remark_date', $filter_end, '<')
+			->orderBy('id', 'desc')
+			->range(0, 1);
+
+		$result = $query->execute();
+		// echo 'AA'.$result->rowCount();
+		// die;
+		// $final_status = $result->rowCount();
+		if ($result->rowCount()) {
+			$all_total += 1;
+		}
+	}
+	return $all_total;
+	// to_timestamp(remark_date ::double precision)
+	// to_timestamp(remark_date::double precision) between '2023-09-01 00:00:00' and '2023-09-01 17:00:00'
+}
+
+function migrate_status_count($district = null, $sub_division_code = null, $block_code = null, $ward_gp = null, $filter_date, $migration_type = null, $gender)
+{
+	$mig_filter_date = date('Y-m-d', strtotime($filter_date));
+	$filter_migration_type = $migration_type ? $migration_type * 1 : null;
+
+	// MIGRATED QUERY STARTS --------------------------------------
+
+	$migrated_count = db_select('k_duaresarkar_application_mapping', 'map')->fields('map', array('id'));
+	if ($district) {
+		$migrated_count->condition('map.camp_district', $district);
+	}
+	if ($sub_division_code) {
+		$migrated_count->condition('map.camp_subdivision', $sub_division_code);
+	}
+	if ($block_code) {
+		$migrated_count->condition('map.camp_areacode', $block_code);
+	}
+	if ($ward_gp) {
+		$migrated_count->condition('map.camp_gpward', $ward_gp);
+	}
+	if ($filter_migration_type != 0) {
+		$migrated_count->join('k_migrant_work_details', 'wd', 'wd.application_id=map.application_id');
+	}
+	$migrated_count->condition('map.migrated_on', $mig_filter_date, '<=');
+	if ($gender != 'A') {
+		$migrated_count->condition('map.gender', $gender);
+	}
+	if ($filter_migration_type != 0) {
+		$migrated_count->condition('wd.present_country', $filter_migration_type);
+	}
+	$mig_count = $migrated_count->execute()->rowCount();
+
+	// MIGRATED QUERY ENDS --------------------------------------------
+
+	// LIKELY TO MIGRATE QUERY STARTS ---------------------------------
+
+	$likely_migrated_count = db_select('k_duaresarkar_application_mapping', 'map')->fields('map', array('id'));
+	if ($district) {
+		$likely_migrated_count->condition('map.camp_district', $district);
+	}
+	if ($sub_division_code) {
+		$likely_migrated_count->condition('map.camp_subdivision', $sub_division_code);
+	}
+	if ($block_code) {
+		$likely_migrated_count->condition('map.camp_areacode', $block_code);
+	}
+	if ($ward_gp) {
+		$likely_migrated_count->condition('map.camp_gpward', $ward_gp);
+	}
+	if ($filter_migration_type != 0) {
+		$likely_migrated_count->join('k_migrant_work_details', 'wd', 'wd.application_id=map.application_id');
+	}
+	$likely_migrated_count->condition('map.migrated_on', $mig_filter_date, '>');
+	if ($gender != 'A') {
+		$likely_migrated_count->condition('map.gender', $gender);
+	}
+	if ($filter_migration_type != 0) {
+		$likely_migrated_count->condition('wd.present_country', $filter_migration_type);
+	}
+	$like_mig_count = $likely_migrated_count->execute()->rowCount();
+
+	// LIKELY TO MIGRATE QUERY ENDS ---------------------------------
+
+	$data = [
+		'migrated_count' => $mig_count,
+		'likely_migrated_count' => $like_mig_count,
+	];
+
+	return $data;
+}
+
+// BSK Reports ----------------------------------------------------
+function bsk_application_count($district = null, $sub_division = null, $block_code = null, $ward_gp = null, $migration_type = null, $end_date, $gender)
+{
+	$start_date = '2023-09-14';
+	$filter_start_convert = date('Y-m-d', strtotime($start_date));
+	$filter_end = date('Y-m-d H:i:s', strtotime($end_date . '+1 days'));
+	$filter_start_convert = strtotime($filter_start_convert);
+	$filter_start = $filter_start_convert;
+	$filter_end = strtotime($filter_end);
+
+	$total_status_p = 0; // P
+	$total_status_a = 0; // A
+	$total_status_c = 0; // C
+	$total_status_r = 0; // R
+	$total_status_pr = 0; // B, BP, BI, BA
+
+	$query_bsk = "SELECT DISTINCT(k_bsk_application_mapping.application_id) AS app_id FROM {k_bsk_application_mapping} INNER JOIN {k_migrant_worker_master} ON k_migrant_worker_master.id = k_bsk_application_mapping.application_id";
+
+	if ($migration_type != 0) {
+		$query_bsk .= " INNER JOIN {k_migrant_work_details} ON k_migrant_work_details.application_id=k_bsk_application_mapping.application_id";
+	}
+	if ($district) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_dist=" . $district;
+	}
+	if ($sub_division) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_subdivision=" . $sub_division;
+	}
+	if ($block_code) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_areacode=" . $block_code;
+	}
+	if ($ward_gp) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_villward=" . $ward_gp;
+	}
+	if ($migration_type != 0) {
+		$query_bsk .= " AND k_migrant_work_details.present_country=" . $migration_type;
+	}
+	if ($gender != 'A') {
+		$query_bsk .= " AND k_migrant_worker_master.gender=" . $gender;
+	}
+	$query_bsk .= " AND k_bsk_application_mapping.application_id IS NOT NULL AND k_migrant_worker_master.status != 'I' AND k_migrant_worker_master.is_active=1";
+
+	$result = db_query($query_bsk);
+
+	$arr = [];
+
+	foreach ($result as $key => $value) {
+		// // array_push($arr, $value->app_id);
+		// echo 'A'.$value->app_id.'\n';
+		$query = db_select('k_migrant_worker_remark_master', 'wrm')
+			->fields('wrm', array('status'))
+			->condition('application_id', (int)$value->app_id)
+			->condition('remark_date', [$filter_start, $filter_end], 'BETWEEN')
+			->orderBy('id', 'desc')
+			->range(0, 1);
+		$result = $query->execute();
+		$final_status = $result->fetchAssoc();
+
+		switch ($final_status['status']) {
+			case $final_status['status'] == 'P':
+				$total_status_p += 1;
+				break;
+			case $final_status['status'] == 'A':
+				$total_status_a += 1;
+				break;
+			case $final_status['status'] == 'C':
+				$total_status_c += 1;
+				break;
+			case $final_status['status'] == 'R':
+				$total_status_r += 1;
+				break;
+			case ($final_status['status'] == 'B' || $final_status['status'] == 'BP' || $final_status['status'] == 'BI' || $final_status['status'] == 'BA'):
+				$total_status_pr += 1;
+				break;
+		}
+	}
+	// print_r($arr);
+	// die;
+
+	return array(
+		'total_p' => $total_status_p,
+		'total_a' => $total_status_a,
+		'total_c' => $total_status_c,
+		'total_r' => $total_status_r,
+		'total_pr' => $total_status_pr,
+	);
+}
+
+// Karmasathi Reports ----------------------------------------------
+function ks_application_count($district = null, $sub_division = null, $block_code = null, $ward_gp = null, $migration_type = null, $start_date, $end_date, $gender)
+{
+	$filter_start = date('Y-m-d H:i:s', strtotime($start_date));
+	$filter_start = strtotime($filter_start);
+
+	$filter_end = date('Y-m-d H:i:s', strtotime($end_date . '+1 days'));
+	$filter_end = strtotime($filter_end);
+
+	$total_status_p = 0; // P
+	$total_status_a = 0; // A
+	$total_status_c = 0; // C
+	$total_status_r = 0; // R
+	$total_status_pr = 0; // B, BP, BI, BA
+
+	$query_bsk = "SELECT DISTINCT(k_migrant_worker_master.id) AS app_id FROM {k_migrant_worker_master} WHERE k_migrant_worker_master.id IS NOT NULL";
+
+	if ($migration_type != 0) {
+		$query_bsk .= " INNER JOIN {k_migrant_work_details} ON k_migrant_work_details.application_id=k_migrant_worker_master.id";
+	}
+	if ($district) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_dist=" . $district;
+	}
+	if ($sub_division) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_subdivision=" . $sub_division;
+	}
+	if ($block_code) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_areacode=" . $block_code;
+	}
+	if ($ward_gp) {
+		$query_bsk .= " AND k_migrant_worker_master.permanent_villward=" . $ward_gp;
+	}
+	if ($migration_type != 0) {
+		$query_bsk .= " AND k_migrant_work_details.present_country=" . $migration_type;
+	}
+	if ($gender != 'A') {
+		$query_bsk .= " AND k_migrant_worker_master.gender=" . $gender;
+	}
+	$query_bsk .= " AND k_migrant_worker_master.id IS NOT NULL AND k_migrant_worker_master.status != 'I' AND k_migrant_worker_master.is_active=1";
+
+	$result = db_query($query_bsk);
+
+	foreach ($result as $key => $value) {
+		$query = db_select('k_migrant_worker_remark_master', 'wrm')
+			->fields('wrm', array('status'))
+			->condition('application_id', (int)$value->app_id)
+			->condition('remark_date', [$filter_start, $filter_end], 'BETWEEN')
+			->orderBy('id', 'desc')
+			->range(0, 1);
+		$result = $query->execute();
+		$final_status = $result->fetchAssoc();
+
+		switch ($final_status['status']) {
+			case $final_status['status'] == 'P':
+				$total_status_p += 1;
+				break;
+			case $final_status['status'] == 'A':
+				$total_status_a += 1;
+				break;
+			case $final_status['status'] == 'C':
+				$total_status_c += 1;
+				break;
+			case $final_status['status'] == 'R':
+				$total_status_r += 1;
+				break;
+			case ($final_status['status'] == 'B' || $final_status['status'] == 'BP' || $final_status['status'] == 'BI' || $final_status['status'] == 'BA'):
+				$total_status_pr += 1;
+				break;
+		}
+	}
+
+	return array(
+		'total_p' => $total_status_p,
+		'total_a' => $total_status_a,
+		'total_c' => $total_status_c,
+		'total_r' => $total_status_r,
+		'total_pr' => $total_status_pr,
+	);
+}
+
+
+function getAllSpecialCount($block_code)
+{
+	$query_count = "SELECT SUM(mw_left_out) as totalMwLeft, SUM(mw_covered_today) as totalMwCovered, SUM(cumulative_coverage) as totalCumulative, SUM(house_visited) as totalHouseVisited, SUM(hardcopy_no) as totalHardcopy FROM k_drive_additional_info WHERE block_mun=$block_code";
+
+	// $query_count = db_select('k_drive_additional_info', 'k');
+	// $query_count->condition('k.block_mun', $block_code);
+	// $query_count->addExpression(SUM('k.mw_left_out'), 'totalMwLeft');
+	// $query_count->addExpression(SUM('k.mw_covered_today'), 'totalMwCovered');
+	// $query_count->addExpression(SUM('k.cumulative_coverage'), 'totalCumulative');
+	// $query_count->addExpression(SUM('k.house_visited'), 'totalHouseVisited');
+	// $query_count->addExpression(SUM('k.hardcopy_no'), 'totalHardcopy');
+	// $result = $query_count->execute()->fetchAssoc();
+
+	$result = db_query($query_count);
+
+	return array($result->totalMwLeft, $result->totalMwCovered, $result->totalCumulative, $result->totalHouseVisited, $result->totalHardcopy);
+}
+
+function totalDigitised($block_code)
+{
+	$rowCount = db_select('k_migrant_worker_master', 'km')
+		->fields('km', array('id'))
+		->condition('permanent_areacode', $block_code)
+		->condition('status', 'I', '<>')
+		->isNotNull('status')
+		->condition('km.created_date', ['2023-11-01 00:00:00', '2023-11-11 00:00:00'], 'BETWEEN')
+		->execute()->rowCount();
+
+	return $rowCount;
+}
+
+function getBlockwiseCount($block_code)
+{
+	$count = db_select('special_drive_view', 't')
+		->fields('t', array('service_provided', 'rejected', 'total_mw_left_out', 'total_mw_covered_today', 'total_cumulative_coverage', 'total_house_visited', 'total_hardcopy_no'))
+		->condition('block_mun_code', $block_code)
+		->execute()->fetchAssoc();
+
+	return array($count->service_provided, $count->rejected, $count->total_mw_left_out, $count->total_mw_covered_today, $count->total_cumulative_coverage);
+}
+
+// For special drive datewise report starts -----------------------
+function getSdMasterData($blockCode, $date)
+{
+	$dateTime = new DateTime($date);
+	$dateTime->modify('-1 day');
+	$prev = $dateTime->format('Y-m-d');
+	$formattedStart = date('Y-m-d 18:00:00', strtotime($prev));
+	$formattedEnd = date('Y-m-d 17:59:59', strtotime($date));
+
+	$countApproved = db_select('k_migrant_worker_master', 't')
+		->fields('t', array('id'))
+		->condition('permanent_areacode', $blockCode)
+		->condition('created_date', [$formattedStart, $formattedEnd], 'between')
+		->condition('status', 'I', '<>')
+		->isNotNull('status')
+		->execute()->rowCount();
+
+	$countRejected = db_select('k_migrant_worker_master', 't')
+		->fields('t', array('id'))
+		->condition('permanent_areacode', $blockCode)
+		->condition('created_date', [$formattedStart, $formattedEnd], 'between')
+		->condition('status', 'R')
+		->execute()->rowCount();
+
+	return array($countApproved, $countRejected);
+}
+
+function getSdInfoData($blockCode, $date)
+{
+	$dateTime = new DateTime($date);
+	$dateTime->modify('-1 day');
+	$prev = $dateTime->format('Y-m-d');
+	$formattedStart = date('Y-m-d 18:00:00', strtotime($prev));
+	$formattedEnd = date('Y-m-d 17:59:59', strtotime($date));
+
+	$query = db_select('k_drive_additional_info', 't')
+		->fields('t', array('mw_left_out', 'mw_covered_today', 'cumulative_coverage', 'house_visited', 'hardcopy_no'))
+		->isNotNull('district')
+		->condition('block_mun', $blockCode)
+		->condition('created_date', [$formattedStart, $formattedEnd], 'between');
+	$result = $query->execute()->fetchAssoc();
+
+	return array($result['mw_left_out'], $result['mw_covered_today'], $result['cumulative_coverage'], $result['house_visited'], $result['hardcopy_no']);
+}
+// For special drive datewise report ends -------------------------
