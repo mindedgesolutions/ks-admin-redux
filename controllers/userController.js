@@ -47,49 +47,9 @@ export const updatePassword = async (req, res) => {
 export const getCurrentAppUser = async (req, res) => {
   const { mobile, applicationId } = req.appUser;
 
-  // const text = `select wm.id,
-  //   wm.mobile,
-  //   wm.name,
-  //   wm.identification_number,
-  //   wbn.application_id as nominee,
-  //   wf.application_id as family
-  //   from k_migrant_worker_master as wm
-  //   left join (
-  //     select k_migrant_worker_nominees.application_id from k_migrant_worker_nominees where k_migrant_worker_nominees.is_active=1 group by k_migrant_worker_nominees.application_id
-  //   ) as wbn on wbn.application_id = wm.id
-  //   left join (
-  //     select k_migrant_family_info.application_id from k_migrant_family_info where k_migrant_family_info.is_active=1 group by k_migrant_family_info.application_id
-  //   ) as wf on wf.application_id = wm.id
-  //   where wm.mobile=$1`;
-
   const text = `select id, mobile, name, identification_number, created_date, status from k_migrant_worker_master where mobile=$1`;
   const values = [mobile];
   const data = await pool.query(text, values);
-  // let accessAgency, accessBank;
-
-  // if (applicationId) {
-  //   const workExists = await pool.query(
-  //     `select present_country, engaged_as from k_migrant_work_details where application_id=$1`,
-  //     [applicationId]
-  //   );
-  //   accessAgency = workExists.rows[0]?.present_country ? true : false;
-  //   accessBank = workExists.rows[0]?.engaged_as ? true : false;
-  // } else {
-  //   accessAgency = false;
-  //   accessBank = false;
-  // }
-
-  // const accessWorksite = data.rowCount > 0 ? true : false;
-  // const accessFamily = data.rows[0]?.nominee ? true : false;
-  // const accessDoc = data.rows[0]?.family ? true : false;
-  // const meta = {
-  //   personal: true,
-  //   worksite: accessWorksite,
-  //   agency: accessAgency,
-  //   bank: accessBank,
-  //   family: accessFamily,
-  //   doc: accessDoc,
-  // };
 
   res.status(StatusCodes.OK).json({ data });
 };

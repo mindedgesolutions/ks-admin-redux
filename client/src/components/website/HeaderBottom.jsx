@@ -22,7 +22,7 @@ const HeaderBottom = () => {
               <Link to="/schemes">Schemes</Link>
               <Link to="/faq">FAQ</Link>
               <Link to="/stakeholders">Stakeholders</Link>
-              <Link to="/contact-us">Contact</Link>
+              <Link to="/contact">Contact</Link>
               <Link to="/otplogin">
                 <FaCircleUser size={30} />
               </Link>

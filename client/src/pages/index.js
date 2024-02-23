@@ -8,3 +8,13 @@ export { default as Schemes } from "./website/Schemes";
 export { default as StakeHolders } from "./website/StakeHolders";
 export { default as OtpLogin } from "./website/OtpLogin";
 // Website related ends ------
+
+// User related starts ------
+export { default as UserLayout } from "./application/user/UserLayout";
+export { default as UserDashboard } from "./application/user/UserDashboard";
+// User related ends ------
+
+// Admin related starts ------
+export { default as AdminLayout } from "./application/admin/AdminLayout";
+export { default as AdminDashboard } from "./application/admin/AdminDashboard";
+// Admin related ends ------
