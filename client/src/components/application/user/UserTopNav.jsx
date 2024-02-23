@@ -1,10 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsMoonFill, BsSunFill } from "react-icons/bs";
 import Avatar from "../../../assets/dist/images/000m.jpg";
+import { useSelector } from "react-redux";
+import { useLoaderData } from "react-router-dom";
 
-const UserTopNav = () => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const toggleTheme = () => {};
+const UserTopNav = ({ logout }) => {
+  const [isDarkTheme, setIsDarkTheme] = useState(
+    localStorage.getItem("theme") === "dark" ? true : false
+  );
+  const appUser = useLoaderData();
+  const { name, mobile } = useSelector((store) => store.userDetails);
+
+  const toggleTheme = () => {
+    const newTheme = !isDarkTheme;
+    setIsDarkTheme(newTheme);
+    const theme = newTheme === true ? "dark" : "";
+    localStorage.setItem("theme", theme);
+    document.body.setAttribute("data-bs-theme", theme);
+  };
+
+  useEffect(() => {
+    document.body.setAttribute("data-bs-theme", localStorage.getItem("theme"));
+  }, [isDarkTheme]);
 
   return (
     <header className="navbar navbar-expand-md d-none d-lg-flex d-print-none">
@@ -43,16 +60,24 @@ const UserTopNav = () => {
             >
               <img src={Avatar} className="avatar avatar-sm" alt="" />
               <div className="d-none d-xl-block ps-2">
-                <div className="fw-bold">Souvik Nag</div>
-                <div className="mt-1 small text-muted">9830098300</div>
+                <div className="fw-bold">
+                  {name
+                    ? name.toUpperCase()
+                    : appUser?.data?.data?.rows[0]?.name
+                    ? appUser?.data?.data?.rows[0]?.name
+                    : ""}
+                </div>
+                <div className="mt-1 small text-muted">
+                  {mobile
+                    ? mobile
+                    : appUser?.data?.data?.rows[0]?.mobile
+                    ? appUser?.data?.data?.rows[0]?.mobile
+                    : ""}
+                </div>
               </div>
             </a>
             <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <button
-                type="button"
-                className="dropdown-item"
-                // onClick={logoutAppUser}
-              >
+              <button type="button" className="dropdown-item" onClick={logout}>
                 Logout
               </button>
             </div>
