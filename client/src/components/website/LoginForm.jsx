@@ -91,6 +91,7 @@ const LoginForm = () => {
                     className="form-control"
                     placeholder="Enter OTP"
                     name="inputOtp"
+                    disabled={isLoading}
                   />
                 </div>
                 <div className="form-item mt-3">
@@ -109,6 +110,7 @@ const LoginForm = () => {
                     className="form-control"
                     placeholder="Enter captcha"
                     name="inputCaptcha"
+                    disabled={isLoading}
                   />
                 </div>
                 <div className="mt-5">

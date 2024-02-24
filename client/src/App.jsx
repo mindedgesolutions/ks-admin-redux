@@ -2,9 +2,11 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import * as Ks from "./pages";
 
 // Loaders start ------
+import { loader as userLayoutLoader } from "./pages/application/user/UserLayout";
+import { loader as personalInfoLoader } from "./pages/application/user/application/PersonalInfo";
 
 // Action start ------
-import { action as otpLogin } from "./components/website/LoginForm";
+import { action as otpLoginLoader } from "./components/website/LoginForm";
 
 const router = createBrowserRouter([
   // Website related starts ------
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
       { path: "/faq", element: <Ks.Faq /> },
       { path: "/stakeholders", element: <Ks.StakeHolders /> },
       { path: "/contact-us", element: <Ks.Contact /> },
-      { path: "/otplogin", element: <Ks.OtpLogin />, action: otpLogin },
+      { path: "/otplogin", element: <Ks.OtpLogin />, action: otpLoginLoader },
     ],
   },
   // Website related ends ------
@@ -27,7 +29,20 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <Ks.UserLayout />,
-    children: [{ path: "dashboard", element: <Ks.AdminDashboard /> }],
+    loader: userLayoutLoader,
+    children: [
+      { path: "dashboard", element: <Ks.AdminDashboard /> },
+      {
+        path: "personal-info",
+        element: <Ks.PersonalInfo />,
+        loader: personalInfoLoader,
+      },
+      { path: "worksite-info", element: <Ks.WorksiteInfo /> },
+      { path: "agency-info", element: <Ks.AgencyInfo /> },
+      { path: "bank-nominee-info", element: <Ks.BankNomineeInfo /> },
+      { path: "family-info", element: <Ks.FamilyInfo /> },
+      { path: "documents", element: <Ks.Documents /> },
+    ],
   },
   // User related ends ------
 

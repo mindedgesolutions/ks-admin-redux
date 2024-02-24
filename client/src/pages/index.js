@@ -12,6 +12,12 @@ export { default as OtpLogin } from "./website/OtpLogin";
 // User related starts ------
 export { default as UserLayout } from "./application/user/UserLayout";
 export { default as UserDashboard } from "./application/user/UserDashboard";
+export { default as PersonalInfo } from "./application/user/application/PersonalInfo";
+export { default as WorksiteInfo } from "./application/user/application/WorksiteInfo";
+export { default as AgencyInfo } from "./application/user/application/AgencyInfo";
+export { default as BankNomineeInfo } from "./application/user/application/BankNomineeInfo";
+export { default as FamilyInfo } from "./application/user/application/FamilyInfo";
+export { default as Documents } from "./application/user/application/Documents";
 // User related ends ------
 
 // Admin related starts ------

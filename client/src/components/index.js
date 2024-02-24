@@ -1,3 +1,7 @@
+// Common starts ------
+export { default as InputText } from "./InputText";
+// Common ends ------
+
 // Website related starts ------
 export { default as Header } from "./website/Header";
 export { default as Footer } from "./website/Footer";
@@ -9,6 +13,9 @@ export { default as LoginForm } from "./website/LoginForm";
 export { default as UserTopNav } from "./application/user/UserTopNav";
 export { default as UserSideBar } from "./application/user/UserSideBar";
 export { default as UserFooter } from "./application/user/UserFooter";
+export { default as UserPageHeader } from "./application/user/UserPageHeader";
+export { default as UserPageWrapper } from "./application/user/UserPageWrapper";
+export { default as ApplicationMenu } from "./application/user/application/ApplicationMenu";
 // User related ends ------
 
 // User related starts ------
