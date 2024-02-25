@@ -1,6 +1,6 @@
 import React from "react";
 import { UserFooter, UserSideBar, UserTopNav } from "../../../components";
-import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import { Outlet, redirect, useLoaderData, useNavigate } from "react-router-dom";
 
 import "../../../assets/dist/css/tabler.min.css";
 import "../../../assets/dist/css/demo.min.css";
@@ -31,7 +31,7 @@ export const loader = async () => {
     return appUser;
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
-    return redirect("/otplogin");
+    // return redirect("/otplogin");
   }
 };
 

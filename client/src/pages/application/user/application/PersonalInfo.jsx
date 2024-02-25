@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ApplicationMenu,
   UserPageHeader,
   UserPageWrapper,
   InputText,
+  MasterDistricts,
+  MasterSubDivs,
 } from "../../../../components";
 import customFetch from "../../../../utils/customFetch";
 import { splitErrors } from "../../../../utils/showErrors";
 import { useLoaderData } from "react-router-dom";
-import { districts } from "../../../../features/masters/districtMasterSlice";
+import { useDispatch } from "react-redux";
+import { changeDist } from "../../../../features/masters/districtMasterSlice";
+import {
+  changeSubdiv,
+  getSubdivs,
+} from "../../../../features/masters/subdivMasterSlice";
 
 // Loader starts ------
 export const loader = async () => {
   try {
-    const info = await customFetch.get("/applications/user/personal-info");
-    return info;
+    const personalInfo = await customFetch.get(
+      "/applications/user/personal-info"
+    );
+    return personalInfo;
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return error;
@@ -24,17 +33,31 @@ export const loader = async () => {
 // Main component starts ------
 const PersonalInfo = () => {
   document.title = `Personal Information | ${import.meta.env.VITE_USER_TITLE}`;
-  const info = useLoaderData();
-  const districtList = districts();
-  console.log(districtList);
+  const personalInfo = useLoaderData();
+  const dispatch = useDispatch();
+  const dbDist = personalInfo?.data?.data?.rows[0]?.permanent_dist || "";
+  const dbSubdiv =
+    personalInfo?.data?.data?.rows[0]?.permanent_subdivision || "";
+
+  // Input fields state management starts ------
   const [form, setForm] = useState({
-    name: info?.data?.data?.rows[0]?.name || "",
-    fatherHusbandName: info?.data?.data?.rows[0]?.father_husband_name || "",
+    name: personalInfo?.data?.data?.rows[0]?.name || "",
+    fatherHusbandName:
+      personalInfo?.data?.data?.rows[0]?.father_husband_name || "",
   });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  // Input fields state management ends ------
+
+  // Keep related dropdowns selected starts ------
+  useEffect(() => {
+    dispatch(changeDist(dbDist));
+    dispatch(getSubdivs(dbDist));
+    dispatch(changeSubdiv(dbSubdiv));
+  }, []);
+  // Keep related dropdowns selected ends ------
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -72,6 +95,12 @@ const PersonalInfo = () => {
                           value={form.fatherHusbandName}
                           handleChange={handleChange}
                         />
+                      </div>
+                      <div className="col-md-6 col-sm-12">
+                        <MasterDistricts />
+                      </div>
+                      <div className="col-md-6 col-sm-12">
+                        <MasterSubDivs />
                       </div>
                     </div>
                   </div>
