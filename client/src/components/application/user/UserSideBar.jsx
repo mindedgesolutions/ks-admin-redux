@@ -38,7 +38,6 @@ const UserSideBar = () => {
               src={Logo}
               style={{ height: "40px" }}
               alt={import.meta.env.VITE_ADMIN_TITLE}
-              // className="navbar-brand-image"
             />
           </Link>
         </h1>
@@ -51,7 +50,6 @@ const UserSideBar = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                {/* <!-- Download SVG icon from http://tabler-icons.io/i/brand-github --> */}
                 <AiFillGithub />
                 Source code
               </a>
@@ -61,7 +59,6 @@ const UserSideBar = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                {/* <!-- Download SVG icon from http://tabler-icons.io/i/heart --> */}
                 <AiOutlineHeart />
                 Sponsor
               </a>
@@ -69,9 +66,7 @@ const UserSideBar = () => {
           </div>
 
           <div className="d-none d-lg-flex">
-            {/* <!-- Download SVG icon from http://tabler-icons.io/i/moon --> */}
             <BsFillMoonFill className="nav-link px-0 hide-theme-dark cursor-pointer" />
-            {/* <!-- Download SVG icon from http://tabler-icons.io/i/sun --> */}
             <BsSunFill className="nav-link px-0 hide-theme-light cursor-pointer" />
           </div>
           <div className="nav-item dropdown">

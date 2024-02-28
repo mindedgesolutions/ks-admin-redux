@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { BsMoonFill, BsSunFill } from "react-icons/bs";
 import Avatar from "../../../assets/dist/images/000m.jpg";
 import { useSelector } from "react-redux";
-import { useLoaderData } from "react-router-dom";
 
-const UserTopNav = ({ logout }) => {
+const UserTopNav = ({ logoutAppUser }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(
     localStorage.getItem("theme") === "dark" ? true : false
   );
-  const appUser = useLoaderData();
-  const { name, mobile } = useSelector((store) => store.userDetails);
+  const { user } = useSelector((store) => store.user);
 
   const toggleTheme = () => {
     const newTheme = !isDarkTheme;
@@ -61,23 +59,19 @@ const UserTopNav = ({ logout }) => {
               <img src={Avatar} className="avatar avatar-sm" alt="" />
               <div className="d-none d-xl-block ps-2">
                 <div className="fw-bold">
-                  {name
-                    ? name.toUpperCase()
-                    : appUser?.data?.data?.rows[0]?.name
-                    ? appUser?.data?.data?.rows[0]?.name
-                    : ""}
+                  {user?.name ? user?.name.toUpperCase() : ""}
                 </div>
                 <div className="mt-1 small text-muted">
-                  {mobile
-                    ? mobile
-                    : appUser?.data?.data?.rows[0]?.mobile
-                    ? appUser?.data?.data?.rows[0]?.mobile
-                    : ""}
+                  {user?.mobile ? user?.mobile : ""}
                 </div>
               </div>
             </a>
             <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <button type="button" className="dropdown-item" onClick={logout}>
+              <button
+                type="button"
+                className="dropdown-item"
+                onClick={logoutAppUser}
+              >
                 Logout
               </button>
             </div>

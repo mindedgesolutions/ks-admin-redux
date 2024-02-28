@@ -137,6 +137,8 @@ export const updatePersonalInfo = async (req, res) => {
     applicationId || mobile,
   ];
   const data = await pool.query(query, values);
-  res.status(StatusCodes.ACCEPTED).json({ data });
+  const appId = await getApplicationId(mobile);
+
+  res.status(StatusCodes.ACCEPTED).json({ data: appId });
 };
 // Personal information functions end ------

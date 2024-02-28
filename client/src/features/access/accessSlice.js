@@ -4,15 +4,13 @@ import {
   getAccessFromLocalStorage,
 } from "../../utils/data";
 
-const initialState = {
-  availableAccess: getAccessFromLocalStorage() || null,
-  loading: false,
-  error: null,
-};
-
 const accessSlice = createSlice({
   name: "userAccess",
-  initialState: initialState,
+  initialState: {
+    availableAccess: getAccessFromLocalStorage() || null,
+    loading: false,
+    error: null,
+  },
   reducers: {
     updateAccess: (state, action) => {
       state.availableAccess = action.payload;

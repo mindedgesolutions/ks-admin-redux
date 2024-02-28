@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineLogin } from "react-icons/ai";
 import { TbUserPlus } from "react-icons/tb";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { generatedOtp } from "../../features/otplogin/otpLoginSlice";
 import { splitErrors } from "../../utils/showErrors";
 import customFetch from "../../utils/customFetch";
 
 const LoginMobile = () => {
   const dispatch = useDispatch();
+  const { newOtp } = useSelector((store) => store.otpLogin);
 
   const handleGenerateOtp = async (e) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ const LoginMobile = () => {
           number
         </p>
         <form onSubmit={handleGenerateOtp}>
-          <div className="col-md-4 form custom-dashboard-form">
+          <div className="form custom-dashboard-form">
             <div className="form-item form-type-textfield form-item-mobile-no">
               <label>
                 Mobile Number/ MWIN <span className="text-danger">*</span>
@@ -48,7 +49,7 @@ const LoginMobile = () => {
             <div id="message_markup"></div>
             <div id="security_code_replace"></div>
             <div id="submit_replace" className="mt-3">
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="btn btn-success w-full">
                 Generate OTP
               </button>
             </div>

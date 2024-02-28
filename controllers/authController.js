@@ -76,14 +76,14 @@ export const otpLogin = async (req, res) => {
     await pool.query("BEGIN");
 
     const data = await pool.query(
-      `select id from k_migrant_worker_master where mobile=$1`,
+      `select uuid from k_migrant_worker_master where mobile=$1`,
       [mobile]
     );
-    const applicationId = data.rowCount > 0 ? data.rows[0].id : null;
+    const uuid = data.rowCount > 0 ? data.rows[0].uuid : null;
 
     const usertoken = createUserJWT({
       mobile: mobile,
-      applicationId: applicationId,
+      uuid: uuid,
     });
 
     const oneDay = 1000 * 60 * 60 * 24;

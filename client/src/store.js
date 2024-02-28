@@ -1,16 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
 import otpReducer from "./features/otplogin/otpLoginSlice";
 import accessReducer from "./features/access/accessSlice";
-import userDetailsReducer from "./features/user/userDetailsSlice";
-import districtReducer from "./features/masters/districtMasterSlice";
-import subDivReducer from "./features/masters/subdivMasterSlice";
+import userBasicReducer from "./features/user/userBasicSlice";
+import personalReducer from "./features/userApplication/personalSlice";
+import subdivReducer from "./features/masters/subdivSlice";
+import blockReducer from "./features/masters/blockSlice";
+import gpReducer from "./features/masters/gpSlice";
+import psReducer from "./features/masters/psSlice";
 
 export const store = configureStore({
   reducer: {
     otpLogin: otpReducer,
     access: accessReducer,
-    userDetails: userDetailsReducer,
-    districts: districtReducer,
-    subdivs: subDivReducer,
+    user: userBasicReducer,
+    personal: personalReducer,
+    msubdivs: subdivReducer,
+    mblocks: blockReducer,
+    mgps: gpReducer,
+    mps: psReducer,
   },
 });

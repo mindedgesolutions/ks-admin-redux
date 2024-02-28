@@ -1,0 +1,24 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { addAccessToLocalStorage } from "../../utils/data";
+
+const defaultState = {
+  user: {},
+  userAccess: {},
+};
+
+const userBasicSlice = createSlice({
+  name: "userBasic",
+  initialState: defaultState,
+  reducers: {
+    details: (state, action) => {
+      state.user = { ...state.user, ...action.payload };
+    },
+    access: (state, action) => {
+      state.userAccess = { ...state.userAccess, ...action.payload };
+      addAccessToLocalStorage(state.userAccess);
+    },
+  },
+});
+
+export const { details, access } = userBasicSlice.actions;
+export default userBasicSlice.reducer;

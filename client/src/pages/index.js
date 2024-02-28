@@ -13,11 +13,12 @@ export { default as OtpLogin } from "./website/OtpLogin";
 export { default as UserLayout } from "./application/user/UserLayout";
 export { default as UserDashboard } from "./application/user/UserDashboard";
 export { default as PersonalInfo } from "./application/user/application/PersonalInfo";
-export { default as WorksiteInfo } from "./application/user/application/WorksiteInfo";
+export { default as WorkInfo } from "./application/user/application/WorkInfo";
 export { default as AgencyInfo } from "./application/user/application/AgencyInfo";
-export { default as BankNomineeInfo } from "./application/user/application/BankNomineeInfo";
-export { default as FamilyInfo } from "./application/user/application/FamilyInfo";
+export { default as BankNominee } from "./application/user/application/BankNominee";
+export { default as Family } from "./application/user/application/Family";
 export { default as Documents } from "./application/user/application/Documents";
+export { default as OverView } from "./application/user/application/OverView";
 // User related ends ------
 
 // Admin related starts ------

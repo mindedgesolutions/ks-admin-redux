@@ -1,8 +1,4 @@
 import { nanoid } from "nanoid";
-import SliderOne from "../assets/dist/images/website/homeSliderBanners/karmasathi-banner1.jpg";
-import SliderOneThumb from "../assets/dist/images/website/homeSliderBanners/thumbs/karmasathi-banner1_tn.jpg";
-import SliderTwo from "../assets/dist/images/website/homeSliderBanners/karmasathi-banner2.jpg";
-import SliderTwoThumb from "../assets/dist/images/website/homeSliderBanners/thumbs/karmasathi-banner2_tn.jpg";
 
 export const notifications = [
   {
@@ -264,16 +260,16 @@ export const reportNames = [
   { id: nanoid(), name: "ds migration status" },
 ];
 
-export const homeSliderImages = [
-  {
-    original: { SliderOne },
-    thumbnail: { SliderOneThumb },
-  },
-  {
-    original: { SliderTwo },
-    thumbnail: { SliderTwoThumb },
-  },
-];
+// export const homeSliderImages = [
+//   {
+//     original: { SliderOne },
+//     thumbnail: { SliderOneThumb },
+//   },
+//   {
+//     original: { SliderTwo },
+//     thumbnail: { SliderTwoThumb },
+//   },
+// ];
 
 // Add application access to local storage starts ------
 export const addAccessToLocalStorage = (access) => {

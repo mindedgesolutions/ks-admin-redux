@@ -1,12 +1,14 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import * as Ks from "./pages";
+import { store } from "./store";
 
-// Loaders start ------
-import { loader as userLayoutLoader } from "./pages/application/user/UserLayout";
-import { loader as personalInfoLoader } from "./pages/application/user/application/PersonalInfo";
+// Loaders ------
+import { loader as userLayout } from "./pages/application/user/UserLayout";
+import { loader as personalLoader } from "./pages/application/user/application/PersonalInfo";
 
-// Action start ------
-import { action as otpLoginLoader } from "./components/website/LoginForm";
+// Actions ------
+import { action as otpLogin } from "./components/website/LoginForm";
+// import { action as personalAction } from "./pages/application/user/application/PersonalInfo";
 
 const router = createBrowserRouter([
   // Website related starts ------
@@ -20,39 +22,39 @@ const router = createBrowserRouter([
       { path: "/faq", element: <Ks.Faq /> },
       { path: "/stakeholders", element: <Ks.StakeHolders /> },
       { path: "/contact-us", element: <Ks.Contact /> },
-      { path: "/otplogin", element: <Ks.OtpLogin />, action: otpLoginLoader },
+      { path: "/otplogin", element: <Ks.OtpLogin />, action: otpLogin },
     ],
   },
   // Website related ends ------
-
-  // User related starts ------
+  // User app related starts ------
   {
     path: "/user",
     element: <Ks.UserLayout />,
-    loader: userLayoutLoader,
+    loader: userLayout(store),
     children: [
-      { path: "dashboard", element: <Ks.AdminDashboard /> },
+      { path: "dashboard", element: <Ks.UserDashboard /> },
       {
         path: "personal-info",
         element: <Ks.PersonalInfo />,
-        loader: personalInfoLoader,
+        loader: personalLoader(store),
+        // action: personalAction(store),
       },
-      { path: "worksite-info", element: <Ks.WorksiteInfo /> },
+      { path: "worksite-info", element: <Ks.WorkInfo /> },
       { path: "agency-info", element: <Ks.AgencyInfo /> },
-      { path: "bank-nominee-info", element: <Ks.BankNomineeInfo /> },
-      { path: "family-info", element: <Ks.FamilyInfo /> },
+      { path: "bank-nominee-info", element: <Ks.BankNominee /> },
+      { path: "family-info", element: <Ks.Family /> },
       { path: "documents", element: <Ks.Documents /> },
+      { path: "overview", element: <Ks.OverView /> },
     ],
   },
-  // User related ends ------
-
-  // Admin related starts ------
+  // User app related ends ------
+  // Admin app related starts ------
   {
     path: "/admin",
     element: <Ks.AdminLayout />,
     children: [{ path: "dashboard", element: <Ks.AdminDashboard /> }],
   },
-  // Admin related ends ------
+  // Admin app related ends ------
 ]);
 
 function App() {

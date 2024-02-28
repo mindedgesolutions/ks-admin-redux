@@ -4,6 +4,7 @@ import {
   getBankSingle,
   getBanks,
   getBlocks,
+  getCountries,
   getDistrictName,
   getDistricts,
   getPs,
@@ -20,6 +21,7 @@ router.get("/blocks/:subDivCode/:blType", getBlocks);
 router.get("/wards/:blockCode", getWards);
 router.get("/ps/:district", getPs);
 router.get("/states", getStates);
+router.get("/countries", getCountries);
 router.get("/banks", getBanks);
 router.get("/bank-single/:ifsc", getBankSingle);
 router.get("/schemes", getSchemes);

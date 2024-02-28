@@ -1,5 +1,5 @@
 import React from "react";
-import FlagIndia from "../../assets/dist/images/website/flag-india.jpg";
+import FlagIndia from '../../assets/images/flag-india.jpg'
 
 const HeaderTop = () => {
   return (

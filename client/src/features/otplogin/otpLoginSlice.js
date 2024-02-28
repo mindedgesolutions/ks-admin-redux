@@ -1,6 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import customFetch from "../../../../client-old/src/utils/customFetch";
-import { toast } from "react-toastify";
 
 const initialState = {
   newMobile: null,

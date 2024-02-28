@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, redirect, useNavigation } from "react-router-dom";
 import { changeMobile } from "../../features/otplogin/otpLoginSlice";
-import customFetch from "../../utils/customFetch";
-import { splitErrors } from "../../utils/showErrors";
 import { IoReloadOutline } from "react-icons/io5";
+import { splitErrors } from "../../utils/showErrors";
+import customFetch from "../../utils/customFetch";
 
-// Action starts ------
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
@@ -22,47 +21,46 @@ export const action = async ({ request }) => {
   }
 };
 
-// Main component starts ------
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isLoading = navigation.state === "submitting";
   const { newMobile, newOtp } = useSelector((store) => store.otpLogin);
-  const max = 1;
-  const min = 9;
-
   const [captcha, setCaptcha] = useState({
     firstNumber: 1,
     secondNumber: 2,
     captchaTotal: 3,
   });
+  const min = 1;
+  const max = 10;
 
-  const generateCaptcha = async () => {
+  const generateCaptcha = () => {
     const numOne = Math.floor(Math.random() * (max - min + 1)) + min;
     const numTwo = Math.floor(Math.random() * (max - min + 1)) + min;
+    const total = Number(numOne) + Number(numTwo);
     setCaptcha({
       ...captcha,
       firstNumber: numOne,
       secondNumber: numTwo,
-      captchaTotal: Number(numOne) + Number(numTwo),
+      captchaTotal: total,
     });
   };
+
+  console.log(newOtp);
 
   useEffect(() => {
     generateCaptcha();
   }, []);
 
-  console.log(newOtp);
-
   return (
     <Form method="post">
+      <input
+        type="hidden"
+        name="captchaTotal"
+        value={captcha.captchaTotal}
+        onChange={() => {}}
+      />
       <div className="content">
-        <input
-          type="hidden"
-          name="captchaTotal"
-          value={captcha.captchaTotal}
-          onChange={() => {}}
-        />
         <div>
           <div className="row">
             <div className="login-bg-main">
@@ -91,7 +89,6 @@ const LoginForm = () => {
                     className="form-control"
                     placeholder="Enter OTP"
                     name="inputOtp"
-                    disabled={isLoading}
                   />
                 </div>
                 <div className="form-item mt-3">
@@ -110,7 +107,6 @@ const LoginForm = () => {
                     className="form-control"
                     placeholder="Enter captcha"
                     name="inputCaptcha"
-                    disabled={isLoading}
                   />
                 </div>
                 <div className="mt-5">

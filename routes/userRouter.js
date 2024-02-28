@@ -5,6 +5,7 @@ import {
   getCurrentAppUser,
   updatePassword,
   updateUser,
+  updateUserUuid,
 } from "../controllers/userController.js";
 import {
   validatePassInputs,
@@ -25,5 +26,8 @@ router.patch(
 );
 
 router.get("/current-app-user", protectUserRoute, getCurrentAppUser);
+
+// Update user UUID ------
+router.get("/update-user-uuid", updateUserUuid);
 
 export default router;
