@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addAccessToLocalStorage } from "../../utils/data";
+import {
+  addAccessToLocalStorage,
+  getAccessFromLocalStorage,
+} from "../../utils/data";
 
 const defaultState = {
   user: {},
-  userAccess: {},
+  userAccess: getAccessFromLocalStorage(),
 };
 
 const userBasicSlice = createSlice({
@@ -14,7 +17,7 @@ const userBasicSlice = createSlice({
       state.user = { ...state.user, ...action.payload };
     },
     access: (state, action) => {
-      state.userAccess = { ...state.userAccess, ...action.payload };
+      state.userAccess = { ...state.userAccess, [action.payload]: true };
       addAccessToLocalStorage(state.userAccess);
     },
   },

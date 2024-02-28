@@ -4,28 +4,32 @@ export const notifications = [
   {
     title: "Test title 1",
     name: "Payal Karmakar",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: true,
   },
   {
     title: "Test title 2",
     name: "Arko Banerjee",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: true,
   },
   {
     title: "Test title 3",
     name: "Jyoti Bag",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: false,
   },
   {
     title: "Test title 4",
     name: "Moumita Chatterjee",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: false,
   },

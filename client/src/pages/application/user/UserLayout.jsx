@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet, redirect, useNavigate } from "react-router-dom";
 import { UserTopNav, UserSideBar, UserFooter } from "../../../components";
 
@@ -9,11 +9,14 @@ import "../../../assets/dist/js/tabler.min.js";
 import "../../../assets/dist/js/demo.min.js";
 
 import customFetch from "../../../utils/customFetch";
-import { removeAccessFromLocalStorage } from "../../../utils/data";
+import {
+  addAccessToLocalStorage,
+  removeAccessFromLocalStorage,
+} from "../../../utils/data";
 import { splitErrors } from "../../../utils/showErrors";
 import { toast } from "react-toastify";
 import { changeMobile } from "../../../features/otplogin/otpLoginSlice";
-import { access, details } from "../../../features/user/userBasicSlice";
+import { details } from "../../../features/user/userBasicSlice";
 
 // Loader starts ------
 export const loader = (store) => async () => {
@@ -22,7 +25,7 @@ export const loader = (store) => async () => {
     const userAccess = await customFetch.get(
       "/applications/user/application-access"
     );
-    store.dispatch(access(userAccess.data.data));
+    addAccessToLocalStorage(userAccess.data.data);
     store.dispatch(details(appUser.data.data.rows[0]));
     store.dispatch(changeMobile());
     return appUser;

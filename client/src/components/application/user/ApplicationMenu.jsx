@@ -1,16 +1,16 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { getAccessFromLocalStorage } from "../../../utils/data";
 
 const ApplicationMenu = () => {
   const location = useLocation();
-  const access = getAccessFromLocalStorage();
+  const { userAccess } = useSelector((store) => store.user);
 
   return (
     <div className="col-3 d-none d-md-block border-end">
       <div className="card-body">
         <div className="list-group list-group-transparent">
-          {access.personal && (
+          {userAccess.personal && (
             <Link to="/user/personal-info" className="text-decoration-none">
               <button
                 type="button"
@@ -23,7 +23,7 @@ const ApplicationMenu = () => {
             </Link>
           )}
 
-          {access.worksite && (
+          {userAccess.worksite && (
             <Link to="/user/worksite-info" className="text-decoration-none">
               <button
                 type="button"
@@ -36,7 +36,7 @@ const ApplicationMenu = () => {
             </Link>
           )}
 
-          {access.agency && (
+          {userAccess.agency && (
             <Link to="/user/agency-info" className="text-decoration-none">
               <button
                 type="button"
@@ -49,7 +49,7 @@ const ApplicationMenu = () => {
             </Link>
           )}
 
-          {access.bank && (
+          {userAccess.bank && (
             <Link to="/user/nominee-info" className="text-decoration-none">
               <button
                 type="button"
@@ -62,7 +62,7 @@ const ApplicationMenu = () => {
             </Link>
           )}
 
-          {access.family && (
+          {userAccess.family && (
             <Link to="/user/family-info" className="text-decoration-none">
               <button
                 type="button"
@@ -75,7 +75,7 @@ const ApplicationMenu = () => {
             </Link>
           )}
 
-          {access.doc && (
+          {userAccess.doc && (
             <Link to="/user/documents" className="text-decoration-none">
               <button
                 type="button"

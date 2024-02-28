@@ -5,7 +5,7 @@ import { BadRequestError } from "../errors/customErrors.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const updateUserUuid = async (req, res) => {
-  for (let index = 500000; index < 5000000; index++) {
+  for (let index = 1500000; index < 2000000; index++) {
     const uuid = uuidv4();
     await pool.query(
       `update k_migrant_worker_master set uuid=$1 where uuid is null and id=$2`,

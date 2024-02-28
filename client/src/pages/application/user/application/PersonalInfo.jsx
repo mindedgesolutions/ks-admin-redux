@@ -139,7 +139,7 @@ const PersonalInfo = () => {
         inputValues
       );
       dispatch(details({ id: response.data.data, name: inputValues.name }));
-      dispatch(access({ worsite: true }));
+      dispatch(access("worksite"));
 
       toast.success(msg);
       navigate("/user/worksite-info");
