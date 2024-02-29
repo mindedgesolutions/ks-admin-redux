@@ -130,16 +130,18 @@ export const validateWorksite = withValidationErrors([
     .if(body("country").equals("1"))
     .notEmpty()
     .withMessage(`Select state`),
-  body("countryName")
-    .if(body("country").equals("2"))
-    .notEmpty()
-    .withMessage(`Enter country name`)
-    .isLength({ min: 3, max: 255 })
-    .withMessage(`Country name must be between 3 to 255 characters`),
-  body("passportNo")
-    .if(body("country").equals("2"))
-    .notEmpty()
-    .withMessage(`Enter passport no.`),
+  body("passportNo").custom((value, { req }) => {
+    const { country } = req.body;
+    if (
+      Number(country) !== 1 &&
+      Number(country) !== 3 &&
+      Number(country) !== 4 &&
+      !value
+    ) {
+      throw new BadRequestError(`Enter passport number`);
+    }
+    return true;
+  }),
   body("workPs")
     .notEmpty()
     .withMessage(`Enter worksite police station name`)

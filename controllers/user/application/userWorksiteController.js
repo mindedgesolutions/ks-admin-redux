@@ -11,7 +11,6 @@ export const addWorksiteInfo = async (req, res) => {
     workAddress,
     country,
     stateCode,
-    countryName,
     passportNo,
     workPs,
     empNature,
@@ -19,37 +18,37 @@ export const addWorksiteInfo = async (req, res) => {
     expectedWages,
   } = req.body;
 
-  let inputCountryName;
-  switch (country) {
-    case "1":
-      inputCountryName = `India`;
-      break;
-    case "3":
-      inputCountryName = `Nepal`;
-      break;
-    case "4":
-      inputCountryName = `Bhutan`;
-      break;
-    case "2":
-      inputCountryName = countryName;
-      break;
-  }
+  try {
+    await pool.query("BEGIN");
 
-  const text = `insert into k_migrant_work_details (application_id, present_country, present_country_name, passport_no, present_state, present_address, present_ps, nature_of_work_id, migrated_from_date, expected_salary) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
-  const values = [
-    appId,
-    country,
-    inputCountryName,
-    passportNo || null,
-    stateCode || null,
-    workAddress,
-    workPs,
-    empNature,
-    migDate,
-    expectedWages || 0,
-  ];
-  const data = await pool.query(text, values);
-  res.status(StatusCodes.CREATED).json({ msg: `success` });
+    const cResponse = await pool.query(
+      `select country_name from master_country where id=$1`,
+      [Number(country)]
+    );
+    const countryName = cResponse.rows[0].country_name;
+
+    const text = `insert into k_migrant_work_details (application_id, present_country, present_country_name, passport_no, present_state, present_address, present_ps, nature_of_work_id, migrated_from_date, expected_salary) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
+    const values = [
+      appId,
+      country,
+      countryName,
+      passportNo || null,
+      stateCode || null,
+      workAddress,
+      workPs,
+      empNature,
+      migDate,
+      expectedWages || 0,
+    ];
+    await pool.query(text, values);
+
+    await pool.query("COMMIT");
+
+    res.status(StatusCodes.CREATED).json({ msg: `success` });
+  } catch (error) {
+    await pool.query("ROLLBACK");
+    throw new BadRequestError(`Data not saved! Please try again.`);
+  }
 };
 
 export const getWorksiteInfo = async (req, res) => {
@@ -69,7 +68,6 @@ export const updateWorksiteInfo = async (req, res) => {
     workAddress,
     country,
     stateCode,
-    countryName,
     passportNo,
     workPs,
     empNature,
@@ -77,37 +75,37 @@ export const updateWorksiteInfo = async (req, res) => {
     expectedWages,
   } = req.body;
 
-  let inputCountryName;
-  switch (country) {
-    case "1":
-      inputCountryName = `India`;
-      break;
-    case "3":
-      inputCountryName = `Nepal`;
-      break;
-    case "4":
-      inputCountryName = `Bhutan`;
-      break;
-    case "2":
-      inputCountryName = countryName;
-      break;
-  }
+  try {
+    await pool.query("BEGIN");
 
-  const text = `update k_migrant_work_details set present_country=$1, present_country_name=$2, passport_no=$3, present_state=$4, present_address=$5, present_ps=$6, nature_of_work_id=$7, migrated_from_date=$8, expected_salary=$9 where application_id=$10`;
-  const values = [
-    country,
-    inputCountryName,
-    country !== "1" ? passportNo : null,
-    country === "1" ? stateCode : null,
-    workAddress,
-    workPs,
-    empNature,
-    migDate,
-    expectedWages || 0,
-    appId,
-  ];
-  const data = await pool.query(text, values);
-  res.status(StatusCodes.ACCEPTED).json({ msg: `success` });
+    const cResponse = await pool.query(
+      `select country_name from master_country where id=$1`,
+      [Number(country)]
+    );
+    const countryName = cResponse.rows[0].country_name;
+
+    const text = `update k_migrant_work_details set present_country=$1, present_country_name=$2, passport_no=$3, present_state=$4, present_address=$5, present_ps=$6, nature_of_work_id=$7, migrated_from_date=$8, expected_salary=$9 where application_id=$10`;
+    const values = [
+      country,
+      countryName,
+      country !== "1" ? passportNo : null,
+      country === "1" ? stateCode : null,
+      workAddress,
+      workPs,
+      empNature,
+      migDate,
+      expectedWages || 0,
+      appId,
+    ];
+    await pool.query(text, values);
+
+    await pool.query("COMMIT");
+
+    res.status(StatusCodes.ACCEPTED).json({ msg: `success` });
+  } catch (error) {
+    await pool.query("ROLLBACK");
+    throw new BadRequestError(`Data not saved! Please try again.`);
+  }
 };
 // Worksite information functions end (C, R, U) ------
 

@@ -5,6 +5,9 @@ import { store } from "./store";
 // Loaders ------
 import { loader as userLayout } from "./pages/application/user/UserLayout";
 import { loader as personalLoader } from "./pages/application/user/application/PersonalInfo";
+import { loader as worksiteLoader } from "./pages/application/user/application/WorkInfo";
+import { loader as agencyLoader } from "./pages/application/user/application/AgencyInfo";
+import { loader as bankNomineeLoader } from "./pages/application/user/application/BankNominee";
 
 // Actions ------
 import { action as otpLogin } from "./components/website/LoginForm";
@@ -39,9 +42,17 @@ const router = createBrowserRouter([
         loader: personalLoader(store),
         // action: personalAction(store),
       },
-      { path: "worksite-info", element: <Ks.WorkInfo /> },
-      { path: "agency-info", element: <Ks.AgencyInfo /> },
-      { path: "bank-nominee-info", element: <Ks.BankNominee /> },
+      {
+        path: "worksite-info",
+        element: <Ks.WorkInfo />,
+        loader: worksiteLoader,
+      },
+      { path: "agency-info", element: <Ks.AgencyInfo />, loader: agencyLoader },
+      {
+        path: "bank-nominee-info",
+        element: <Ks.BankNominee />,
+        loader: bankNomineeLoader,
+      },
       { path: "family-info", element: <Ks.Family /> },
       { path: "documents", element: <Ks.Documents /> },
       { path: "overview", element: <Ks.OverView /> },

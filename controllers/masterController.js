@@ -52,6 +52,14 @@ export const getCountries = async (req, res) => {
   res.status(StatusCodes.OK).json({ data });
 };
 
+export const getJobs = async (req, res) => {
+  const data = await pool.query(
+    `select id, nature_of_work from master_work where is_active=1 order by order_by`,
+    []
+  );
+  res.status(StatusCodes.OK).json({ data });
+};
+
 export const getBanks = async (req, res) => {
   const data = await pool.query(
     `select ifsc_code, bank_name, branch_name from bank_branch_master order by ifsc_code`,

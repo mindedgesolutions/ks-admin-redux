@@ -26,6 +26,10 @@ export { default as ApplicationMenu } from "./application/user/ApplicationMenu";
 export { default as UserLocation } from "./application/user/UserLocation";
 export { default as UserTechSkills } from "./application/user/UserTechSkills";
 export { default as UserWorksite } from "./application/user/UserWorksite";
+export { default as WithAgent } from "./application/user/WithAgent";
+export { default as WithoutAgent } from "./application/user/WithoutAgent";
+export { default as UserBank } from "./application/user/UserBank";
+export { default as ModalAddNewBank } from "./application/user/ModalAddNewBank";
 // User related ends ------
 
 // Admin related starts ------

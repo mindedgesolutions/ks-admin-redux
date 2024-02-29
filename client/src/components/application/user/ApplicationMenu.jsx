@@ -50,11 +50,13 @@ const ApplicationMenu = () => {
           )}
 
           {userAccess.bank && (
-            <Link to="/user/nominee-info" className="text-decoration-none">
+            <Link to="/user/bank-nominee-info" className="text-decoration-none">
               <button
                 type="button"
                 className={`list-group-item list-group-item-action d-flex align-items-center ${
-                  location.pathname === "/user/nominee-info" ? "active" : ""
+                  location.pathname === "/user/bank-nominee-info"
+                    ? "active"
+                    : ""
                 }`}
               >
                 Bank & Nominee

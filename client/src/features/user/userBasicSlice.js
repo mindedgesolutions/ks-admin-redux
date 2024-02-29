@@ -4,15 +4,18 @@ import {
   getAccessFromLocalStorage,
 } from "../../utils/data";
 
-const defaultState = {
+const initialState = {
   user: {},
-  userAccess: getAccessFromLocalStorage(),
+  userAccess: {},
 };
 
 const userBasicSlice = createSlice({
   name: "userBasic",
-  initialState: defaultState,
+  initialState: initialState,
   reducers: {
+    currentAccess: (state) => {
+      state.userAccess = getAccessFromLocalStorage();
+    },
     details: (state, action) => {
       state.user = { ...state.user, ...action.payload };
     },
@@ -20,8 +23,10 @@ const userBasicSlice = createSlice({
       state.userAccess = { ...state.userAccess, [action.payload]: true };
       addAccessToLocalStorage(state.userAccess);
     },
+    resetUserState: () => initialState,
   },
 });
 
-export const { details, access } = userBasicSlice.actions;
+export const { currentAccess, details, access, resetUserState } =
+  userBasicSlice.actions;
 export default userBasicSlice.reducer;

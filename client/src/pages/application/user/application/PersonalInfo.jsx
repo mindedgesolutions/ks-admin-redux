@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { splitErrors } from "../../../../utils/showErrors";
 import customFetch from "../../../../utils/customFetch";
-import {
-  redirect,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-} from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import {
   ApplicationMenu,
   UserPageHeader,
@@ -80,8 +75,6 @@ const PersonalInfo = () => {
   document.title = `Personal Information | ${import.meta.env.VITE_USER_TITLE}`;
   const dispatch = useDispatch();
   const { info } = useLoaderData();
-  const navigation = useNavigation();
-  const isLoading = navigation.state === "submitting";
   const navigate = useNavigate();
 
   const { epicRequired, religionOther, userAge } = useSelector(
@@ -105,6 +98,7 @@ const PersonalInfo = () => {
     permanentAddress: info?.data?.data?.rows[0]?.permanent_address || "",
     pin: info?.data?.data?.rows[0]?.permanent_pin || "",
     qualification: info?.data?.data?.rows[0]?.qualification || "",
+    isLoading: false,
   });
 
   const handleChange = (e) => {
@@ -128,6 +122,7 @@ const PersonalInfo = () => {
   // Handle form submit ------
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setForm({ ...form, isLoading: true });
     const formData = new FormData(e.currentTarget);
     const inputValues = Object.fromEntries(formData);
     try {
@@ -141,9 +136,11 @@ const PersonalInfo = () => {
       dispatch(details({ id: response.data.data, name: inputValues.name }));
       dispatch(access("worksite"));
 
+      setForm({ ...form, isLoading: false });
       toast.success(msg);
       navigate("/user/worksite-info");
     } catch (error) {
+      setForm({ ...form, isLoading: false });
       splitErrors(error?.response?.data?.msg);
       return error;
     }
@@ -304,7 +301,7 @@ const PersonalInfo = () => {
                       <UserTechSkills />
                     </div>
                     <div className="mt-5">
-                      <SubmitBtn isLoading={isLoading} />
+                      <SubmitBtn isLoading={form.isLoading} />
                     </div>
                   </div>
                 </div>

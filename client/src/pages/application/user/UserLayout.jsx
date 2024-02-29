@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, redirect, useNavigate } from "react-router-dom";
 import { UserTopNav, UserSideBar, UserFooter } from "../../../components";
 
@@ -15,17 +15,26 @@ import {
 } from "../../../utils/data";
 import { splitErrors } from "../../../utils/showErrors";
 import { toast } from "react-toastify";
-import { changeMobile } from "../../../features/otplogin/otpLoginSlice";
-import { details } from "../../../features/user/userBasicSlice";
+import {
+  changeMobile,
+  resetOtpState,
+} from "../../../features/otplogin/otpLoginSlice";
+import {
+  currentAccess,
+  details,
+  resetUserState,
+} from "../../../features/user/userBasicSlice";
+import { useDispatch } from "react-redux";
+import { resetAccessState } from "../../../features/access/accessSlice.js";
 
 // Loader starts ------
 export const loader = (store) => async () => {
   try {
     const appUser = await customFetch.get("/users/current-app-user");
-    const userAccess = await customFetch.get(
+    const reponse = await customFetch.get(
       "/applications/user/application-access"
     );
-    addAccessToLocalStorage(userAccess.data.data);
+    addAccessToLocalStorage(reponse.data.data);
     store.dispatch(details(appUser.data.data.rows[0]));
     store.dispatch(changeMobile());
     return appUser;
@@ -38,13 +47,23 @@ export const loader = (store) => async () => {
 // Main component starts ------
 const UserLayout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const logoutAppUser = async () => {
     await customFetch.get("/auth/user-logout");
     removeAccessFromLocalStorage();
+
+    dispatch(resetAccessState());
+    dispatch(resetOtpState());
+    dispatch(resetUserState());
+
     toast.success(`User logged out`);
     navigate("/otplogin");
   };
+
+  useEffect(() => {
+    dispatch(currentAccess());
+  }, []);
 
   return (
     <>
