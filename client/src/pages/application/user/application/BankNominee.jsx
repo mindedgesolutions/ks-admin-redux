@@ -1,15 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ApplicationMenu,
+  InputSelect,
+  InputText,
+  SubmitBtn,
   UserBank,
   UserPageHeader,
   UserPageWrapper,
+  UserSchemes,
 } from "../../../../components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import customFetch from "../../../../utils/customFetch";
 import { splitErrors } from "../../../../utils/showErrors";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { relationships } from "../../../../utils/data";
+import { access } from "../../../../features/user/userBasicSlice";
+import { toast } from "react-toastify";
 
+// Loader starts ------
 export const loader = async () => {
   try {
     const banks = await customFetch.get("/master/banks");
@@ -25,12 +33,57 @@ export const loader = async () => {
   }
 };
 
+// Main component starts ------
 const BankNominee = () => {
+  document.title = `Bank & Nominee Information | ${
+    import.meta.env.VITE_USER_TITLE
+  }`;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { info } = useLoaderData();
   const { user } = useSelector((store) => store.user);
+  const { currentSchemes } = useSelector((store) => store.bankNominee);
+
+  const [form, setForm] = useState({
+    khadyasathiNo: info?.data?.data?.rows[0]?.khadyasathi_no || "",
+    sasthyasathiNo: info?.data?.data?.rows[0]?.sasthyasathi_no || "",
+    nomineeName: info?.data?.data?.rows[0]?.nominee_name || "",
+    nomineeRelation: info?.data?.data?.rows[0]?.nominee_relationship || "",
+    nomineeMobile: info?.data?.data?.rows[0]?.nominee_mobile || "",
+    nomineeAadhaar: info?.data?.data?.rows[0]?.nominee_aadhar || "",
+    isLoading: false,
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const relationList = relationships.filter(
+    (relation) => relation.isActive === true
+  );
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setForm({ ...form, isLoading: true });
+    const formData = new FormData(e.currentTarget);
+    let data = Object.fromEntries(formData);
+    data = { ...data, schemes: currentSchemes };
+    try {
+      const process = data.appId ? customFetch.patch : customFetch.post;
+      const msg = data.appId ? `Data updated` : `Data added`;
+
+      await process(`/applications/user/bank-nominee`, data);
+
+      dispatch(access("family"));
+
+      setForm({ ...form, isLoading: false });
+      toast.success(msg);
+      navigate("/user/family-info");
+    } catch (error) {
+      splitErrors(error?.response?.data?.msg);
+      setForm({ ...form, isLoading: false });
+      console.log(error);
+    }
   };
   return (
     <>
@@ -47,6 +100,70 @@ const BankNominee = () => {
                 <div className="card-body">
                   <div className="row row-cards">
                     <UserBank />
+
+                    <div className="col-md-6 col-sm-12">
+                      <InputText
+                        label="Ration Card / Khadya Sathi Card no."
+                        name="khadyasathiNo"
+                        required={true}
+                        value={form.khadyasathiNo}
+                        handleChange={handleChange}
+                      />
+                    </div>
+                    <div className="col-md-6 col-sm-12">
+                      <InputText
+                        label="Sasthya Sathi Card no."
+                        name="sasthyasathiNo"
+                        required={false}
+                        value={form.sasthyasathiNo}
+                        handleChange={handleChange}
+                      />
+                    </div>
+                    <UserSchemes />
+                  </div>
+                  <div className="row row-cards mt-1">
+                    <div className="col-md-6 col-sm-12">
+                      <InputText
+                        label="Nominee name"
+                        name="nomineeName"
+                        required={true}
+                        value={form.nomineeName}
+                        handleChange={handleChange}
+                      />
+                    </div>
+                    <div className="col-md-6 col-sm-12">
+                      <InputSelect
+                        label="Relationship with the nominee"
+                        name="nomineeRelation"
+                        required={true}
+                        placeholder="relationship"
+                        options={relationList}
+                        value={form.nomineeRelation}
+                        handleChange={handleChange}
+                      />
+                    </div>
+                    <div className="col-md-6 col-sm-12">
+                      <InputText
+                        label="Nominee mobile no."
+                        name="nomineeMobile"
+                        required={true}
+                        value={form.nomineeMobile}
+                        handleChange={handleChange}
+                      />
+                    </div>
+                    <div className="col-md-6 col-sm-12">
+                      <InputText
+                        label="Nominee Aadhaar no."
+                        name="nomineeAadhaar"
+                        required={true}
+                        value={form.nomineeAadhaar}
+                        handleChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <SubmitBtn isLoading={form.isLoading} />
                   </div>
                 </div>
               </form>

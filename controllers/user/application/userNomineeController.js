@@ -74,10 +74,6 @@ export const addBankInfo = async (req, res) => {
   }
 };
 
-export const updateBankInfo = async (req, res) => {
-  const { mobile, applicationId } = req.appUser;
-};
-
 export const getBankInfo = async (req, res) => {
   const { mobile, applicationId } = req.appUser;
   const searchBy = applicationId || (await getApplicationId(mobile));
@@ -86,6 +82,83 @@ export const getBankInfo = async (req, res) => {
     [searchBy]
   );
   res.status(StatusCodes.OK).json({ data });
+};
+
+export const updateBankInfo = async (req, res) => {
+  const { mobile, applicationId } = req.appUser;
+  const {
+    appId,
+    ifscCode,
+    bankName,
+    branchName,
+    accountNo,
+    khadyasathiNo,
+    sasthyasathiNo,
+    schemes,
+    nomineeName,
+    nomineeRelation,
+    nomineeMobile,
+    nomineeAadhaar,
+  } = req.body;
+
+  try {
+    await pool.query("BEGIN");
+
+    const mwin = await pool.query(
+      `select identification_number from k_migrant_worker_master where id=$1`,
+      [appId]
+    );
+
+    // Nominee update ------
+    await pool.query(
+      `update k_migrant_worker_nominees set nominee_name=$1, nominee_relationship=$2, nominee_mobile=$3, nominee_aadhar=$4, bank_name=$5, bank_branch=$6, bank_account=$7, ifsc_code=$8 where application_id=$9`,
+      [
+        nomineeName,
+        nomineeRelation,
+        nomineeMobile,
+        nomineeAadhaar,
+        bankName,
+        branchName,
+        accountNo,
+        ifscCode,
+        appId,
+      ]
+    );
+
+    // Khadyasathi / Sasthyasathi no update ------
+    await pool.query(
+      `update k_migrant_worker_master set khadyasathi_no=$1, sasthyasathi_no=$2 where id=$3`,
+      [khadyasathiNo, sasthyasathiNo ?? null, appId]
+    );
+
+    // Schemes update ------
+
+    if (schemes.length > 0) {
+      await pool.query(
+        `delete from k_availed_schemes where application_id=$1 and member_id is null`,
+        [appId]
+      );
+
+      const inputSchemes = JSON.parse(schemes);
+      const values = inputSchemes
+        .map((data) => {
+          return `('${appId}', '${data.value}')`;
+        })
+        .join(", ");
+
+      await pool.query(
+        `insert into k_availed_schemes(application_id, scheme_id) values ${values} returning id`
+      );
+    }
+
+    await pool.query("COMMIT");
+
+    res.status(StatusCodes.OK).json({ msg: `success` });
+  } catch (error) {
+    await pool.query("ROLLBACK");
+    console.log(error);
+    throw new BadRequestError(`Something went wrong!`);
+  }
 };
 
 export const getUserSchemes = async (req, res) => {

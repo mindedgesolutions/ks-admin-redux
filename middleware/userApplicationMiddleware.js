@@ -216,7 +216,16 @@ export const validateBank = withValidationErrors([
   body("khadyasathiNo")
     .notEmpty()
     .withMessage(`Enter Khadya Sathi / Ration card no.`),
-  body("schemes").notEmpty().withMessage(`Select at least one availed scheme`),
+  body("schemes").custom(async (value, { req }) => {
+    const count = await pool.query(
+      `select id from k_availed_schemes where application_id=$1 and member_id is null`,
+      [req.body.appId]
+    );
+    if (value.length === 0 && count.rowCount === 0) {
+      throw new BadRequestError(`Select at least one availed scheme`);
+    }
+    return true;
+  }),
   body("nomineeName")
     .notEmpty()
     .withMessage(`Enter name of the nominee`)

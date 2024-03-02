@@ -8,10 +8,10 @@ import { loader as personalLoader } from "./pages/application/user/application/P
 import { loader as worksiteLoader } from "./pages/application/user/application/WorkInfo";
 import { loader as agencyLoader } from "./pages/application/user/application/AgencyInfo";
 import { loader as bankNomineeLoader } from "./pages/application/user/application/BankNominee";
+import { loader as familyLoader } from "./pages/application/user/application/Family";
 
 // Actions ------
 import { action as otpLogin } from "./components/website/LoginForm";
-// import { action as personalAction } from "./pages/application/user/application/PersonalInfo";
 
 const router = createBrowserRouter([
   // Website related starts ------
@@ -40,7 +40,6 @@ const router = createBrowserRouter([
         path: "personal-info",
         element: <Ks.PersonalInfo />,
         loader: personalLoader(store),
-        // action: personalAction(store),
       },
       {
         path: "worksite-info",
@@ -53,7 +52,7 @@ const router = createBrowserRouter([
         element: <Ks.BankNominee />,
         loader: bankNomineeLoader,
       },
-      { path: "family-info", element: <Ks.Family /> },
+      { path: "family-info", element: <Ks.Family />, loader: familyLoader },
       { path: "documents", element: <Ks.Documents /> },
       { path: "overview", element: <Ks.OverView /> },
     ],

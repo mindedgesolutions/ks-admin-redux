@@ -8,6 +8,7 @@ import blockReducer from "./features/masters/blockSlice";
 import gpReducer from "./features/masters/gpSlice";
 import psReducer from "./features/masters/psSlice";
 import bankNomineeReducer from "./features/userApplication/bankNomineesSlice";
+import familyReducer from "./features/userApplication/familySlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +21,6 @@ export const store = configureStore({
     mgps: gpReducer,
     mps: psReducer,
     bankNominee: bankNomineeReducer,
+    family: familyReducer,
   },
 });

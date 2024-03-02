@@ -47,29 +47,6 @@ export const loader = (store) => async () => {
   }
 };
 
-// Action starts ------
-// export const action =
-//   (store) =>
-//   async ({ request }) => {
-//     const formData = await request.formData();
-//     const data = Object.fromEntries(formData);
-//     try {
-//       const process = data.appId ? customFetch.patch : customFetch.post;
-//       const msg = data.appId ? `Data updated` : `Data added`;
-
-//       await process(`/applications/user/personal-info`, data);
-
-//       store.dispatch(details({ name: data.name }));
-//       store.dispatch(access({ worsite: true }));
-
-//       toast.success(msg);
-//       return redirect("/user/worksite-info");
-//     } catch (error) {
-//       splitErrors(error?.response?.data?.msg);
-//       return error;
-//     }
-//   };
-
 // Main component starts ------
 const PersonalInfo = () => {
   document.title = `Personal Information | ${import.meta.env.VITE_USER_TITLE}`;

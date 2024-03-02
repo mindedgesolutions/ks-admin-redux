@@ -30,6 +30,10 @@ export { default as WithAgent } from "./application/user/WithAgent";
 export { default as WithoutAgent } from "./application/user/WithoutAgent";
 export { default as UserBank } from "./application/user/UserBank";
 export { default as ModalAddNewBank } from "./application/user/ModalAddNewBank";
+export { default as UserSchemes } from "./application/user/UserSchemes";
+export { default as UserFamilySchemes } from "./application/user/UserFamilySchemes";
+export { default as UserFamilyTable } from "./application/user/UserFamilyTable";
+export { default as ConfirmDeleteFamily } from "./application/user/ConfirmDeleteFamily";
 // User related ends ------
 
 // Admin related starts ------

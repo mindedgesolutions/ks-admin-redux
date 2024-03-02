@@ -6,14 +6,14 @@ import customFetch from "../../../utils/customFetch";
 import { splitErrors } from "../../../utils/showErrors";
 
 const UserBank = () => {
-  const { banks: bankList } = useLoaderData();
+  const { info, banks: bankList } = useLoaderData();
   const dispatch = useDispatch();
 
   const [form, setForm] = useState({
-    ifscCode: "",
-    bankName: "",
-    branchName: "",
-    accountNo: "",
+    ifscCode: info?.data?.data?.rows[0]?.ifsc_code || "",
+    bankName: info?.data?.data?.rows[0]?.bank_name || "",
+    branchName: info?.data?.data?.rows[0]?.bank_branch || "",
+    accountNo: info?.data?.data?.rows[0]?.bank_account || "",
   });
 
   const handleChange = (e) => {

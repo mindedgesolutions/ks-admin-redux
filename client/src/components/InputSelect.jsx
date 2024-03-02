@@ -8,6 +8,7 @@ const InputSelect = ({
   options,
   value,
   handleChange,
+  placeholder,
 }) => {
   return (
     <>
@@ -24,7 +25,7 @@ const InputSelect = ({
         onChange={handleChange}
         value={value}
       >
-        <option value="">- Select {name} -</option>
+        <option value="">- Select {placeholder || name} -</option>
         {options.map((option) => {
           return (
             <option key={nanoid()} value={option.value}>
