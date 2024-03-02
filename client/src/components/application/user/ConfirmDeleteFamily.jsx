@@ -3,16 +3,11 @@ import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { hideModal } from "../../../features/userApplication/familySlice";
 
-const ConfirmDeleteFamily = () => {
+const ConfirmDeleteFamily = ({ deleteConfirmed }) => {
   const dispatch = useDispatch();
-  const { visible, name, memberId } = useSelector((store) => store.family);
+  const { visible, fMember } = useSelector((store) => store.family);
 
   const handleClose = () => {
-    dispatch(hideModal());
-  };
-
-  const deleteConfirmed = () => {
-    // Delete API
     dispatch(hideModal());
   };
 
@@ -22,7 +17,7 @@ const ConfirmDeleteFamily = () => {
         <Modal.Title>Confirm delete</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Do you wish to delete <b>{name}</b>?
+        Do you wish to delete <b>{fMember.member_name}</b>?
       </Modal.Body>
       <Modal.Footer>
         <button

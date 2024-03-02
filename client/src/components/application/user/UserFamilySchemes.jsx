@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 import Select from "react-select";
+import { familySchemeSet } from "../../../features/userApplication/familySlice";
 
 const UserFamilySchemes = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const UserFamilySchemes = () => {
 
   const handleChange = async (selected) => {
     setSelectedSchemes(selected);
-    dispatch(newSchemeSet(selected));
+    dispatch(familySchemeSet(selected));
   };
 
   return (

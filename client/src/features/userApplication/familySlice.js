@@ -2,13 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   visible: false,
-  memberId: "",
-  name: "",
-  gender: "",
-  age: "",
-  relation: "",
-  aadhaar: "",
-  epic: "",
+  fMember: {
+    id: 0,
+    application_id: 0,
+    member_name: "",
+    member_gender: "",
+    member_age: 0,
+    member_aadhar_no: "",
+    member_relationship: "",
+    member_epic: "",
+  },
+  fMembers: [],
+  fSchemes: [],
   isLoading: false,
 };
 
@@ -18,26 +23,40 @@ const familySlice = createSlice({
   reducers: {
     showModal: (state, action) => {
       state.visible = true;
-      state.memberId = action.payload.id;
-      state.name = action.payload.name;
+      state.fMember.id = action.payload.id;
+      state.fMember.member_name = action.payload.name;
     },
     hideModal: (state) => {
       state.visible = false;
-      state.memberId = "";
-      state.name = "";
+      state.fMember = { id: 0, member_name: "" };
+    },
+    familySchemeSet: (state, action) => {
+      const sendSchemes = JSON.stringify(action.payload);
+      state.fSchemes = sendSchemes;
+    },
+    currentMembers: (state, action) => {
+      state.fMembers = action.payload;
+    },
+    addMember: (state, action) => {
+      state.fMembers = [...state.fMembers, action.payload];
     },
     editMember: (state, action) => {
       console.log(action.payload);
-      state.memberId = "";
-      state.name = "";
-      state.gender = "";
-      state.age = "";
-      state.relation = "";
-      state.aadhaar = "";
-      state.epic = "";
+    },
+    deleteMember: (state, action) => {
+      const deleteId = action.payload;
+      state.fMembers = state.fMembers.filter((value) => deleteId !== value.id);
     },
   },
 });
 
-export const { showModal, hideModal, editMember } = familySlice.actions;
+export const {
+  showModal,
+  hideModal,
+  familySchemeSet,
+  currentMembers,
+  addMember,
+  editMember,
+  deleteMember,
+} = familySlice.actions;
 export default familySlice.reducer;

@@ -54,7 +54,7 @@ export const addFamilyMember = async (req, res) => {
 
     await pool.query("COMMIT");
 
-    res.status(StatusCodes.CREATED).json({ data: `success` });
+    res.status(StatusCodes.CREATED).json({ data });
   } catch (error) {
     await pool.query("ROLLBACK");
     console.log(error);
@@ -67,6 +67,16 @@ export const getAllMembers = async (req, res) => {
   const searchBy = applicationId || (await getApplicationId(mobile));
   const data = await pool.query(
     `select kmfi.* from k_migrant_family_info kmfi where kmfi.application_id=$1`,
+    [searchBy]
+  );
+  res.status(StatusCodes.OK).json({ data });
+};
+
+export const getAllMembersPartial = async (req, res) => {
+  const { mobile, applicationId } = req.appUser;
+  const searchBy = applicationId || (await getApplicationId(mobile));
+  const data = await pool.query(
+    `select id, application_id, member_name, member_gender, member_age, member_aadhar_no, member_relationship, member_epic from k_migrant_family_info where application_id=$1`,
     [searchBy]
   );
   res.status(StatusCodes.OK).json({ data });

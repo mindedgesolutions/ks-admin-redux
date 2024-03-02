@@ -44,6 +44,7 @@ import {
   addFamilyMember,
   deleteMember,
   getAllMembers,
+  getAllMembersPartial,
   getSingleMember,
   updateSingleMember,
 } from "../controllers/user/application/userFamilyController.js";
@@ -99,6 +100,7 @@ router.get("/user/single-member/:id", protectUserRoute, getSingleMember);
 router.delete("/user/delete/:appId/:id", deleteMember);
 
 router.get("/user/all-members", protectUserRoute, getAllMembers);
+router.get("/user/all-members-partial", protectUserRoute, getAllMembersPartial);
 // User family related routes end ------
 
 router.route("/user/documents").post(protectUserRoute, uploadDocument); // Documents

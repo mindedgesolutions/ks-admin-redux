@@ -69,8 +69,10 @@ const BankNominee = () => {
     let data = Object.fromEntries(formData);
     data = { ...data, schemes: currentSchemes };
     try {
-      const process = data.appId ? customFetch.patch : customFetch.post;
-      const msg = data.appId ? `Data updated` : `Data added`;
+      const process = info.data.data.rowCount
+        ? customFetch.patch
+        : customFetch.post;
+      const msg = info.data.data.rowCount ? `Data updated` : `Data added`;
 
       await process(`/applications/user/bank-nominee`, data);
 

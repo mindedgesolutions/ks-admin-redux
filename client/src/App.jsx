@@ -52,7 +52,11 @@ const router = createBrowserRouter([
         element: <Ks.BankNominee />,
         loader: bankNomineeLoader,
       },
-      { path: "family-info", element: <Ks.Family />, loader: familyLoader },
+      {
+        path: "family-info",
+        element: <Ks.Family />,
+        loader: familyLoader(store),
+      },
       { path: "documents", element: <Ks.Documents /> },
       { path: "overview", element: <Ks.OverView /> },
     ],

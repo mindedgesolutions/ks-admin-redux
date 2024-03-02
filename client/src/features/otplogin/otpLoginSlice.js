@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-  newMobile: null,
-  newOtp: null,
+  newMobile: "",
+  newOtp: "",
 };
 
 const otpLoginSlice = createSlice({
@@ -17,10 +17,16 @@ const otpLoginSlice = createSlice({
       state.newMobile = action.payload.mobile;
       state.newOtp = action.payload.otp;
     },
-    resetOtpState: () => initialState,
+    resetOtpState: (state) => {
+      state.newMobile = "";
+      state.newOtp = "";
+    },
   },
 });
 
-export const { changeMobile, generatedOtp, resetOtpState } =
-  otpLoginSlice.actions;
+export const {
+  changeMobile,
+  generatedOtp,
+  resetOtpState,
+} = otpLoginSlice.actions;
 export default otpLoginSlice.reducer;

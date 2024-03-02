@@ -2,16 +2,15 @@ import { nanoid } from "nanoid";
 import React from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
-import { useLoaderData } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   editMember,
   showModal,
 } from "../../../features/userApplication/familySlice";
 
 const UserFamilyTable = () => {
+  const { fMembers } = useSelector((store) => store.family);
   const dispatch = useDispatch();
-  const { members } = useLoaderData();
 
   return (
     <div className="table-responsive fs-5 mx-0 px-0">
@@ -27,7 +26,7 @@ const UserFamilyTable = () => {
           </tr>
         </thead>
         <tbody>
-          {members.data.data.rows.map((member, index) => {
+          {fMembers.map((member, index) => {
             return (
               <tr key={nanoid()}>
                 <td>{index + 1}.</td>
@@ -46,10 +45,7 @@ const UserFamilyTable = () => {
                     className="ms-1 fs-3 text-danger cursor-pointer"
                     onClick={() =>
                       dispatch(
-                        showModal({
-                          id: member.id,
-                          name: member.member_name.toUpperCase(),
-                        })
+                        showModal({ id: member.id, name: member.member_name })
                       )
                     }
                   />

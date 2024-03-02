@@ -18,7 +18,9 @@ const accessSlice = createSlice({
       state.availableAccess = action.payload;
       addAccessToLocalStorage(action.payload);
     },
-    resetAccessState: () => initialState,
+    resetAccessState: (state) => {
+      state.availableAccess = null;
+    },
   },
 });
 
