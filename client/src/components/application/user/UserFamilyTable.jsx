@@ -5,12 +5,17 @@ import { FaRegEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editMember,
+  getEditDetails,
   showModal,
 } from "../../../features/userApplication/familySlice";
 
 const UserFamilyTable = () => {
   const { fMembers } = useSelector((store) => store.family);
   const dispatch = useDispatch();
+
+  const handleEditMember = (value) => {
+    dispatch(getEditDetails(value));
+  };
 
   return (
     <div className="table-responsive fs-5 mx-0 px-0">
@@ -38,7 +43,7 @@ const UserFamilyTable = () => {
                   <FaRegEdit
                     title="Edit"
                     className="me-2 fs-3 text-yellow cursor-pointer"
-                    onClick={() => dispatch(editMember(member))}
+                    onClick={() => handleEditMember(member.id)}
                   />
                   <FaRegTrashCan
                     title="Delete"

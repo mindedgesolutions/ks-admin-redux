@@ -276,5 +276,16 @@ export const validateFamilyMember = withValidationErrors([
     }
     return true;
   }),
+  body("schemes").custom(async (value, { req }) => {
+    const memberId = req.body.editId;
+    const count = await pool.query(
+      `select id from k_availed_schemes where application_id=$1 and member_id=$2`,
+      [req.body.appId, memberId]
+    );
+    if (value.length === 0 && count.rowCount === 0) {
+      throw new BadRequestError(`Select at least one availed scheme`);
+    }
+    return true;
+  }),
 ]);
 // Add family member form validation ends ------

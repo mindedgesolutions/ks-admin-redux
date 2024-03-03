@@ -1,4 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import customFetch from "../../utils/customFetch";
+
+export const getEditDetails = createAsyncThunk(
+  "/family/details",
+  async (data) => {
+    const response = await customFetch.get(
+      `/applications/user/single-member/${data}`
+    );
+    console.log(response.data.data.rows[0]);
+  }
+);
 
 const initialState = {
   visible: false,
@@ -11,6 +22,7 @@ const initialState = {
     member_aadhar_no: "",
     member_relationship: "",
     member_epic: "",
+    member_schemes: [],
   },
   fMembers: [],
   fSchemes: [],

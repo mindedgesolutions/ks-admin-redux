@@ -50,7 +50,7 @@ const Family = () => {
     (relation) => relation.isActive === true
   );
 
-  // Form input state management ------
+  // Form input state management starts ------
   const [form, setForm] = useState({
     memberName: "",
     memberGender: "",
@@ -66,7 +66,7 @@ const Family = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Reset form inputs ------
+  // Reset form inputs starts ------
   const resetForm = () => {
     setForm({
       ...form,
@@ -81,7 +81,7 @@ const Family = () => {
     });
   };
 
-  // Handle add member form submit ------
+  // Handle add member form submit starts ------
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setForm({ ...form, isLoading: true });
@@ -108,6 +108,7 @@ const Family = () => {
         member_aadhar_no: inputValues.memberAadhaar,
         member_relationship: inputValues.memberRelation,
         member_epic: inputValues.memberEpic,
+        member_schemes: fSchemes,
       };
 
       dispatch(addMember(newMember));
@@ -121,6 +122,8 @@ const Family = () => {
       return error;
     }
   };
+
+  // Edit member starts ------
 
   // Delete family member ------
   const deleteConfirmed = async () => {
