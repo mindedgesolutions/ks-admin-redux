@@ -79,6 +79,7 @@ export const getAllMembersPartial = async (req, res) => {
     `select id, application_id, member_name, member_gender, member_age, member_aadhar_no, member_relationship, member_epic from k_migrant_family_info where application_id=$1`,
     [searchBy]
   );
+
   res.status(StatusCodes.OK).json({ data });
 };
 
@@ -92,13 +93,17 @@ export const getSingleMember = async (req, res) => {
       [id]
     );
     const meta = await pool.query(
-      `select * from k_availed_schemes where member_id=$1`,
+      `select kas.scheme_id, ms.schemes_name from k_availed_schemes kas join master_schemes ms on kas.scheme_id = ms.id where kas.member_id=$1`,
       [id]
     );
+    const response = {
+      data: data,
+      meta: meta,
+    };
 
     await pool.query("COMMIT");
 
-    res.status(StatusCodes.OK).json({ data, meta });
+    res.status(StatusCodes.OK).json({ data: response });
   } catch (error) {
     await pool.query("ROLLBACK");
     console.log(error);

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 import Select from "react-select";
 import { familySchemeSet } from "../../../features/userApplication/familySlice";
@@ -7,14 +7,15 @@ import { familySchemeSet } from "../../../features/userApplication/familySlice";
 const UserFamilySchemes = () => {
   const dispatch = useDispatch();
   const { schemes } = useLoaderData();
+  const { clearData, fMember } = useSelector((store) => store.family);
 
   const dbSch = [];
-  // userSchemes.data.data.rows.map((scheme) => {
-  //   const element = { value: scheme.scheme_id, label: scheme.schemes_name };
-  //   dbSch.push(element);
-  // });
+  fMember.member_schemes.map((scheme) => {
+    const element = { value: scheme.scheme_id, label: scheme.schemes_name };
+    dbSch.push(element);
+  });
 
-  const [selectedSchemes, setSelectedSchemes] = useState([]);
+  const [selectedSchemes, setSelectedSchemes] = useState(dbSch || []);
 
   const sch = [];
   schemes.data.data.rows.map((scheme) => {
@@ -30,6 +31,10 @@ const UserFamilySchemes = () => {
     setSelectedSchemes(selected);
     dispatch(familySchemeSet(selected));
   };
+
+  useEffect(() => {
+    setSelectedSchemes(null);
+  }, [clearData]);
 
   return (
     <div className="col-md-6 col-sm-12">

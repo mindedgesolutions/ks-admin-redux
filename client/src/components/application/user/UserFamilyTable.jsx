@@ -4,7 +4,6 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  editMember,
   getEditDetails,
   showModal,
 } from "../../../features/userApplication/familySlice";
