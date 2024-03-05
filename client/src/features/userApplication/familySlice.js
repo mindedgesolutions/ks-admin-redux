@@ -117,6 +117,16 @@ const familySlice = createSlice({
         (value) => Number(deleteId) !== Number(value.id)
       );
     },
+    resetFamily: (state) => {
+      state.visible = false;
+      state.visibleF = false;
+      state.fMember = {};
+      state.allFSchemes = [];
+      state.fMembers = [];
+      state.fSchemes = [];
+      state.clearData = 0;
+      state.isLoading = false;
+    },
   },
   // extraReducers: (builder) => {
   //   builder
@@ -158,5 +168,6 @@ export const {
   editMember,
   deleteMember,
   memberInfo,
+  resetFamily,
 } = familySlice.actions;
 export default familySlice.reducer;

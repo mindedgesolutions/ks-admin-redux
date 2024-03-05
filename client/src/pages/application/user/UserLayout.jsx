@@ -26,6 +26,7 @@ import {
 } from "../../../features/user/userBasicSlice";
 import { useDispatch } from "react-redux";
 import { resetAccessState } from "../../../features/access/accessSlice.js";
+import { resetFamily } from "../../../features/userApplication/familySlice.js";
 
 // Loader starts ------
 export const loader = (store) => async () => {
@@ -57,6 +58,7 @@ const UserLayout = () => {
     dispatch(resetAccessState());
     dispatch(resetOtpState());
     dispatch(resetUserState());
+    dispatch(resetFamily());
 
     toast.success(`User logged out`);
     navigate("/otplogin");
