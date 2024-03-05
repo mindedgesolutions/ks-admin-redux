@@ -7,7 +7,7 @@ import { familySchemeSet } from "../../../features/userApplication/familySlice";
 const UserFamilySchemes = () => {
   const dispatch = useDispatch();
   const { schemes } = useLoaderData();
-  const { clearData, fMember } = useSelector((store) => store.family);
+  const { clearData, fMember, fSchemes } = useSelector((store) => store.family);
 
   const dbSch = [];
   fMember.member_schemes.map((scheme) => {
@@ -35,6 +35,10 @@ const UserFamilySchemes = () => {
   useEffect(() => {
     setSelectedSchemes(null);
   }, [clearData]);
+
+  useEffect(() => {
+    setSelectedSchemes(dbSch);
+  }, [fMember]);
 
   return (
     <div className="col-md-6 col-sm-12">

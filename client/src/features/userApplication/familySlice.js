@@ -84,7 +84,7 @@ const familySlice = createSlice({
           member_epic: data.member_epic,
           member_schemes: schemes,
         };
-        state.fSchemes = schemes;
+        state.fSchemes = JSON.stringify(schemes);
       })
       .addCase(getEditDetails.rejected, (state, action) => {
         state.isLoading = false;
