@@ -94,3 +94,9 @@ export const documentFormat = (value) => {
 export const getFileExtension = (fileName) => {
   return fileName.split(".").pop();
 };
+
+export const randomBadgeBg = () => {
+  const colorArray = ["azure", "purple", "pink", "yellow", "green", "cyan"];
+  const randomIndex = Math.floor(Math.random() * colorArray.length);
+  return colorArray[randomIndex];
+};

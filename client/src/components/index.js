@@ -35,6 +35,8 @@ export { default as FamilyAddForm } from "./application/user/FamilyAddForm";
 export { default as UserFamilySchemes } from "./application/user/UserFamilySchemes";
 export { default as UserFamilyTable } from "./application/user/UserFamilyTable";
 export { default as ConfirmDeleteFamily } from "./application/user/ConfirmDeleteFamily";
+export { default as ModalViewFamily } from "./application/user/ModalViewFamily";
+export { default as OverviewSideBar } from "./application/user/OverviewSideBar";
 // User related ends ------
 
 // Admin related starts ------

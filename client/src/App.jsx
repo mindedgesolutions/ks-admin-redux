@@ -9,6 +9,7 @@ import { loader as worksiteLoader } from "./pages/application/user/application/W
 import { loader as agencyLoader } from "./pages/application/user/application/AgencyInfo";
 import { loader as bankNomineeLoader } from "./pages/application/user/application/BankNominee";
 import { loader as familyLoader } from "./pages/application/user/application/Family";
+import { loader as viewLoader } from "./pages/application/user/application/OverView";
 
 // Actions ------
 import { action as otpLogin } from "./components/website/LoginForm";
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
         loader: familyLoader(store),
       },
       { path: "documents", element: <Ks.Documents /> },
-      { path: "overview", element: <Ks.OverView /> },
+      { path: "overview", element: <Ks.OverView />, loader: viewLoader },
     ],
   },
   // User app related ends ------

@@ -10,7 +10,7 @@ const UserFamilySchemes = () => {
   const { clearData, fMember, fSchemes } = useSelector((store) => store.family);
 
   const dbSch = [];
-  fMember.member_schemes.map((scheme) => {
+  fMember?.member_schemes?.map((scheme) => {
     const element = { value: scheme.scheme_id, label: scheme.schemes_name };
     dbSch.push(element);
   });

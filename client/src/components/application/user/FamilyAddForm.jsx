@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addMember,
   clearSchemes,
+  editMember,
 } from "../../../features/userApplication/familySlice";
 import customFetch from "../../../utils/customFetch";
 import { toast } from "react-toastify";
@@ -33,8 +34,8 @@ const FamilyAddForm = () => {
     memberAadhaar: "",
     memberEpic: "",
     btnLabel: "Add member",
-    isLoading: false,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -52,7 +53,6 @@ const FamilyAddForm = () => {
       memberAadhaar: "",
       memberEpic: "",
       btnLabel: "Add member",
-      isLoading: false,
     });
     dispatch(clearSchemes());
   };
@@ -61,7 +61,7 @@ const FamilyAddForm = () => {
   // Handle form submit (add / edit) starts ------
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setForm({ ...form, isLoading: true });
+    setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     let inputValues = Object.fromEntries(formData);
     inputValues = { ...inputValues, memberSchemes: fSchemes };
@@ -76,7 +76,10 @@ const FamilyAddForm = () => {
     try {
       const response = await process(url, inputValues);
       const newMember = {
-        id: response.data.data.rows[0].id,
+        id:
+          inputValues.editId > 0
+            ? inputValues.editId
+            : response.data.data.rows[0].id,
         application_id: Number(inputValues.appId),
         member_name: inputValues.memberName,
         member_gender: inputValues.memberGender,
@@ -86,14 +89,17 @@ const FamilyAddForm = () => {
         member_epic: inputValues.memberEpic,
         member_schemes: fSchemes,
       };
+      inputValues.editId > 0
+        ? dispatch(editMember(newMember))
+        : dispatch(addMember(newMember));
 
-      dispatch(addMember(newMember));
       dispatch(access("doc"));
 
       toast.success(msg);
+      setIsLoading(false);
       resetForm();
     } catch (error) {
-      setForm({ ...form, isLoading: false });
+      setIsLoading(false);
       splitErrors(error?.response?.data?.msg);
       return error;
     }
@@ -182,7 +188,7 @@ const FamilyAddForm = () => {
           <UserFamilySchemes />
         </div>
         <div className="mt-5">
-          <SubmitBtn text={form.btnLabel} isLoading={form.isLoading} />
+          <SubmitBtn text={form.btnLabel} isLoading={isLoading} />
           <button
             type="button"
             className="btn btn-default ms-2"

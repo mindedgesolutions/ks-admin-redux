@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ApplicationMenu,
   ConfirmDeleteFamily,
@@ -17,6 +17,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { access, accessRevoke } from "../../../../features/user/userBasicSlice";
 import { toast } from "react-toastify";
+import { useLoaderData } from "react-router-dom";
 
 // Loader starts ------
 export const loader = (store) => async () => {
@@ -25,7 +26,7 @@ export const loader = (store) => async () => {
     const members = await customFetch.get(
       "/applications/user/all-members-partial"
     );
-    store.dispatch(currentMembers(members.data.data.rows));
+    store.dispatch(currentMembers(members.data.response));
     return { schemes, members };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);

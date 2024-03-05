@@ -79,8 +79,16 @@ export const getAllMembersPartial = async (req, res) => {
     `select id, application_id, member_name, member_gender, member_age, member_aadhar_no, member_relationship, member_epic from k_migrant_family_info where application_id=$1`,
     [searchBy]
   );
+  const meta = await pool.query(
+    `select kas.member_id, kas.scheme_id, ms.schemes_name from k_availed_schemes kas join master_schemes ms on kas.scheme_id = ms.id where kas.application_id=$1 and member_id is not null`,
+    [searchBy]
+  );
+  const response = {
+    data: data,
+    meta: meta,
+  };
 
-  res.status(StatusCodes.OK).json({ data });
+  res.status(StatusCodes.OK).json({ response });
 };
 
 export const getSingleMember = async (req, res) => {
@@ -132,10 +140,10 @@ export const updateSingleMember = async (req, res) => {
         memberName,
         memberGender,
         memberAge,
-        memberAadhaar,
+        Number(memberAadhaar),
         memberRelation,
         memberEpic,
-        id,
+        Number(id),
       ]
     );
 
@@ -147,7 +155,8 @@ export const updateSingleMember = async (req, res) => {
     if (memberSchemes.length > 0) {
       const values = JSON.parse(memberSchemes)
         .map((scheme) => {
-          return `('${appId}', ${id}, '${scheme.value}')`;
+          const schemeId = Number(scheme.value) || Number(scheme.scheme_id);
+          return `('${Number(appId)}', ${Number(id)}, '${schemeId}')`;
         })
         .join(", ");
 
