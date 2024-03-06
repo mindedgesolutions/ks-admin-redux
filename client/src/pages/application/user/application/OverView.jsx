@@ -4,6 +4,12 @@ import {
   OverviewTabList,
   UserPageHeader,
   UserPageWrapper,
+  ViewAgency,
+  ViewBankNominee,
+  ViewDocuments,
+  ViewFamily,
+  ViewPersonal,
+  ViewWorksite,
 } from "../../../../components";
 import { useSelector } from "react-redux";
 import customFetch from "../../../../utils/customFetch";
@@ -12,7 +18,9 @@ import { splitErrors } from "../../../../utils/showErrors";
 // Loader starts ------
 export const loader = async () => {
   try {
-    const info = await customFetch.get("/users/app-user-complete");
+    const info = await customFetch.get(
+      "/applications/user/complete-personal-info"
+    );
     return { info };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
@@ -22,7 +30,9 @@ export const loader = async () => {
 
 // Main component starts ------
 const OverView = () => {
+  document.title = `Application Overview | ${import.meta.env.VITE_USER_TITLE}`;
   const { user } = useSelector((store) => store.user);
+  const { currentTab } = useSelector((store) => store.overview);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -44,32 +54,14 @@ const OverView = () => {
                   <div className="card-body pt-2">
                     <OverviewTabList />
 
-                    <div class="card-body">
-                      <div class="tab-content">
-                        <div
-                          class="tab-pane active show"
-                          id="tabs-home-3"
-                          role="tabpanel"
-                        >
-                          <h4>Home tab</h4>
-                          <div>
-                            Cursus turpis vestibulum, dui in pharetra vulputate
-                            id sed non turpis ultricies fringilla at sed
-                            facilisis lacus pellentesque purus nibh
-                          </div>
-                        </div>
-                        <div
-                          class="tab-pane"
-                          id="tabs-profile-3"
-                          role="tabpanel"
-                        >
-                          <h4>Profile tab</h4>
-                          <div>
-                            Fringilla egestas nunc quis tellus diam rhoncus
-                            ultricies tristique enim at diam, sem nunc amet,
-                            pellentesque id egestas velit sed
-                          </div>
-                        </div>
+                    <div className="card-body">
+                      <div className="tab-content">
+                        {currentTab === "personal" && <ViewPersonal />}
+                        {currentTab === "worksite" && <ViewWorksite />}
+                        {currentTab === "agency" && <ViewAgency />}
+                        {currentTab === "bank" && <ViewBankNominee />}
+                        {currentTab === "family" && <ViewFamily />}
+                        {currentTab === "documents" && <ViewDocuments />}
                       </div>
                     </div>
                   </div>

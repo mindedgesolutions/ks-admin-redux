@@ -80,6 +80,50 @@ export const getPersonalInfo = async (req, res) => {
   res.status(StatusCodes.OK).json({ data });
 };
 
+export const getCompletePersonalInfo = async (req, res) => {
+  const { mobile, applicationId } = req.appUser;
+  const searchBy = applicationId || (await getApplicationId(mobile));
+
+  const response = await pool.query(
+    `select kwm.*, 
+    kwd.*, 
+    kwn.*, 
+    md.district_name, 
+    msd.subdiv_name, 
+    mbm.block_mun_name,
+    mvw.village_ward_name,
+    mps.ps_name
+    from k_migrant_worker_master kwm 
+    join k_migrant_work_details kwd on kwm.id = kwd.application_id 
+    join k_migrant_worker_nominees kwn on kwm.id = kwn.application_id 
+    join master_district md on kwm.permanent_dist = md.district_code 
+    join master_subdivision msd on kwm.permanent_subdivision = msd.subdiv_code 
+    join master_block_mun mbm on kwm.permanent_areacode = mbm.block_mun_code 
+    join master_village_ward mvw on kwm.permanent_villward = mvw.village_ward_code 
+    join master_policestation mps on kwm.permanent_ps = mps.ps_code 
+    where kwm.id=$1`,
+    [searchBy]
+  );
+  // ------------
+  let religionName;
+  if (response.rows[0].religion) {
+    const rel = await pool.query(
+      `select religion_name from master_religion where id=$1`,
+      [Number(response.rows[0].religion)]
+    );
+    religionName = rel.rows[0].religion_name;
+  } else {
+    religionName = null;
+  }
+  // ------------
+  const data = {
+    response: response,
+    religionName: religionName,
+  };
+
+  res.status(StatusCodes.OK).json({ data });
+};
+
 export const updatePersonalInfo = async (req, res) => {
   const { mobile, applicationId } = req.appUser;
   const {

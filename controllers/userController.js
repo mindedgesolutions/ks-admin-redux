@@ -66,19 +66,4 @@ export const getCurrentAppUser = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data });
 };
-
-export const userFullInfo = async (req, res) => {
-  const { mobile, applicationId } = req.appUser;
-  const searchBy = applicationId || (await getApplicationId(mobile));
-
-  const data = await pool.query(
-    `select kwm.*, kwd.*, kwn.* from k_migrant_worker_master kwm 
-    join k_migrant_work_details kwd on kwm.id = kwd.application_id 
-    join k_migrant_worker_nominees kwn on kwm.id = kwn.application_id 
-    where kwm.id=$1`,
-    [searchBy]
-  );
-
-  res.status(StatusCodes.OK).json({ data });
-};
 // User App related ends ------

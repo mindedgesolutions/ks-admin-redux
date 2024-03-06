@@ -22,6 +22,7 @@ import {
 } from "../middleware/userApplicationMiddleware.js";
 import {
   addPersonalInfo,
+  getCompletePersonalInfo,
   getCurrentApplication,
   getPersonalInfo,
   updatePersonalInfo,
@@ -66,6 +67,9 @@ router
   .get(protectUserRoute, getPersonalInfo)
   .post([protectUserRoute, validatePersonal], addPersonalInfo)
   .patch([protectUserRoute, validatePersonal], updatePersonalInfo); // Personal information
+router
+  .route("/user/complete-personal-info")
+  .get(protectUserRoute, getCompletePersonalInfo);
 router
   .route("/user/worksite-info")
   .get([protectUserRoute, accessWorksite], getWorksiteInfo)
