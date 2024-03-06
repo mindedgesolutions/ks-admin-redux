@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import customFetch from "../../utils/customFetch";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   visible: false,
@@ -103,43 +102,8 @@ const familySlice = createSlice({
         (value) => Number(deleteId) !== Number(value.id)
       );
     },
-    resetFamily: (state) => {
-      state.visible = false;
-      state.visibleF = false;
-      state.fMember = {};
-      state.allFSchemes = [];
-      state.fMembers = [];
-      state.fSchemes = [];
-      state.clearData = 0;
-      state.isLoading = false;
-    },
+    resetFamily: (state) => initialState,
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(getEditDetails.pending, (state) => {
-  //       state.isLoading = true;
-  //     })
-  //     .addCase(getEditDetails.fulfilled, (state, action) => {
-  //       const data = action.payload.data.rows[0];
-  //       const schemes = action.payload.meta.rows;
-  //       state.fMember = {
-  //         id: Number(data.id),
-  //         application_id: Number(data.application_id),
-  //         member_name: data.member_name,
-  //         member_gender: data.member_gender,
-  //         member_age: Number(data.member_age),
-  //         member_aadhar_no: data.member_aadhar_no,
-  //         member_relationship: data.member_relationship,
-  //         member_epic: data.member_epic,
-  //         member_schemes: schemes,
-  //       };
-  //       state.fSchemes = JSON.stringify(schemes);
-  //     })
-  //     .addCase(getEditDetails.rejected, (state, action) => {
-  //       state.isLoading = false;
-  //       console.log(action.payload);
-  //     });
-  // },
 });
 
 export const {

@@ -18,7 +18,9 @@ export const getPsList = createAsyncThunk("master/ps", async (data) => {
 const psSlice = createSlice({
   name: "policestation",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetPs: (state) => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getPsList.pending, (state) => {
@@ -35,4 +37,5 @@ const psSlice = createSlice({
   },
 });
 
+export const { resetPs } = psSlice.actions;
 export default psSlice.reducer;

@@ -13,8 +13,9 @@ const bankNomineeSlice = createSlice({
       const sendSchemes = JSON.stringify(action.payload);
       state.currentSchemes = sendSchemes;
     },
+    resetBankNominee: (state) => initialState,
   },
 });
 
-export const { newSchemeSet } = bankNomineeSlice.actions;
+export const { newSchemeSet, resetBankNominee } = bankNomineeSlice.actions;
 export default bankNomineeSlice.reducer;

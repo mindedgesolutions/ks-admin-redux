@@ -27,18 +27,10 @@ const userBasicSlice = createSlice({
       state.userAccess = { ...state.userAccess, [action.payload]: false };
       addAccessToLocalStorage(state.userAccess);
     },
-    resetUserState: (state) => {
-      state.user = {};
-      state.userAccess = {};
-    },
+    resetUserState: (state) => initialState,
   },
 });
 
-export const {
-  currentAccess,
-  details,
-  access,
-  accessRevoke,
-  resetUserState,
-} = userBasicSlice.actions;
+export const { currentAccess, details, access, accessRevoke, resetUserState } =
+  userBasicSlice.actions;
 export default userBasicSlice.reducer;

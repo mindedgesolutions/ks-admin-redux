@@ -21,7 +21,9 @@ export const getSubdivs = createAsyncThunk(
 const subdivSlice = createSlice({
   name: "subdivs",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetSubdiv: (state) => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getSubdivs.pending, (state) => {
@@ -38,4 +40,5 @@ const subdivSlice = createSlice({
   },
 });
 
+export const { resetSubdiv } = subdivSlice.actions;
 export default subdivSlice.reducer;

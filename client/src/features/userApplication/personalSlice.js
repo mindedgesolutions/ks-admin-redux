@@ -33,9 +33,15 @@ const personalSlice = createSlice({
     changeReligion: (state, action) => {
       state.religionOther = action.payload === "9" ? true : false;
     },
+    resetPersonal: (state) => initialState,
   },
 });
 
-export const { changeAge, currentEpic, currentReligion, changeReligion } =
-  personalSlice.actions;
+export const {
+  changeAge,
+  currentEpic,
+  currentReligion,
+  changeReligion,
+  resetPersonal,
+} = personalSlice.actions;
 export default personalSlice.reducer;

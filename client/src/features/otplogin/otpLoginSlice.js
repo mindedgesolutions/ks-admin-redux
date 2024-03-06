@@ -17,16 +17,10 @@ const otpLoginSlice = createSlice({
       state.newMobile = action.payload.mobile;
       state.newOtp = action.payload.otp;
     },
-    resetOtpState: (state) => {
-      state.newMobile = "";
-      state.newOtp = "";
-    },
+    resetOtpState: (state) => initialState,
   },
 });
 
-export const {
-  changeMobile,
-  generatedOtp,
-  resetOtpState,
-} = otpLoginSlice.actions;
+export const { changeMobile, generatedOtp, resetOtpState } =
+  otpLoginSlice.actions;
 export default otpLoginSlice.reducer;

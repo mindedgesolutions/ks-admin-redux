@@ -7,12 +7,9 @@ const OverviewSideBar = () => {
   const { info } = useLoaderData();
 
   return (
-    <div className="col-4 d-none d-md-block border-end">
+    <div className="col-3 d-none d-md-block border-end">
       <div className="card-body px-2">
         <div className="card">
-          <div className="card-header p-3">
-            <h3 className="card-title">Personal Information</h3>
-          </div>
           <div className="card-body p-3">
             <div className="mb-3">
               <div className="row">
@@ -52,6 +49,18 @@ const OverviewSideBar = () => {
               <label className="form-label">
                 {dateFormat(info.data.data.rows[0].dob)} (
                 {info.data.data.rows[0].age})
+              </label>
+            </div>
+            <div className="mb-3">
+              <label className="datagrid-title">Aadhaar no. :</label>
+              <label className="form-label">
+                {info.data.data.rows[0].aadhar_no}
+              </label>
+            </div>
+            <div className="mb-3">
+              <label className="datagrid-title">EPIC :</label>
+              <label className="form-label">
+                {info?.data?.data?.rows[0]?.epic_no || "NA"}
               </label>
             </div>
           </div>

@@ -39,6 +39,7 @@ const blockSlice = createSlice({
           break;
       }
     },
+    resetBlock: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -56,5 +57,5 @@ const blockSlice = createSlice({
   },
 });
 
-export const { changeBlLabel } = blockSlice.actions;
+export const { changeBlLabel, resetBlock } = blockSlice.actions;
 export default blockSlice.reducer;

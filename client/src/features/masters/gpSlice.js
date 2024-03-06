@@ -18,7 +18,9 @@ export const getGpWards = createAsyncThunk("masters/gpwards", async (data) => {
 const gpSlice = createSlice({
   name: "gpward",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetGp: (state) => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getGpWards.pending, (state) => {
@@ -35,4 +37,5 @@ const gpSlice = createSlice({
   },
 });
 
+export const { resetGp } = gpSlice.actions;
 export default gpSlice.reducer;
