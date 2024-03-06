@@ -89,6 +89,22 @@ const ApplicationMenu = () => {
               </button>
             </Link>
           )}
+
+          {userAccess.personal &&
+            userAccess.worksite &&
+            userAccess.agency &&
+            userAccess.bank &&
+            userAccess.family &&
+            userAccess.doc && (
+              <Link to="/user/overview" className="text-decoration-none">
+                <button
+                  type="button"
+                  className={`list-group-item list-group-item-action d-flex align-items-center`}
+                >
+                  Overview
+                </button>
+              </Link>
+            )}
         </div>
       </div>
     </div>

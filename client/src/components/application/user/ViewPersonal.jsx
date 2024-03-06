@@ -3,16 +3,20 @@ import { Link, useLoaderData } from "react-router-dom";
 import { dateFormat, genderFormat } from "../../../utils/functions";
 import { qualificationList } from "../../../utils/data";
 import { MdEdit } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const ViewPersonal = () => {
   const { info } = useLoaderData();
+  const { currentTab } = useSelector((store) => store.overview);
 
   const qualificationLabel = qualificationList.find(
     (i) => i.value === info?.data?.data?.response?.rows[0]?.qualification
   );
 
   return (
-    <div className="tab-pane active show">
+    <div
+      className={`tab-pane ${currentTab === "personal" ? "active show" : ""}`}
+    >
       <div className="row row-cards">
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Name :</label>

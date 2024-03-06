@@ -21,7 +21,10 @@ export const loader = async () => {
     const info = await customFetch.get(
       "/applications/user/complete-personal-info"
     );
-    return { info };
+    const work = await customFetch.get("/applications/user/worksite-info");
+    const agency = await customFetch.get("/applications/user/agency-info");
+
+    return { info, work, agency };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return error;

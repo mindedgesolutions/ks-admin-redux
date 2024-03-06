@@ -47,7 +47,6 @@ export const loader = (store) => async () => {
     return appUser;
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
-    return null;
     return redirect("/otplogin");
   }
 };

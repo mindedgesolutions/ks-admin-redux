@@ -69,7 +69,7 @@ router
   .patch([protectUserRoute, validatePersonal], updatePersonalInfo); // Personal information
 router
   .route("/user/complete-personal-info")
-  .get(protectUserRoute, getCompletePersonalInfo);
+  .get(protectUserRoute, getCompletePersonalInfo); // Complete personal info with district, sub-div, block ... etc.
 router
   .route("/user/worksite-info")
   .get([protectUserRoute, accessWorksite], getWorksiteInfo)
