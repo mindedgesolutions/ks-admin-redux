@@ -1,20 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import customFetch from "../../utils/customFetch";
 
-// export const getEditDetails = createAsyncThunk(
-//   "/family/details",
-//   async (data) => {
-//     try {
-//       const response = await customFetch.get(
-//         `/applications/user/single-member/${data}`
-//       );
-//       return response.data.data;
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// );
-
 const initialState = {
   visible: false,
   visibleF: false,
