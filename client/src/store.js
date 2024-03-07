@@ -10,6 +10,11 @@ import psReducer from "./features/masters/psSlice";
 import bankNomineeReducer from "./features/userApplication/bankNomineesSlice";
 import familyReducer from "./features/userApplication/familySlice";
 import overViewReducer from "./features/userApplication/overViewSlice";
+import statesReducer from "./features/masters/statesSlice";
+import jobsReducer from "./features/masters/jobsSlice";
+import countryReducer from "./features/masters/countrySlice";
+import schemeReducer from "./features/masters/schemeSlice";
+import bankReducer from "./features/masters/bankSlice";
 
 export const store = configureStore({
   reducer: {
@@ -24,5 +29,10 @@ export const store = configureStore({
     bankNominee: bankNomineeReducer,
     family: familyReducer,
     overview: overViewReducer,
+    states: statesReducer,
+    jobs: jobsReducer,
+    countries: countryReducer,
+    schemes: schemeReducer,
+    banks: bankReducer,
   },
 });

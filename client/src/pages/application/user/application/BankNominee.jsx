@@ -16,9 +16,10 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { relationships } from "../../../../utils/data";
 import { access } from "../../../../features/user/userBasicSlice";
 import { toast } from "react-toastify";
+import { setBankList } from "../../../../features/masters/bankSlice";
 
 // Loader starts ------
-export const loader = async () => {
+export const loader = (store) => async () => {
   try {
     const banks = await customFetch.get("/master/banks");
     const schemes = await customFetch.get("/master/schemes");
@@ -26,7 +27,10 @@ export const loader = async () => {
     const userSchemes = await customFetch.get(
       "/applications/user/selected-schemes"
     );
-    return { banks, schemes, info, userSchemes };
+
+    store.dispatch(setBankList(banks.data.data.rows));
+
+    return { schemes, info, userSchemes };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return error;

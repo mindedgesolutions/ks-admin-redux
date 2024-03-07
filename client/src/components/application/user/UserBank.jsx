@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import customFetch from "../../../utils/customFetch";
 import { splitErrors } from "../../../utils/showErrors";
 
 const UserBank = () => {
-  const { info, banks: bankList } = useLoaderData();
-  const dispatch = useDispatch();
+  const { info } = useLoaderData();
+  const { banks } = useSelector((store) => store.banks);
 
   const [form, setForm] = useState({
     ifscCode: info?.data?.data?.rows[0]?.ifsc_code || "",
@@ -21,7 +21,7 @@ const UserBank = () => {
   };
 
   const options = [];
-  bankList.data.data.rows.map((bank) => {
+  banks.map((bank) => {
     const bankElement = { value: bank.ifsc_code, label: bank.ifsc_code };
     options.push(bankElement);
   });

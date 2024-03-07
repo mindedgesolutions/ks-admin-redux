@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoaderData } from "react-router-dom";
 import Select from "react-select";
 import { familySchemeSet } from "../../../features/userApplication/familySlice";
 
 const UserFamilySchemes = () => {
   const dispatch = useDispatch();
-  const { schemes } = useLoaderData();
+  const { schemes } = useSelector((store) => store.schemes);
   const { clearData, fMember, fSchemes } = useSelector((store) => store.family);
 
   const dbSch = [];
@@ -18,7 +17,7 @@ const UserFamilySchemes = () => {
   const [selectedSchemes, setSelectedSchemes] = useState(dbSch || []);
 
   const sch = [];
-  schemes.data.data.rows.map((scheme) => {
+  schemes.map((scheme) => {
     const element = { value: scheme.id, label: scheme.schemes_name };
     sch.push(element);
   });

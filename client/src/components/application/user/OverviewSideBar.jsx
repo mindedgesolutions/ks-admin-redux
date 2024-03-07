@@ -17,7 +17,7 @@ const OverviewSideBar = () => {
                   <div className="mb-3">
                     <label className="datagrid-title">Name :</label>
                     <label className="form-label">
-                      {info.data.data.response.rows[0].name.toUpperCase()}
+                      {info?.data?.data?.response?.rows[0]?.name?.toUpperCase()}
                     </label>
                   </div>
                 </div>
