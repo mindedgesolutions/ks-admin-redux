@@ -19,7 +19,9 @@ import { access } from "../../../features/user/userBasicSlice";
 const FamilyAddForm = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.user);
-  const { fMember, fSchemes } = useSelector((store) => store.family);
+  const { fMember, fSchemes, allFSchemes } = useSelector(
+    (store) => store.family
+  );
 
   const relationshipsList = relationships.filter(
     (relation) => relation.isActive === true
@@ -75,6 +77,7 @@ const FamilyAddForm = () => {
 
     try {
       const response = await process(url, inputValues);
+      // Construct member object starts ------
       const newMember = {
         id:
           inputValues.editId > 0
@@ -89,9 +92,35 @@ const FamilyAddForm = () => {
         member_epic: inputValues.memberEpic,
         member_schemes: fSchemes,
       };
+      // Construct member object ends ------
+
+      // Construct all schemes object starts ------
+      let filtered;
+      if (inputValues.editId) {
+        filtered = allFSchemes.filter(
+          (i) => Number(i.member_id) !== Number(inputValues.editId)
+        );
+      } else {
+        filtered = allFSchemes;
+      }
+      const newArray = [];
+      JSON.parse(fSchemes).map((f) => {
+        const newSObj = {
+          member_id:
+            inputValues.editId > 0
+              ? inputValues.editId
+              : response.data.data.rows[0].id,
+          scheme_id: String(f.value),
+          schemes_name: f.label,
+        };
+        newArray.push(newSObj);
+      });
+      const updatedArray = [...filtered, ...newArray];
+      // Construct all schemes object ends ------
+
       inputValues.editId > 0
-        ? dispatch(editMember(newMember))
-        : dispatch(addMember(newMember));
+        ? dispatch(editMember({ member: newMember, schemes: updatedArray }))
+        : dispatch(addMember({ member: newMember, schemes: updatedArray }));
 
       dispatch(access("doc"));
 

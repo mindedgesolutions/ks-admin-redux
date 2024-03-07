@@ -59,9 +59,9 @@ const ModalViewFamily = () => {
               return (
                 <span
                   key={nanoid()}
-                  className={`badge bg-${randomBadgeBg()}-lt p-2 me-2`}
+                  className={`badge bg-${randomBadgeBg()}-lt p-2 me-2 my-1`}
                 >
-                  {scheme.schemes_name}
+                  {scheme?.schemes_name?.toUpperCase()}
                 </span>
               );
             })}

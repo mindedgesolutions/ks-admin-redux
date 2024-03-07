@@ -74,7 +74,8 @@ const familySlice = createSlice({
       state.allFSchemes = action.payload.meta.rows;
     },
     addMember: (state, action) => {
-      state.fMembers = [...state.fMembers, action.payload];
+      state.fMembers = [...state.fMembers, action.payload.member];
+      state.allFSchemes = action.payload.schemes;
     },
     memberInfo: (state, action) => {
       state.fMember = {
@@ -90,11 +91,12 @@ const familySlice = createSlice({
       };
     },
     editMember: (state, action) => {
-      const { id } = action.payload;
+      const { id } = action.payload.member;
       state.fMembers = state.fMembers.filter(
         (i) => Number(i.id) !== Number(id)
       );
-      state.fMembers = [...state.fMembers, action.payload];
+      state.fMembers = [...state.fMembers, action.payload.member];
+      state.allFSchemes = action.payload.schemes;
     },
     deleteMember: (state, action) => {
       const deleteId = action.payload;
