@@ -33,7 +33,7 @@ const ViewPersonal = () => {
         <div className="col-md-4 col-sm-12">
           <Link
             to="/user/personal-info"
-            class="btn btn-yellow btn-sm px-2 py-1 float-end"
+            className="btn btn-yellow btn-sm px-2 py-1 float-end"
           >
             <MdEdit className="me-1" /> Edit
           </Link>
