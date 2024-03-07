@@ -88,6 +88,90 @@ const ViewWorksite = () => {
           </label>
         </div>
       </div>
+
+      <hr className="my-3" />
+
+      <div className="row row-cards">
+        <div className="col-md-6 col-sm-12">
+          <label className="datagrid-title">Engaged as :</label>
+          <label className="form-label">
+            {agency?.data?.data?.rows[0]?.engaged_as?.toUpperCase()}
+          </label>
+        </div>
+      </div>
+      {agency?.data?.data?.rows[0]?.engaged_as === "Agency" && (
+        <>
+          <div className="row row-cards">
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">Employer's name :</label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.employer_name?.toUpperCase()}
+              </label>
+            </div>
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">Employer's address :</label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.employer_address?.toUpperCase()}
+              </label>
+            </div>
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">Employer's mobile no. :</label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.employer_mobile?.toUpperCase()}
+              </label>
+            </div>
+          </div>
+          <div className="row row-cards">
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">Agent's / Others name :</label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.agency_name?.toUpperCase()}
+              </label>
+            </div>
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">
+                Agent's / Others address :
+              </label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.agency_address?.toUpperCase()}
+              </label>
+            </div>
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">
+                Agent's/ Others mobile no. :
+              </label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.agency_mobile?.toUpperCase()}
+              </label>
+            </div>
+          </div>
+        </>
+      )}
+
+      {agency?.data?.data?.rows[0]?.engaged_as === "Without-agency" && (
+        <>
+          <div className="row row-cards">
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">Employer's name :</label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.employer_name?.toUpperCase()}
+              </label>
+            </div>
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">Employer's address :</label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.employer_address?.toUpperCase()}
+              </label>
+            </div>
+            <div className="col-md-4 col-sm-12">
+              <label className="datagrid-title">Employer's mobile no. :</label>
+              <label className="form-label">
+                {agency?.data?.data?.rows[0]?.employer_mobile?.toUpperCase()}
+              </label>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

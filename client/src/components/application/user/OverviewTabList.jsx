@@ -36,15 +36,6 @@ const OverviewTabList = () => {
         </li>
         <li className="nav-item">
           <button
-            className={`nav-link ${currentTab === "agency" ? "active" : ""}`}
-            onClick={() => dispatch(setCurrentTab("agency"))}
-          >
-            <TbUsers size={14} className="me-1" />
-            Agency / Employer
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
             className={`nav-link ${currentTab === "bank" ? "active" : ""}`}
             onClick={() => dispatch(setCurrentTab("bank"))}
           >
