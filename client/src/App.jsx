@@ -45,13 +45,13 @@ const router = createBrowserRouter([
       {
         path: "worksite-info",
         element: <Ks.WorkInfo />,
-        loader: worksiteLoader,
+        loader: worksiteLoader(store),
       },
       { path: "agency-info", element: <Ks.AgencyInfo />, loader: agencyLoader },
       {
         path: "bank-nominee-info",
         element: <Ks.BankNominee />,
-        loader: bankNomineeLoader,
+        loader: bankNomineeLoader(store),
       },
       {
         path: "family-info",
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
         loader: familyLoader(store),
       },
       { path: "documents", element: <Ks.Documents /> },
-      { path: "overview", element: <Ks.OverView />, loader: viewLoader },
+      { path: "overview", element: <Ks.OverView />, loader: viewLoader(store) },
     ],
   },
   // User app related ends ------

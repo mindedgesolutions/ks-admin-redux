@@ -17,16 +17,23 @@ import { nanoid } from "nanoid";
 import { access } from "../../../../features/user/userBasicSlice";
 import { toast } from "react-toastify";
 import { datePickerFormat } from "../../../../utils/functions";
+import { setStateList } from "../../../../features/masters/statesSlice";
+import { setCountryList } from "../../../../features/masters/countrySlice";
+import { setJobList } from "../../../../features/masters/jobsSlice";
 
 // Loader starts ------
-export const loader = async () => {
+export const loader = (store) => async () => {
   try {
     const states = await customFetch.get("/master/states");
     const countries = await customFetch.get("/master/countries");
     const jobs = await customFetch.get("/master/jobs");
     const info = await customFetch.get("/applications/user/worksite-info");
 
-    return { states, countries, jobs, info };
+    store.dispatch(setStateList(states.data.data.rows));
+    store.dispatch(setCountryList(countries.data.data.rows));
+    store.dispatch(setJobList(jobs.data.data.rows));
+
+    return { info };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return error;
@@ -38,7 +45,9 @@ const WorkInfo = () => {
   document.title = `Worksite Information | ${import.meta.env.VITE_USER_TITLE}`;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { jobs, info } = useLoaderData();
+  const { info } = useLoaderData();
+  const { jobs } = useSelector((store) => store.jobs);
+
   const [form, setForm] = useState({
     workAddress: info?.data?.data?.rows[0]?.present_address || "",
     workPs: info?.data?.data?.rows[0]?.present_ps || "",
@@ -135,7 +144,7 @@ const WorkInfo = () => {
                           <option value="">
                             - Select nature of employment -
                           </option>
-                          {jobs.data.data.rows.map((option) => {
+                          {jobs.map((option) => {
                             return (
                               <option key={nanoid()} value={option.id}>
                                 {option.nature_of_work}

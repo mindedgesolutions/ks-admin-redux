@@ -14,9 +14,11 @@ import {
 import { useSelector } from "react-redux";
 import customFetch from "../../../../utils/customFetch";
 import { splitErrors } from "../../../../utils/showErrors";
+import { setStateList } from "../../../../features/masters/statesSlice";
+import { setJobList } from "../../../../features/masters/jobsSlice";
 
 // Loader starts ------
-export const loader = async () => {
+export const loader = (store) => async () => {
   try {
     const info = await customFetch.get(
       "/applications/user/complete-personal-info"
@@ -24,7 +26,13 @@ export const loader = async () => {
     const work = await customFetch.get("/applications/user/worksite-info");
     const agency = await customFetch.get("/applications/user/agency-info");
 
-    return { info, work, agency };
+    const states = await customFetch.get("/master/states");
+    const jobs = await customFetch.get("/master/jobs");
+
+    store.dispatch(setStateList(states.data.data.rows));
+    store.dispatch(setJobList(jobs.data.data.rows));
+
+    return { info, work, info };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return error;

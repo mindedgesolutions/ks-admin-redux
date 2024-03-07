@@ -1,9 +1,13 @@
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 
 const UserWorksite = () => {
-  const { countries: countryList, states: stateList, info } = useLoaderData();
+  const { info } = useLoaderData();
+  const { countries } = useSelector((store) => store.countries);
+  const { states } = useSelector((store) => store.states);
+
   const [loc, setLoc] = useState({
     country: info?.data?.data?.rows[0]?.present_country || "",
     stateCode: info?.data?.data?.rows[0]?.present_state || "",
@@ -29,7 +33,7 @@ const UserWorksite = () => {
             value={loc.country}
           >
             <option value="">- Select country -</option>
-            {countryList.data.data.rows.map((option) => {
+            {countries.map((option) => {
               return (
                 <option key={nanoid()} value={option.id}>
                   {option.country_name}
@@ -52,7 +56,7 @@ const UserWorksite = () => {
               value={loc.stateCode}
             >
               <option value="">- Select state -</option>
-              {stateList.data.data.rows.map((state) => {
+              {states.map((state) => {
                 return (
                   <option key={nanoid()} value={state.id}>
                     {state.statename}
