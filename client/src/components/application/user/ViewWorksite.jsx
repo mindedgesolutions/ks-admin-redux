@@ -26,7 +26,7 @@ const ViewWorksite = () => {
         </div>
         <div className="col-md-4 col-sm-12">
           <Link
-            to="/user/personal-info"
+            to="/user/worksite-info"
             className="btn btn-yellow btn-sm px-2 py-1 float-end"
           >
             <MdEdit className="me-1" /> Edit
@@ -40,18 +40,17 @@ const ViewWorksite = () => {
             {work.data.data.rows[0].present_country_name.toUpperCase()}
           </label>
         </div>
-        {work.data.data.rows[0].present_country === 1 && (
+        {work.data.data.rows[0].present_country === 1 ? (
           <div className="col-md-4 col-sm-12">
-            <label className="datagrid-title">Date of birth :</label>
+            <label className="datagrid-title">State :</label>
             <label className="form-label">
               {dateFormat(info.data.data.response.rows[0].dob)} (
               {info.data.data.response.rows[0].age})
             </label>
           </div>
-        )}
-        {work.data.data.rows[0].present_country === 2 && (
+        ) : (
           <div className="col-md-4 col-sm-12">
-            <label className="datagrid-title">Date of birth :</label>
+            <label className="datagrid-title">Passport no. :</label>
             <label className="form-label">
               {dateFormat(info.data.data.response.rows[0].dob)} (
               {info.data.data.response.rows[0].age})
