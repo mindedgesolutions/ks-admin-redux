@@ -56,7 +56,7 @@ const UserBank = () => {
     <>
       <div className="col-md-6 col-sm-12">
         <label htmlFor="ifscCode" className="form-label required">
-          IFS code
+          IFSC code
         </label>
         <AsyncSelect
           loadOptions={loadOptions}

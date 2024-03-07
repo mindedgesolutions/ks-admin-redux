@@ -4,7 +4,6 @@ import {
   OverviewTabList,
   UserPageHeader,
   UserPageWrapper,
-  ViewAgency,
   ViewBankNominee,
   ViewDocuments,
   ViewFamily,
@@ -16,6 +15,7 @@ import customFetch from "../../../../utils/customFetch";
 import { splitErrors } from "../../../../utils/showErrors";
 import { setStateList } from "../../../../features/masters/statesSlice";
 import { setJobList } from "../../../../features/masters/jobsSlice";
+import { setSchemeList } from "../../../../features/masters/schemeSlice";
 
 // Loader starts ------
 export const loader = (store) => async () => {
@@ -25,14 +25,23 @@ export const loader = (store) => async () => {
     );
     const work = await customFetch.get("/applications/user/worksite-info");
     const agency = await customFetch.get("/applications/user/agency-info");
+    const bank = await customFetch.get("/applications/user/bank-nominee");
+    const userSchemes = await customFetch.get(
+      "/applications/user/selected-schemes"
+    );
+    const members = await customFetch.get(
+      "/applications/user/all-members-partial"
+    );
 
     const states = await customFetch.get("/master/states");
     const jobs = await customFetch.get("/master/jobs");
+    const schemes = await customFetch.get("/master/schemes");
 
     store.dispatch(setStateList(states.data.data.rows));
     store.dispatch(setJobList(jobs.data.data.rows));
+    store.dispatch(setSchemeList(schemes.data.data.rows));
 
-    return { info, work, info };
+    return { info, work, agency, bank, userSchemes, members };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return error;
@@ -69,7 +78,6 @@ const OverView = () => {
                       <div className="tab-content">
                         {currentTab === "personal" && <ViewPersonal />}
                         {currentTab === "worksite" && <ViewWorksite />}
-                        {currentTab === "agency" && <ViewAgency />}
                         {currentTab === "bank" && <ViewBankNominee />}
                         {currentTab === "family" && <ViewFamily />}
                         {currentTab === "documents" && <ViewDocuments />}
