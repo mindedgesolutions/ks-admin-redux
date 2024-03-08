@@ -32,7 +32,9 @@ const ViewFamily = () => {
               <div className="card">
                 <div className="row row-0">
                   <div className="card-body p-2">
-                    <h3 className="card-title">{i.member_name}</h3>
+                    <h3 className="card-title">
+                      {i.member_name.toUpperCase()}
+                    </h3>
                     <div className="row row-cards">
                       <div className="col-md-4 col-sm-12 my-1">
                         <label className="datagrid-title">Gender :</label>
