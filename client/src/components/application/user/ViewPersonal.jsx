@@ -21,13 +21,13 @@ const ViewPersonal = () => {
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Name :</label>
           <label className="form-label">
-            {info.data.data.response.rows[0].name.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.name.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Father's / Husband's name :</label>
           <label className="form-label">
-            {info.data.data.response.rows[0].father_husband_name.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.father_husband_name.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
@@ -43,14 +43,16 @@ const ViewPersonal = () => {
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Gender :</label>
           <label className="form-label">
-            {genderFormat(info.data.data.response.rows[0].gender).toUpperCase()}
+            {genderFormat(
+              info?.data?.data?.response?.rows[0]?.gender
+            )?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Date of birth :</label>
           <label className="form-label">
-            {dateFormat(info.data.data.response.rows[0].dob)} (
-            {info.data.data.response.rows[0].age})
+            {dateFormat(info?.data?.data?.response?.rows[0]?.dob)} (
+            {info?.data?.data?.response?.rows[0]?.age})
           </label>
         </div>
       </div>
@@ -61,14 +63,14 @@ const ViewPersonal = () => {
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Category :</label>
           <label className="form-label">
-            {info.data.data.response.rows[0].caste.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.caste?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Religion :</label>
           <label className="form-label">
             {info?.data?.data?.response?.rows[0]?.religion
-              ? info?.data?.data?.religionName.toUpperCase()
+              ? info?.data?.data?.religionName?.toUpperCase()
               : info?.data?.data?.response?.rows[0]?.religion_other?.toUpperCase()}
           </label>
         </div>
@@ -79,13 +81,13 @@ const ViewPersonal = () => {
             Emergency mobile number of family member :
           </label>
           <label className="form-label">
-            {info.data.data.response.rows[0].emergency_contact_no}
+            {info?.data?.data?.response?.rows[0]?.emergency_contact_no}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Aadhaar number :</label>
           <label className="form-label">
-            {info.data.data.response.rows[0].aadhar_no}
+            {info?.data?.data?.response?.rows[0]?.aadhar_no}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
@@ -102,7 +104,7 @@ const ViewPersonal = () => {
         <div className="col-md-6 col-sm-12">
           <label className="datagrid-title">Permanent address :</label>
           <label className="form-label">
-            {info.data.data.response.rows[0].permanent_address.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.permanent_address?.toUpperCase()}
           </label>
         </div>
       </div>
@@ -110,31 +112,31 @@ const ViewPersonal = () => {
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">District :</label>
           <label className="form-label">
-            {info.data.data.response.rows[0].district_name.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.district_name?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Sub-division :</label>
           <label className="form-label">
-            {info.data.data.response.rows[0].subdiv_name.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.subdiv_name?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Block :</label>
           <label className="form-label">
-            {info?.data?.data?.response?.rows[0]?.block_mun_name.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.block_mun_name?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Gram Panchayat :</label>
           <label className="form-label">
-            {info?.data?.data?.response?.rows[0]?.village_ward_name.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.village_ward_name?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Police station :</label>
           <label className="form-label">
-            {info?.data?.data?.response?.rows[0]?.ps_name.toUpperCase()}
+            {info?.data?.data?.response?.rows[0]?.ps_name?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-4 col-sm-12">
@@ -151,7 +153,7 @@ const ViewPersonal = () => {
         <div className="col-md-4 col-sm-12">
           <label className="datagrid-title">Qualification :</label>
           <label className="form-label">
-            {qualificationLabel.text.toUpperCase()}
+            {qualificationLabel?.text?.toUpperCase()}
           </label>
         </div>
         <div className="col-md-8 col-sm-12">

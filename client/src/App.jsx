@@ -59,7 +59,11 @@ const router = createBrowserRouter([
         loader: familyLoader(store),
       },
       { path: "documents", element: <Ks.Documents /> },
-      { path: "overview", element: <Ks.OverView />, loader: viewLoader(store) },
+      {
+        path: "overview",
+        element: <Ks.OverView />,
+        loader: viewLoader(store),
+      },
     ],
   },
   // User app related ends ------

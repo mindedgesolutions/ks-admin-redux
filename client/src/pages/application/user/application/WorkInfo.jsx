@@ -24,14 +24,20 @@ import { setJobList } from "../../../../features/masters/jobsSlice";
 // Loader starts ------
 export const loader = (store) => async () => {
   try {
+    // const { states: stateList } = store.getState().states;
+
+    // if (stateList.length === 0) {
+    //   const states = await customFetch.get("/master/states");
+    // }
+
     const states = await customFetch.get("/master/states");
-    const countries = await customFetch.get("/master/countries");
     const jobs = await customFetch.get("/master/jobs");
+    const countries = await customFetch.get("/master/countries");
     const info = await customFetch.get("/applications/user/worksite-info");
 
     store.dispatch(setStateList(states.data.data.rows));
-    store.dispatch(setCountryList(countries.data.data.rows));
     store.dispatch(setJobList(jobs.data.data.rows));
+    store.dispatch(setCountryList(countries.data.data.rows));
 
     return { info };
   } catch (error) {
