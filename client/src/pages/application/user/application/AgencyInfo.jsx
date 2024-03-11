@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import {
   ApplicationMenu,
   SubmitBtn,
+  UserAppLoader,
   UserPageHeader,
   UserPageWrapper,
   WithAgent,
   WithoutAgent,
 } from "../../../../components";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
 import { engageTypes } from "../../../../utils/data";
 import { nanoid } from "nanoid";
 import customFetch from "../../../../utils/customFetch";
@@ -35,6 +36,7 @@ const AgencyInfo = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const info = useLoaderData();
+  const navigation = useNavigation();
 
   const { user } = useSelector((store) => store.user);
 
@@ -90,42 +92,46 @@ const AgencyInfo = () => {
               <form onSubmit={handleFormSubmit} autoComplete="off">
                 <input type="hidden" name="appId" value={user.id} />
 
-                <div className="card-body">
-                  <div className="row row-cards">
-                    <div className="col-md-6 col-sm-12">
-                      <label className="form-label mb-3 required">
-                        Engaged as
-                      </label>
-                      {engageTypes.map((option) => {
-                        return (
-                          <div key={nanoid()}>
-                            <label className="form-check form-check-inline">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                value={option.value}
-                                name="empType"
-                                checked={form.empType === option.value}
-                                onChange={handleChange}
-                              />
-                              <span className="form-check-label">
-                                {option.text}
-                              </span>
-                            </label>
-                            <br />
-                          </div>
-                        );
-                      })}
+                {navigation.state === "loading" ? (
+                  <UserAppLoader />
+                ) : (
+                  <div className="card-body">
+                    <div className="row row-cards">
+                      <div className="col-md-6 col-sm-12">
+                        <label className="form-label mb-3 required">
+                          Engaged as
+                        </label>
+                        {engageTypes.map((option) => {
+                          return (
+                            <div key={nanoid()}>
+                              <label className="form-check form-check-inline">
+                                <input
+                                  className="form-check-input"
+                                  type="radio"
+                                  value={option.value}
+                                  name="empType"
+                                  checked={form.empType === option.value}
+                                  onChange={handleChange}
+                                />
+                                <span className="form-check-label">
+                                  {option.text}
+                                </span>
+                              </label>
+                              <br />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {form.empType === "Agency" && <WithAgent />}
+                    {form.empType === "Without-agency" && <WithoutAgent />}
+
+                    <div className="mt-5">
+                      <SubmitBtn isLoading={form.isLoading} />
                     </div>
                   </div>
-
-                  {form.empType === "Agency" && <WithAgent />}
-                  {form.empType === "Without-agency" && <WithoutAgent />}
-
-                  <div className="mt-5">
-                    <SubmitBtn isLoading={form.isLoading} />
-                  </div>
-                </div>
+                )}
               </form>
             </div>
           </div>

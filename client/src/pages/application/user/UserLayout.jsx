@@ -2,12 +2,6 @@ import React, { useEffect } from "react";
 import { Outlet, redirect, useNavigate } from "react-router-dom";
 import { UserTopNav, UserSideBar, UserFooter } from "../../../components";
 
-import "../../../assets/dist/css/tabler.min.css";
-import "../../../assets/dist/css/demo.min.css";
-
-import "../../../assets/dist/js/tabler.min.js";
-import "../../../assets/dist/js/demo.min.js";
-
 import customFetch from "../../../utils/customFetch";
 import {
   addAccessToLocalStorage,
@@ -33,6 +27,12 @@ import { resetPs } from "../../../features/masters/psSlice.js";
 import { resetSubdiv } from "../../../features/masters/subdivSlice.js";
 import { resetBankNominee } from "../../../features/userApplication/bankNomineesSlice.js";
 import { resetPersonal } from "../../../features/userApplication/personalSlice.js";
+
+import "../../../assets/dist/css/tabler.min.css";
+import "../../../assets/dist/css/demo.min.css";
+
+import "../../../assets/dist/js/tabler.min.js";
+import "../../../assets/dist/js/demo.min.js";
 
 // Loader starts ------
 export const loader = (store) => async () => {

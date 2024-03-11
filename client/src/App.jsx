@@ -34,6 +34,7 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <Ks.UserLayout />,
+    errorElement: <Ks.ApplicationError />,
     loader: userLayout(store),
     children: [
       { path: "dashboard", element: <Ks.UserDashboard /> },
@@ -47,7 +48,11 @@ const router = createBrowserRouter([
         element: <Ks.WorkInfo />,
         loader: worksiteLoader(store),
       },
-      { path: "agency-info", element: <Ks.AgencyInfo />, loader: agencyLoader },
+      {
+        path: "agency-info",
+        element: <Ks.AgencyInfo />,
+        loader: agencyLoader,
+      },
       {
         path: "bank-nominee-info",
         element: <Ks.BankNominee />,
