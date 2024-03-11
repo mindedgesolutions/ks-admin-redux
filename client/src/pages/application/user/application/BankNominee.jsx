@@ -4,6 +4,7 @@ import {
   InputSelect,
   InputText,
   SubmitBtn,
+  UserAppLoader,
   UserBank,
   UserPageHeader,
   UserPageWrapper,
@@ -12,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import customFetch from "../../../../utils/customFetch";
 import { splitErrors } from "../../../../utils/showErrors";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
 import { relationships } from "../../../../utils/data";
 import { access } from "../../../../features/user/userBasicSlice";
 import { toast } from "react-toastify";
@@ -44,6 +45,7 @@ const BankNominee = () => {
   }`;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const navigation = useNavigation();
   const { info } = useLoaderData();
   const { user } = useSelector((store) => store.user);
   const { currentSchemes } = useSelector((store) => store.bankNominee);
@@ -103,75 +105,79 @@ const BankNominee = () => {
               <form onSubmit={handleFormSubmit} autoComplete="off">
                 <input type="hidden" name="appId" value={user.id} />
 
-                <div className="card-body">
-                  <div className="row row-cards">
-                    <UserBank />
+                {navigation.state === "loading" ? (
+                  <UserAppLoader />
+                ) : (
+                  <div className="card-body">
+                    <div className="row row-cards">
+                      <UserBank />
 
-                    <div className="col-md-6 col-sm-12">
-                      <InputText
-                        label="Ration Card / Khadya Sathi Card no."
-                        name="khadyasathiNo"
-                        required={true}
-                        value={form.khadyasathiNo}
-                        handleChange={handleChange}
-                      />
+                      <div className="col-md-6 col-sm-12">
+                        <InputText
+                          label="Ration Card / Khadya Sathi Card no."
+                          name="khadyasathiNo"
+                          required={true}
+                          value={form.khadyasathiNo}
+                          handleChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-md-6 col-sm-12">
+                        <InputText
+                          label="Sasthya Sathi Card no."
+                          name="sasthyasathiNo"
+                          required={false}
+                          value={form.sasthyasathiNo}
+                          handleChange={handleChange}
+                        />
+                      </div>
+                      <UserSchemes />
                     </div>
-                    <div className="col-md-6 col-sm-12">
-                      <InputText
-                        label="Sasthya Sathi Card no."
-                        name="sasthyasathiNo"
-                        required={false}
-                        value={form.sasthyasathiNo}
-                        handleChange={handleChange}
-                      />
+                    <div className="row row-cards mt-1">
+                      <div className="col-md-6 col-sm-12">
+                        <InputText
+                          label="Nominee name"
+                          name="nomineeName"
+                          required={true}
+                          value={form.nomineeName}
+                          handleChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-md-6 col-sm-12">
+                        <InputSelect
+                          label="Relationship with the nominee"
+                          name="nomineeRelation"
+                          required={true}
+                          placeholder="relationship"
+                          options={relationList}
+                          value={form.nomineeRelation}
+                          handleChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-md-6 col-sm-12">
+                        <InputText
+                          label="Nominee mobile no."
+                          name="nomineeMobile"
+                          required={true}
+                          value={form.nomineeMobile}
+                          handleChange={handleChange}
+                        />
+                      </div>
+                      <div className="col-md-6 col-sm-12">
+                        <InputText
+                          label="Nominee Aadhaar no."
+                          name="nomineeAadhaar"
+                          required={true}
+                          value={form.nomineeAadhaar}
+                          handleChange={handleChange}
+                        />
+                      </div>
                     </div>
-                    <UserSchemes />
-                  </div>
-                  <div className="row row-cards mt-1">
-                    <div className="col-md-6 col-sm-12">
-                      <InputText
-                        label="Nominee name"
-                        name="nomineeName"
-                        required={true}
-                        value={form.nomineeName}
-                        handleChange={handleChange}
-                      />
-                    </div>
-                    <div className="col-md-6 col-sm-12">
-                      <InputSelect
-                        label="Relationship with the nominee"
-                        name="nomineeRelation"
-                        required={true}
-                        placeholder="relationship"
-                        options={relationList}
-                        value={form.nomineeRelation}
-                        handleChange={handleChange}
-                      />
-                    </div>
-                    <div className="col-md-6 col-sm-12">
-                      <InputText
-                        label="Nominee mobile no."
-                        name="nomineeMobile"
-                        required={true}
-                        value={form.nomineeMobile}
-                        handleChange={handleChange}
-                      />
-                    </div>
-                    <div className="col-md-6 col-sm-12">
-                      <InputText
-                        label="Nominee Aadhaar no."
-                        name="nomineeAadhaar"
-                        required={true}
-                        value={form.nomineeAadhaar}
-                        handleChange={handleChange}
-                      />
-                    </div>
-                  </div>
 
-                  <div className="mt-5">
-                    <SubmitBtn isLoading={form.isLoading} />
+                    <div className="mt-5">
+                      <SubmitBtn isLoading={form.isLoading} />
+                    </div>
                   </div>
-                </div>
+                )}
               </form>
             </div>
           </div>

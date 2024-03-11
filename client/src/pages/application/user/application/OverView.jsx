@@ -2,6 +2,7 @@ import React from "react";
 import {
   OverviewSideBar,
   OverviewTabList,
+  UserAppLoader,
   UserPageHeader,
   UserPageWrapper,
   ViewBankNominee,
@@ -16,6 +17,7 @@ import { splitErrors } from "../../../../utils/showErrors";
 import { setStateList } from "../../../../features/masters/statesSlice";
 import { setJobList } from "../../../../features/masters/jobsSlice";
 import { setSchemeList } from "../../../../features/masters/schemeSlice";
+import { useNavigation } from "react-router-dom";
 
 // Loader starts ------
 export const loader = (store) => async () => {
@@ -51,6 +53,7 @@ export const loader = (store) => async () => {
 // Main component starts ------
 const OverView = () => {
   document.title = `Application Overview | ${import.meta.env.VITE_USER_TITLE}`;
+  const navigation = useNavigation();
   const { user } = useSelector((store) => store.user);
   const { currentTab } = useSelector((store) => store.overview);
 
@@ -73,16 +76,19 @@ const OverView = () => {
                 <div className="row">
                   <div className="card-body pt-2">
                     <OverviewTabList />
-
-                    <div className="card-body">
-                      <div className="tab-content">
-                        {currentTab === "personal" && <ViewPersonal />}
-                        {currentTab === "worksite" && <ViewWorksite />}
-                        {currentTab === "bank" && <ViewBankNominee />}
-                        {currentTab === "family" && <ViewFamily />}
-                        {currentTab === "documents" && <ViewDocuments />}
+                    {navigation.state === "loading" ? (
+                      <UserAppLoader />
+                    ) : (
+                      <div className="card-body">
+                        <div className="tab-content">
+                          {currentTab === "personal" && <ViewPersonal />}
+                          {currentTab === "worksite" && <ViewWorksite />}
+                          {currentTab === "bank" && <ViewBankNominee />}
+                          {currentTab === "family" && <ViewFamily />}
+                          {currentTab === "documents" && <ViewDocuments />}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
