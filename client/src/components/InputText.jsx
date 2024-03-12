@@ -1,6 +1,7 @@
 import React from "react";
 
 const InputText = ({
+  type,
   label,
   name,
   required,
@@ -17,7 +18,7 @@ const InputText = ({
         {label}
       </label>
       <input
-        type="text"
+        type={type || "text"}
         name={name}
         id={name}
         value={value}

@@ -20,6 +20,7 @@ export const action =
     if (data.inputCaptcha && Number(data.inputCaptcha) !== Number(captcha)) {
       toast.error(`Incorrect captcha! Please try again`);
       store.dispatch(generateCaptcha());
+      return null;
     }
 
     try {
