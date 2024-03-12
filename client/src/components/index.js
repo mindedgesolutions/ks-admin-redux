@@ -50,4 +50,5 @@ export { default as ViewWorksite } from "./application/user/ViewWorksite";
 export { default as AdminTopNav } from "./application/admin/AdminTopNav";
 export { default as AdminSideBar } from "./application/admin/AdminSideBar";
 export { default as AdminFooter } from "./application/admin/AdminFooter";
+export { default as AdminProfileSidebar } from "./application/admin/AdminProfileSidebar";
 // Admin related ends ------

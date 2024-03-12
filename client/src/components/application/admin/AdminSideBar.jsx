@@ -73,15 +73,15 @@ const AdminSideBar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/user/personal-info">
+              <Link className="nav-link" to="">
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <AiOutlineFile size={18} />
                 </span>
-                <span className="nav-link-title">Application</span>
+                <span className="nav-link-title">Applications</span>
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/admin/reports">
+              <Link className="nav-link" to="">
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <BsGraphUpArrow size={16} />
                 </span>
