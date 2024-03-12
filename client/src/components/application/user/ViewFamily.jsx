@@ -22,68 +22,56 @@ const ViewFamily = () => {
           </Link>
         </div>
       </div>
-      <div className="row row-cards">
-        {members.data.response.data.rows.map((i) => {
-          const schemes = members.data.response.meta.rows.filter(
-            (m) => Number(m.member_id) === Number(i.id)
-          );
-          return (
-            <div key={nanoid()} className="col-md-8 col-sm-12">
-              <div className="card">
-                <div className="row row-0">
-                  <div className="card-body p-2">
-                    <h3 className="card-title">{i.member_name}</h3>
-                    <div className="row row-cards">
-                      <div className="col-md-4 col-sm-12 my-1">
-                        <label className="datagrid-title">Gender :</label>
-                        <label className="form-label">
-                          {genderFormat(i.member_gender).toUpperCase()}
-                        </label>
-                      </div>
-                      <div className="col-md-4 col-sm-12 my-1">
-                        <label className="datagrid-title">Age :</label>
-                        <label className="form-label">{i.member_age}</label>
-                      </div>
-                    </div>
-                    <div className="row row-cards">
-                      <div className="col-md-4 col-sm-12 my-1">
-                        <label className="datagrid-title">Relationship :</label>
-                        <label className="form-label">
-                          {i.member_relationship.toUpperCase()}
-                        </label>
-                      </div>
-                      <div className="col-md-4 col-sm-12 my-1">
-                        <label className="datagrid-title">Aadhaar no. :</label>
-                        <label className="form-label">
-                          {i.member_aadhar_no}
-                        </label>
-                      </div>
-                    </div>
-                    <div className="row row-cards">
-                      <div className="col-md-12 col-sm-12 my-1">
-                        <label className="datagrid-title">
-                          Availed schemes :
-                        </label>
-                      </div>
-                      <div className="col-md-12 col-sm-12 my-0">
-                        {schemes.map((s) => {
-                          return (
-                            <span
-                              key={nanoid()}
-                              className={`badge bg-${randomBadgeBg()}-lt p-2 me-2 my-1`}
-                            >
-                              {s?.schemes_name?.toUpperCase()}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+
+      <div className="table-responsive fs-5 mx-0 px-0">
+        <table className="table table-striped table-hover">
+          <thead className="table-dark">
+            <tr>
+              <th className="bg-dark">Sl. No.</th>
+              <th className="bg-dark">Name</th>
+              <th className="bg-dark">Gender</th>
+              <th className="bg-dark">Age</th>
+              <th className="bg-dark">Relation</th>
+              <th className="bg-dark">Aadhaar no.</th>
+              <th className="bg-dark">EPIC no.</th>
+              <th className="bg-dark">Schemes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {members.data.response.data.rows.map((i, index) => {
+              const schemes = members.data.response.meta.rows.filter(
+                (m) => Number(m.member_id) === Number(i.id)
+              );
+
+              return (
+                <tr key={nanoid()}>
+                  <td>{index + 1}.</td>
+                  <td>{i.member_name.toUpperCase()}</td>
+                  <td>{genderFormat(i.member_gender).toUpperCase()}</td>
+                  <td>{i.member_age}</td>
+                  <td>{i.member_relationship.toUpperCase()}</td>
+                  <td>{i.member_aadhar_no}</td>
+                  <td>{i.member_epic || "NA"}</td>
+                  <td>
+                    {schemes.map((s) => {
+                      return (
+                        <>
+                          <span
+                            key={nanoid()}
+                            className={`badge bg-${randomBadgeBg()}-lt p-1 me-1 my-0`}
+                          >
+                            {s?.schemes_name?.toUpperCase()}
+                          </span>
+                          <br />
+                        </>
+                      );
+                    })}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

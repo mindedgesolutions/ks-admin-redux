@@ -24,6 +24,7 @@ export { default as UserPageHeader } from "./application/user/UserPageHeader";
 export { default as UserPageWrapper } from "./application/user/UserPageWrapper";
 export { default as ApplicationMenu } from "./application/user/ApplicationMenu";
 export { default as UserLocation } from "./application/user/UserLocation";
+export { default as UserAppLoader } from "./application/user/UserAppLoader";
 export { default as UserTechSkills } from "./application/user/UserTechSkills";
 export { default as UserWorksite } from "./application/user/UserWorksite";
 export { default as WithAgent } from "./application/user/WithAgent";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { splitErrors } from "../../../../utils/showErrors";
 import customFetch from "../../../../utils/customFetch";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
 import {
   ApplicationMenu,
   UserPageHeader,
@@ -14,6 +14,7 @@ import {
   UserLocation,
   UserTechSkills,
   SubmitBtn,
+  UserAppLoader,
 } from "../../../../components";
 import {
   casteList,
@@ -53,6 +54,7 @@ const PersonalInfo = () => {
   const dispatch = useDispatch();
   const { info } = useLoaderData();
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
   const { epicRequired, religionOther, userAge } = useSelector(
     (store) => store.personal
@@ -137,150 +139,154 @@ const PersonalInfo = () => {
 
               <div className="col d-flex flex-column">
                 <div className="row">
-                  <div className="card-body">
-                    <div className="row row-cards">
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="Name"
-                          name="name"
-                          required={true}
-                          value={form.name}
-                          handleChange={handleChange}
-                          autoFocus={true}
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="Father's / Husband's name"
-                          name="fatherHusbandName"
-                          required={true}
-                          value={form.fatherHusbandName}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputRadio
-                          label="Gender"
-                          name="gender"
-                          required={true}
-                          options={genders}
-                          value={form.gender}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <label htmlFor="dob" className="form-label required">
-                          Date of birth
-                        </label>
-                        <input
-                          type="date"
-                          name="dob"
-                          id="dob"
-                          value={form.dob}
-                          onChange={handleDobChange}
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputSelect
-                          label="Category"
-                          name="category"
-                          required={true}
-                          options={casteList}
-                          value={form.category}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputSelect
-                          label="Religion"
-                          name="religion"
-                          required={true}
-                          options={religions}
-                          value={form.religion}
-                          handleChange={handleReligionChange}
-                        />
-                      </div>
-                      {religionOther && (
+                  {navigation.state === "loading" ? (
+                    <UserAppLoader />
+                  ) : (
+                    <div className="card-body">
+                      <div className="row row-cards">
                         <div className="col-md-6 col-sm-12">
                           <InputText
-                            label="Enter your religion"
-                            name="religionOther"
+                            label="Name"
+                            name="name"
                             required={true}
-                            value={form.religionOther}
+                            value={form.name}
+                            handleChange={handleChange}
+                            autoFocus={true}
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputText
+                            label="Father's / Husband's name"
+                            name="fatherHusbandName"
+                            required={true}
+                            value={form.fatherHusbandName}
                             handleChange={handleChange}
                           />
                         </div>
-                      )}
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="Emergency mobile number of family member"
-                          name="emergencyMobile"
-                          required={true}
-                          value={form.emergencyMobile}
-                          handleChange={handleChange}
-                        />
+                        <div className="col-md-6 col-sm-12">
+                          <InputRadio
+                            label="Gender"
+                            name="gender"
+                            required={true}
+                            options={genders}
+                            value={form.gender}
+                            handleChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <label htmlFor="dob" className="form-label required">
+                            Date of birth
+                          </label>
+                          <input
+                            type="date"
+                            name="dob"
+                            id="dob"
+                            value={form.dob}
+                            onChange={handleDobChange}
+                            className="form-control"
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputSelect
+                            label="Category"
+                            name="category"
+                            required={true}
+                            options={casteList}
+                            value={form.category}
+                            handleChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputSelect
+                            label="Religion"
+                            name="religion"
+                            required={true}
+                            options={religions}
+                            value={form.religion}
+                            handleChange={handleReligionChange}
+                          />
+                        </div>
+                        {religionOther && (
+                          <div className="col-md-6 col-sm-12">
+                            <InputText
+                              label="Enter your religion"
+                              name="religionOther"
+                              required={true}
+                              value={form.religionOther}
+                              handleChange={handleChange}
+                            />
+                          </div>
+                        )}
+                        <div className="col-md-6 col-sm-12">
+                          <InputText
+                            label="Emergency mobile number of family member"
+                            name="emergencyMobile"
+                            required={true}
+                            value={form.emergencyMobile}
+                            handleChange={handleChange}
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="row row-cards mt-0">
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="Aadhaar number"
-                          name="aadhaar"
-                          required={true}
-                          value={form.aadhaar}
-                          handleChange={handleChange}
-                        />
+                      <div className="row row-cards mt-0">
+                        <div className="col-md-6 col-sm-12">
+                          <InputText
+                            label="Aadhaar number"
+                            name="aadhaar"
+                            required={true}
+                            value={form.aadhaar}
+                            handleChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputText
+                            label="EPIC number"
+                            name="epic"
+                            required={epicRequired}
+                            value={form.epic}
+                            handleChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputTextarea
+                            label="Permanent address"
+                            name="permanentAddress"
+                            required={true}
+                            value={form.permanentAddress}
+                            handleChange={handleChange}
+                          />
+                        </div>
                       </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="EPIC number"
-                          name="epic"
-                          required={epicRequired}
-                          value={form.epic}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputTextarea
-                          label="Permanent address"
-                          name="permanentAddress"
-                          required={true}
-                          value={form.permanentAddress}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="row row-cards mt-0">
-                      <UserLocation />
+                      <div className="row row-cards mt-0">
+                        <UserLocation />
 
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="PIN code"
-                          name="pin"
-                          required={true}
-                          value={form.pin}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputSelect
-                          label="Qualification"
-                          name="qualification"
-                          required={true}
-                          options={qualificationList}
-                          value={form.qualification}
-                          handleChange={handleChange}
-                        />
-                      </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputText
+                            label="PIN code"
+                            name="pin"
+                            required={true}
+                            value={form.pin}
+                            handleChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputSelect
+                            label="Qualification"
+                            name="qualification"
+                            required={true}
+                            options={qualificationList}
+                            value={form.qualification}
+                            handleChange={handleChange}
+                          />
+                        </div>
 
-                      <UserTechSkills />
+                        <UserTechSkills />
+                      </div>
+                      <div className="mt-5">
+                        <SubmitBtn isLoading={form.isLoading} />
+                      </div>
                     </div>
-                    <div className="mt-5">
-                      <SubmitBtn isLoading={form.isLoading} />
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

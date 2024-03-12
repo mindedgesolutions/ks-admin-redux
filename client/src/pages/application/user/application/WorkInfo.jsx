@@ -5,6 +5,7 @@ import {
   InputText,
   InputTextarea,
   SubmitBtn,
+  UserAppLoader,
   UserPageHeader,
   UserPageWrapper,
   UserWorksite,
@@ -12,7 +13,7 @@ import {
 import customFetch from "../../../../utils/customFetch";
 import { splitErrors } from "../../../../utils/showErrors";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { access } from "../../../../features/user/userBasicSlice";
 import { toast } from "react-toastify";
@@ -24,14 +25,20 @@ import { setJobList } from "../../../../features/masters/jobsSlice";
 // Loader starts ------
 export const loader = (store) => async () => {
   try {
+    // const { states: stateList } = store.getState().states;
+
+    // if (stateList.length === 0) {
+    //   const states = await customFetch.get("/master/states");
+    // }
+
     const states = await customFetch.get("/master/states");
-    const countries = await customFetch.get("/master/countries");
     const jobs = await customFetch.get("/master/jobs");
+    const countries = await customFetch.get("/master/countries");
     const info = await customFetch.get("/applications/user/worksite-info");
 
     store.dispatch(setStateList(states.data.data.rows));
-    store.dispatch(setCountryList(countries.data.data.rows));
     store.dispatch(setJobList(jobs.data.data.rows));
+    store.dispatch(setCountryList(countries.data.data.rows));
 
     return { info };
   } catch (error) {
@@ -45,6 +52,7 @@ const WorkInfo = () => {
   document.title = `Worksite Information | ${import.meta.env.VITE_USER_TITLE}`;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const navigation = useNavigation();
   const { info } = useLoaderData();
   const { jobs } = useSelector((store) => store.jobs);
 
@@ -103,86 +111,90 @@ const WorkInfo = () => {
 
               <div className="col d-flex flex-column">
                 <div className="row">
-                  <div className="card-body">
-                    <div className="row row-cards">
-                      <div className="col-md-12 col-sm-12">
-                        <InputTextarea
-                          label="Worksite address"
-                          name="workAddress"
-                          required={true}
-                          value={form.workAddress}
-                          handleChange={handleChange}
-                          autoFocus={true}
-                        />
+                  {navigation.state === "loading" ? (
+                    <UserAppLoader />
+                  ) : (
+                    <div className="card-body">
+                      <div className="row row-cards">
+                        <div className="col-md-12 col-sm-12">
+                          <InputTextarea
+                            label="Worksite address"
+                            name="workAddress"
+                            required={true}
+                            value={form.workAddress}
+                            handleChange={handleChange}
+                            autoFocus={true}
+                          />
+                        </div>
+                      </div>
+                      <UserWorksite />
+                      <div className="row row-cards mt-1">
+                        <div className="col-md-6 col-sm-12">
+                          <InputText
+                            label="Worksite police station"
+                            name="workPs"
+                            required={true}
+                            value={form.workPs}
+                            handleChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <label
+                            htmlFor="empNature"
+                            className="form-label required"
+                          >
+                            Nature of employment
+                          </label>
+                          <select
+                            name="empNature"
+                            id="empNature"
+                            className="form-select"
+                            value={form.empNature}
+                            onChange={handleChange}
+                          >
+                            <option value="">
+                              - Select nature of employment -
+                            </option>
+                            {jobs.map((option) => {
+                              return (
+                                <option key={nanoid()} value={option.id}>
+                                  {option.nature_of_work}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <label
+                            htmlFor="migDate"
+                            className="form-label required"
+                          >
+                            Migrated on
+                          </label>
+                          <input
+                            type="date"
+                            name="migDate"
+                            id="migDate"
+                            value={form.migDate}
+                            onChange={handleChange}
+                            className="form-control"
+                          />
+                        </div>
+                        <div className="col-md-6 col-sm-12">
+                          <InputText
+                            label="Expected wages per day"
+                            name="expectedWages"
+                            required={false}
+                            value={form.expectedWages}
+                            handleChange={handleChange}
+                          />
+                        </div>
+                        <div className="mt-5">
+                          <SubmitBtn isLoading={form.isLoading} />
+                        </div>
                       </div>
                     </div>
-                    <UserWorksite />
-                    <div className="row row-cards mt-1">
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="Worksite police station"
-                          name="workPs"
-                          required={true}
-                          value={form.workPs}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <label
-                          htmlFor="empNature"
-                          className="form-label required"
-                        >
-                          Nature of employment
-                        </label>
-                        <select
-                          name="empNature"
-                          id="empNature"
-                          className="form-select"
-                          value={form.empNature}
-                          onChange={handleChange}
-                        >
-                          <option value="">
-                            - Select nature of employment -
-                          </option>
-                          {jobs.map((option) => {
-                            return (
-                              <option key={nanoid()} value={option.id}>
-                                {option.nature_of_work}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <label
-                          htmlFor="migDate"
-                          className="form-label required"
-                        >
-                          Migrated on
-                        </label>
-                        <input
-                          type="date"
-                          name="migDate"
-                          id="migDate"
-                          value={form.migDate}
-                          onChange={handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="col-md-6 col-sm-12">
-                        <InputText
-                          label="Expected wages per day"
-                          name="expectedWages"
-                          required={false}
-                          value={form.expectedWages}
-                          handleChange={handleChange}
-                        />
-                      </div>
-                      <div className="mt-5">
-                        <SubmitBtn isLoading={form.isLoading} />
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

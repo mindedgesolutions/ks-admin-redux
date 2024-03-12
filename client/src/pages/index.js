@@ -19,9 +19,12 @@ export { default as BankNominee } from "./application/user/application/BankNomin
 export { default as Family } from "./application/user/application/Family";
 export { default as Documents } from "./application/user/application/Documents";
 export { default as OverView } from "./application/user/application/OverView";
+export { default as ApplicationError } from "./application/user/application/ApplicationError";
 // User related ends ------
 
 // Admin related starts ------
 export { default as AdminLayout } from "./application/admin/AdminLayout";
 export { default as AdminDashboard } from "./application/admin/AdminDashboard";
+export { default as AdminLogin } from "./application/admin/login/AdminLogin";
+export { default as AdminForgotPassword } from "./application/admin/login/AdminForgotPassword";
 // Admin related ends ------

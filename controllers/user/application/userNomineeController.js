@@ -78,7 +78,23 @@ export const getBankInfo = async (req, res) => {
   const { mobile, applicationId } = req.appUser;
   const searchBy = applicationId || (await getApplicationId(mobile));
   const data = await pool.query(
-    `select kwn.*, kwm.khadyasathi_no, kwm.sasthyasathi_no from k_migrant_worker_nominees kwn join k_migrant_worker_master kwm on kwn.application_id=kwm.id where kwn.application_id=$1`,
+    // `select kwn.*,
+    // kwm.khadyasathi_no,
+    // kwm.sasthyasathi_no,
+    // kas.member_id, kas.scheme_id,
+    // ms.schemes_name
+    // from k_migrant_worker_nominees kwn
+    // join k_migrant_worker_master kwm on kwn.application_id=kwm.id
+    // left join k_availed_schemes kas on kas.application_id=kwn.application_id
+    // left join master_schemes ms on kas.scheme_id = ms.id
+    // where kwn.application_id=$1
+    // and kas.member_id is null`,
+    `select kwn.*, 
+    kwm.khadyasathi_no, 
+    kwm.sasthyasathi_no
+    from k_migrant_worker_nominees kwn 
+    join k_migrant_worker_master kwm on kwn.application_id=kwm.id 
+    where kwn.application_id=$1`,
     [searchBy]
   );
   res.status(StatusCodes.OK).json({ data });

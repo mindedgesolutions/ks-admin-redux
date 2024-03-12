@@ -13,6 +13,7 @@ import { loader as viewLoader } from "./pages/application/user/application/OverV
 
 // Actions ------
 import { action as otpLogin } from "./components/website/LoginForm";
+import { action as adminLogin } from "./pages/application/admin/login/AdminLogin";
 
 const router = createBrowserRouter([
   // Website related starts ------
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <Ks.UserLayout />,
+    errorElement: <Ks.ApplicationError />,
     loader: userLayout(store),
     children: [
       { path: "dashboard", element: <Ks.UserDashboard /> },
@@ -47,7 +49,11 @@ const router = createBrowserRouter([
         element: <Ks.WorkInfo />,
         loader: worksiteLoader(store),
       },
-      { path: "agency-info", element: <Ks.AgencyInfo />, loader: agencyLoader },
+      {
+        path: "agency-info",
+        element: <Ks.AgencyInfo />,
+        loader: agencyLoader,
+      },
       {
         path: "bank-nominee-info",
         element: <Ks.BankNominee />,
@@ -59,11 +65,21 @@ const router = createBrowserRouter([
         loader: familyLoader(store),
       },
       { path: "documents", element: <Ks.Documents /> },
-      { path: "overview", element: <Ks.OverView />, loader: viewLoader(store) },
+      {
+        path: "overview",
+        element: <Ks.OverView />,
+        loader: viewLoader(store),
+      },
     ],
   },
   // User app related ends ------
   // Admin app related starts ------
+  {
+    path: "/admin/login",
+    element: <Ks.AdminLogin />,
+    action: adminLogin(store),
+  },
+  { path: "/admin/forgot-password", element: <Ks.AdminForgotPassword /> },
   {
     path: "/admin",
     element: <Ks.AdminLayout />,
