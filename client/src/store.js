@@ -15,6 +15,7 @@ import jobsReducer from "./features/masters/jobsSlice";
 import countryReducer from "./features/masters/countrySlice";
 import schemeReducer from "./features/masters/schemeSlice";
 import bankReducer from "./features/masters/bankSlice";
+import adminLoginReducer from "./features/adminLogin/adminLoginSlice";
 
 export const store = configureStore({
   reducer: {
@@ -34,5 +35,6 @@ export const store = configureStore({
     countries: countryReducer,
     schemes: schemeReducer,
     banks: bankReducer,
+    adminLogin: adminLoginReducer,
   },
 });
