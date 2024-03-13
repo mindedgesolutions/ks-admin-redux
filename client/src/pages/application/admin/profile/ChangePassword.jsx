@@ -6,15 +6,36 @@ import {
   UserPageHeader,
   UserPageWrapper,
 } from "../../../../components";
-import { Form } from "react-router-dom";
+import { Form, redirect, useNavigation } from "react-router-dom";
+import customFetch from "../../../../utils/customFetch";
+import { toast } from "react-toastify";
+import { splitErrors } from "../../../../utils/showErrors";
 
+// Action starts ------
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+
+  try {
+    await customFetch.patch("/users/change-password", data);
+    toast.success(`Password changed successfully`);
+    return redirect("/admin/profile");
+  } catch (error) {
+    splitErrors(error?.response?.data?.msg);
+    return error;
+  }
+};
+
+// Main component starts ------
 const ChangePassword = () => {
   document.title = `Change Password | ${import.meta.env.VITE_ADMIN_TITLE}`;
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "submitting";
+
   const [form, setForm] = useState({
     oldPass: "",
     newPass: "",
     confirmPass: "",
-    isLoading: false,
   });
 
   const handleChange = (e) => {
@@ -27,7 +48,6 @@ const ChangePassword = () => {
       oldPass: "",
       newPass: "",
       confirmPass: "",
-      isLoading: false,
     });
   };
 
@@ -42,9 +62,9 @@ const ChangePassword = () => {
             <div className="col d-flex flex-column">
               <Form method="post" autoComplete="off">
                 <div className="card-body">
-                  <h2 className="mb-4">Change password</h2>
+                  <h2 className="mb-2">Change password</h2>
 
-                  <div className="mt-4">&nbsp;</div>
+                  <div className="mt-0">&nbsp;</div>
 
                   <div className="row">
                     <div className="col-md-4">
@@ -85,10 +105,7 @@ const ChangePassword = () => {
 
                 <div className="card-footer bg-transparent mt-3">
                   <div className="btn-list justify-content-start">
-                    <SubmitBtn
-                      text="Change password"
-                      isLoading={form.isLoading}
-                    />
+                    <SubmitBtn text="Change password" isLoading={isLoading} />
                     <button
                       type="button"
                       className="btn"

@@ -18,6 +18,7 @@ import { action as otpLogin } from "./components/website/LoginForm";
 import { action as adminLogin } from "./pages/application/admin/login/AdminLogin";
 import { action as adminForgotPass } from "./pages/application/admin/login/AdminForgotPassword";
 import { action as updateProfile } from "./pages/application/admin/profile/UpdateProfile";
+import { action as changePassword } from "./pages/application/admin/profile/ChangePassword";
 
 const router = createBrowserRouter([
   // Website related starts ------
@@ -99,8 +100,14 @@ const router = createBrowserRouter([
         element: <Ks.UpdateProfile />,
         action: updateProfile(store),
       },
-      { path: "change-password", element: <Ks.ChangePassword /> },
+      {
+        path: "change-password",
+        element: <Ks.ChangePassword />,
+        action: changePassword,
+      },
       { path: "notifications", element: <Ks.AdminNotifications /> },
+      { path: "reports", element: <Ks.AllReports /> },
+      { path: "applications", element: <Ks.AllApplications /> },
     ],
   },
   // Admin app related ends ------

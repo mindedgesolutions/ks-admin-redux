@@ -40,13 +40,13 @@ export const updateUser = async (req, res) => {
 export const updatePassword = async (req, res) => {
   const { userId } = req.user;
   const { oldPass, newPass } = req.body;
-  const existingText = `select password from users where id=$1`;
+  const existingText = `select pass from users where uid=$1`;
   const existingValues = [userId];
   const existingData = await pool.query(existingText, existingValues);
-  const check = await checkPassword(oldPass, existingData.rows[0].password);
+  const check = await checkPassword(oldPass, existingData.rows[0].pass);
   if (!check) throw new BadRequestError(`Incorrect old password`);
   const password = await hashPassword(newPass);
-  const text = `update users set password=$1 where id=$2`;
+  const text = `update users set pass=$1 where uid=$2`;
   const values = [password, userId];
   await pool.query(text, values);
 

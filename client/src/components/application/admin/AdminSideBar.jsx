@@ -25,7 +25,7 @@ const AdminSideBar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <h1 className="navbar-brand navbar-brand-autodark">
-          <Link to="/user/dashboard">
+          <Link to="/admin/dashboard">
             <img
               src={Logo}
               style={{ height: "40px" }}
@@ -65,7 +65,7 @@ const AdminSideBar = () => {
         <div className="collapse navbar-collapse" id="sidebar-menu">
           <ul className="navbar-nav pt-lg-3">
             <li className="nav-item">
-              <Link className="nav-link" to="/user/dashboard">
+              <Link className="nav-link" to="/admin/dashboard">
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <AiOutlineHome size={18} />
                 </span>
@@ -73,7 +73,7 @@ const AdminSideBar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="">
+              <Link className="nav-link" to="/admin/applications">
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <AiOutlineFile size={18} />
                 </span>
@@ -81,7 +81,7 @@ const AdminSideBar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="">
+              <Link className="nav-link" to="/admin/reports">
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <BsGraphUpArrow size={16} />
                 </span>
