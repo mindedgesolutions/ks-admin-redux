@@ -25,4 +25,9 @@ export { default as ApplicationError } from "./application/user/application/Appl
 // Admin related starts ------
 export { default as AdminLayout } from "./application/admin/AdminLayout";
 export { default as AdminDashboard } from "./application/admin/AdminDashboard";
+export { default as AdminLogin } from "./application/admin/login/AdminLogin";
+export { default as AdminForgotPassword } from "./application/admin/login/AdminForgotPassword";
+export { default as UpdateProfile } from "./application/admin/profile/UpdateProfile";
+export { default as ChangePassword } from "./application/admin/profile/ChangePassword";
+export { default as AdminNotifications } from "./application/admin/profile/AdminNotifications";
 // Admin related ends ------

@@ -16,8 +16,7 @@ export const updatePassword = async (req, res) => {
 
 export const login = async (req, res) => {
   const { username, password, captcha, inputCaptcha } = req.body;
-  if (captcha !== inputCaptcha)
-    throw new BadRequestError(`Incorrect captcha entered`);
+
   const text = `SELECT "users"."uid", "users"."pass", "role"."name" FROM "users" INNER JOIN "users_roles" ON "users"."uid" = "users_roles"."uid" INNER JOIN "role" ON "users_roles"."rid" = "role"."rid" where "users"."name"=$1`;
   const values = [username];
   const user = await pool.query(text, values);

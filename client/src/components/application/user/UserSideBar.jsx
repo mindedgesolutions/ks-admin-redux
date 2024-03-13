@@ -2,12 +2,7 @@ import React from "react";
 import Logo from "../../../assets/dist/images/inverse-logo.png";
 import Avatar from "../../../assets/dist/images/000m.jpg";
 import { Link } from "react-router-dom";
-import {
-  AiFillGithub,
-  AiOutlineHeart,
-  AiOutlineHome,
-  AiOutlineFile,
-} from "react-icons/ai";
+import { AiOutlineHome, AiOutlineFile } from "react-icons/ai";
 import { BsFillMoonFill, BsSunFill, BsGraphUpArrow } from "react-icons/bs";
 import { GoPackage } from "react-icons/go";
 import { getAccessFromLocalStorage } from "../../../utils/data";
@@ -43,26 +38,7 @@ const UserSideBar = () => {
         </h1>
         <div className="navbar-nav flex-row d-lg-none">
           <div className="nav-item d-none d-lg-flex me-3">
-            <div className="btn-list">
-              <a
-                href="https://github.com/tabler/tabler"
-                className="btn"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <AiFillGithub />
-                Source code
-              </a>
-              <a
-                href="https://github.com/sponsors/codecalm"
-                className="btn"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <AiOutlineHeart />
-                Sponsor
-              </a>
-            </div>
+            <div className="btn-list"></div>
           </div>
 
           <div className="d-none d-lg-flex">
@@ -81,25 +57,8 @@ const UserSideBar = () => {
                 className="avatar avatar-sm cursor-pointer"
                 alt="karmasathi"
               />
-              <div className="d-none d-xl-block ps-2">
-                <div>Pawel Kuna</div>
-                <div className="mt-1 small text-muted">UI Designer</div>
-              </div>
             </a>
             <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <a href="#" className="dropdown-item">
-                Status
-              </a>
-              <a href="./profile.html" className="dropdown-item">
-                Profile
-              </a>
-              <a href="#" className="dropdown-item">
-                Feedback
-              </a>
-              <div className="dropdown-divider"></div>
-              <a href="./settings.html" className="dropdown-item">
-                Settings
-              </a>
               <a href="./sign-in.html" className="dropdown-item">
                 Logout
               </a>

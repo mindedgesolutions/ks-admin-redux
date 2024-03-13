@@ -11,8 +11,13 @@ import { loader as bankNomineeLoader } from "./pages/application/user/applicatio
 import { loader as familyLoader } from "./pages/application/user/application/Family";
 import { loader as viewLoader } from "./pages/application/user/application/OverView";
 
+import { loader as adminLayout } from "./pages/application/admin/AdminLayout";
+
 // Actions ------
 import { action as otpLogin } from "./components/website/LoginForm";
+import { action as adminLogin } from "./pages/application/admin/login/AdminLogin";
+import { action as adminForgotPass } from "./pages/application/admin/login/AdminForgotPassword";
+import { action as updateProfile } from "./pages/application/admin/profile/UpdateProfile";
 
 const router = createBrowserRouter([
   // Website related starts ------
@@ -74,9 +79,29 @@ const router = createBrowserRouter([
   // User app related ends ------
   // Admin app related starts ------
   {
+    path: "/admin/login",
+    element: <Ks.AdminLogin />,
+    action: adminLogin(store),
+  },
+  {
+    path: "/admin/forgot-password",
+    element: <Ks.AdminForgotPassword />,
+    action: adminForgotPass,
+  },
+  {
     path: "/admin",
     element: <Ks.AdminLayout />,
-    children: [{ path: "dashboard", element: <Ks.AdminDashboard /> }],
+    loader: adminLayout(store),
+    children: [
+      { path: "dashboard", element: <Ks.AdminDashboard /> },
+      {
+        path: "profile",
+        element: <Ks.UpdateProfile />,
+        action: updateProfile(store),
+      },
+      { path: "change-password", element: <Ks.ChangePassword /> },
+      { path: "notifications", element: <Ks.AdminNotifications /> },
+    ],
   },
   // Admin app related ends ------
 ]);
