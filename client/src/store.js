@@ -17,6 +17,7 @@ import schemeReducer from "./features/masters/schemeSlice";
 import bankReducer from "./features/masters/bankSlice";
 import adminLoginReducer from "./features/adminLogin/adminLoginSlice";
 import adminBasicReducer from "./features/admin/adminBasicSlice";
+import reportReducer from "./features/reports/reportSlice";
 
 export const store = configureStore({
   reducer: {
@@ -38,5 +39,6 @@ export const store = configureStore({
     banks: bankReducer,
     adminLogin: adminLoginReducer,
     adminBasic: adminBasicReducer,
+    reports: reportReducer,
   },
 });

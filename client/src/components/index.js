@@ -51,5 +51,5 @@ export { default as AdminTopNav } from "./application/admin/AdminTopNav";
 export { default as AdminSideBar } from "./application/admin/AdminSideBar";
 export { default as AdminFooter } from "./application/admin/AdminFooter";
 export { default as AdminProfileSidebar } from "./application/admin/AdminProfileSidebar";
-export { default as AdminReportSidebar } from "./application/admin/AdminReportSidebar";
+export { default as ReportItems } from "./application/admin/ReportItems";
 // Admin related ends ------

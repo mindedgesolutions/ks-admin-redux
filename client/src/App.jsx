@@ -106,7 +106,27 @@ const router = createBrowserRouter([
         action: changePassword,
       },
       { path: "notifications", element: <Ks.AdminNotifications /> },
-      { path: "reports", element: <Ks.AllReports /> },
+      {
+        path: "reports",
+        children: [
+          { index: true, element: <Ks.AllReports /> },
+          {
+            path: "ds/application-status",
+            element: <Ks.DsApplicationStatus />,
+          },
+          { path: "ds/migration-status", element: <Ks.DsMigrationStatus /> },
+          { path: "ds/deo", element: <Ks.DsDeo /> },
+          {
+            path: "bsk/application-status",
+            element: <Ks.BskApplicationStatus />,
+          },
+          {
+            path: "ks/application-status",
+            element: <Ks.KsApplicationStatus />,
+          },
+          { path: "sd/static", element: <Ks.SdStaticAtFive /> },
+        ],
+      },
       { path: "applications", element: <Ks.AllApplications /> },
     ],
   },
