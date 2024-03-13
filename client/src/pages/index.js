@@ -32,4 +32,10 @@ export { default as ChangePassword } from "./application/admin/profile/ChangePas
 export { default as AdminNotifications } from "./application/admin/profile/AdminNotifications";
 export { default as AllReports } from "./application/admin/reports/AllReports";
 export { default as AllApplications } from "./application/admin/reports/AllApplications";
+export { default as BskApplicationStatus } from "./application/admin/reports/bsk/BskApplicationStatus";
+export { default as DsApplicationStatus } from "./application/admin/reports/ds/DsApplicationStatus";
+export { default as DsDeo } from "./application/admin/reports/ds/DsDeo";
+export { default as DsMigrationStatus } from "./application/admin/reports/ds/DsMigrationStatus";
+export { default as KsApplicationStatus } from "./application/admin/reports/ks/KsApplicationStatus";
+export { default as SdStaticAtFive } from "./application/admin/reports/sd/SdStaticAtFive";
 // Admin related ends ------
