@@ -9,6 +9,7 @@ import {
 import { Form } from "react-router-dom";
 
 const ChangePassword = () => {
+  document.title = `Change Password | ${import.meta.env.VITE_ADMIN_TITLE}`;
   const [form, setForm] = useState({
     oldPass: "",
     newPass: "",
