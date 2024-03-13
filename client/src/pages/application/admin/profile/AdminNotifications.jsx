@@ -5,6 +5,8 @@ import {
   UserPageWrapper,
 } from "../../../../components";
 import { notifications } from "../../../../utils/data";
+import { nanoid } from "nanoid";
+import Avatar from "../../../../assets/dist/images/000m.jpg";
 
 const AdminNotifications = () => {
   document.title = `Admin Notifications | ${import.meta.env.VITE_ADMIN_TITLE}`;
@@ -18,22 +20,30 @@ const AdminNotifications = () => {
 
             <div className="col d-flex flex-column">
               <div className="card-body">
-                <h2 className="mb-4">Notifications</h2>
+                <h2 className="mb-2">Notifications</h2>
 
-                <div className="mt-4">&nbsp;</div>
+                <div className="mt-0">&nbsp;</div>
 
-                <div className="row">
-                  <div className="col-md-4">
-                    {notifications.map((notification) => {
-                      return (
-                        <span>
-                          <h1>{notification.title}</h1>
-                          <p>{notification.body}</p>
-                          <p>{notification.date}</p>
-                        </span>
-                      );
-                    })}
-                  </div>
+                <div className="list-group list-group-flush list-group-hoverable">
+                  {notifications.map((notification) => {
+                    return (
+                      <div key={nanoid()} className="list-group-item">
+                        <div className="row align-items-center">
+                          <div className="col-auto">
+                            <img src={Avatar} className="avatar" />
+                          </div>
+                          <div className="col">
+                            <div className="text-reset d-block">
+                              {notification.title}
+                            </div>
+                            <div className="d-block text-secondary mt-n1">
+                              {notification.body}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
