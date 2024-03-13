@@ -55,15 +55,14 @@ const ViewFamily = () => {
                   <td>
                     {schemes.map((s) => {
                       return (
-                        <>
+                        <div key={nanoid()}>
                           <span
-                            key={nanoid()}
                             className={`badge bg-${randomBadgeBg()}-lt p-1 me-1 my-0`}
                           >
                             {s?.schemes_name?.toUpperCase()}
                           </span>
                           <br />
-                        </>
+                        </div>
                       );
                     })}
                   </td>
