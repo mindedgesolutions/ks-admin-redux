@@ -30,4 +30,5 @@ export { default as AdminForgotPassword } from "./application/admin/login/AdminF
 export { default as UpdateProfile } from "./application/admin/profile/UpdateProfile";
 export { default as ChangePassword } from "./application/admin/profile/ChangePassword";
 export { default as AdminNotifications } from "./application/admin/profile/AdminNotifications";
+export { default as AllReports } from "./application/admin/reports/AllReports";
 // Admin related ends ------

@@ -4,8 +4,10 @@ import {
   UserPageHeader,
   UserPageWrapper,
 } from "../../../../components";
+import { notifications } from "../../../../utils/data";
 
 const AdminNotifications = () => {
+  document.title = `Admin Notifications | ${import.meta.env.VITE_ADMIN_TITLE}`;
   return (
     <>
       <UserPageHeader title="Notifications" />
@@ -16,21 +18,21 @@ const AdminNotifications = () => {
 
             <div className="col d-flex flex-column">
               <div className="card-body">
-                <h2 className="mb-4">Change password</h2>
+                <h2 className="mb-4">Notifications</h2>
 
                 <div className="mt-4">&nbsp;</div>
 
                 <div className="row">
                   <div className="col-md-4">
-                    <InputText
-                      type="password"
-                      label="Old password"
-                      name="oldPass"
-                      required={true}
-                      value={form.oldPass}
-                      handleChange={handleChange}
-                      autoFocus={true}
-                    />
+                    {notifications.map((notification) => {
+                      return (
+                        <span>
+                          <h1>{notification.title}</h1>
+                          <p>{notification.body}</p>
+                          <p>{notification.date}</p>
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
