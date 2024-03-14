@@ -12,6 +12,7 @@ import familyReducer from "./features/userApplication/familySlice";
 import overViewReducer from "./features/userApplication/overViewSlice";
 import statesReducer from "./features/masters/statesSlice";
 import jobsReducer from "./features/masters/jobsSlice";
+import districtReducer from "./features/masters/districtSlice";
 import countryReducer from "./features/masters/countrySlice";
 import schemeReducer from "./features/masters/schemeSlice";
 import bankReducer from "./features/masters/bankSlice";
@@ -34,6 +35,7 @@ export const store = configureStore({
     overview: overViewReducer,
     states: statesReducer,
     jobs: jobsReducer,
+    districts: districtReducer,
     countries: countryReducer,
     schemes: schemeReducer,
     banks: bankReducer,

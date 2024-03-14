@@ -17,12 +17,22 @@ import {
 } from "../../../features/admin/adminBasicSlice.js";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import {
+  setDistricts,
+  unsetDistricts,
+} from "../../../features/masters/districtSlice.js";
+import { resetSubdiv } from "../../../features/masters/subdivSlice.js";
+import { resetBlock } from "../../../features/masters/blockSlice.js";
 
 export const loader = (store) => async () => {
   try {
     const response = await customFetch.get("/users/current-user");
+    const districts = await customFetch.get("/master/districts");
+
     store.dispatch(details(response.data.data.rows[0]));
-    return response;
+    store.dispatch(setDistricts(districts.data.data.rows));
+
+    return { response, districts };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return redirect("/admin/login");
@@ -35,7 +45,12 @@ const AdminLayout = () => {
 
   const logout = async () => {
     await customFetch.get("/auth/logout");
+
     dispatch(resetAdminBasic());
+    dispatch(unsetDistricts());
+    dispatch(resetSubdiv());
+    dispatch(resetBlock());
+
     toast.success(`User logged out`);
     navigate("/admin/login");
   };
