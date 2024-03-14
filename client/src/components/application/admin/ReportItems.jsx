@@ -9,7 +9,10 @@ const ReportItems = ({ report }) => {
     const { title, description, url } = child;
     const id = nanoid();
     const titleArray = title.split(" ");
-    const nameInitials = titleArray[0].charAt(0) + titleArray[1].charAt(0);
+    const nameInitials =
+      titleArray.length > 1
+        ? titleArray[0].charAt(0) + titleArray[1].charAt(0)
+        : titleArray[0].charAt(0) + titleArray[0].charAt(1);
 
     return (
       <div key={id}>

@@ -72,13 +72,35 @@ const AdminSideBar = () => {
                 <span className="nav-link-title">Home</span>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/admin/applications">
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#navbar-extra"
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="false"
+                role="button"
+                aria-expanded="false"
+              >
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <AiOutlineFile size={18} />
                 </span>
                 <span className="nav-link-title">Applications</span>
-              </Link>
+              </a>
+              <div className="dropdown-menu">
+                <div className="dropdown-menu-columns">
+                  <div className="dropdown-menu-column">
+                    <Link to="/admin/applications" className="dropdown-item">
+                      All applications
+                    </Link>
+                    <Link
+                      to="/admin/search-application"
+                      className="dropdown-item"
+                    >
+                      Search application
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/admin/reports">
@@ -87,53 +109,6 @@ const AdminSideBar = () => {
                 </span>
                 <span className="nav-link-title">Reports</span>
               </Link>
-            </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#navbar-base"
-                data-bs-toggle="dropdown"
-                data-bs-auto-close="false"
-                role="button"
-                aria-expanded="false"
-              >
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <GoPackage />
-                </span>
-                <span className="nav-link-title">Interface</span>
-              </a>
-              <div className="dropdown-menu">
-                <div className="dropdown-menu-columns">
-                  <div className="dropdown-menu-column">
-                    <div className="dropend">
-                      <a
-                        className="dropdown-item dropdown-toggle"
-                        href="#sidebar-cards"
-                        data-bs-toggle="dropdown"
-                        data-bs-auto-close="false"
-                        role="button"
-                        aria-expanded="false"
-                      >
-                        Cards
-                      </a>
-                      <div className="dropdown-menu">
-                        <a href="./cards.html" className="dropdown-item">
-                          Sample cards
-                        </a>
-                        <a href="./card-actions.html" className="dropdown-item">
-                          Card actions
-                        </a>
-                        <a
-                          href="./cards-masonry.html"
-                          className="dropdown-item"
-                        >
-                          Cards Masonry
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </li>
           </ul>
         </div>
