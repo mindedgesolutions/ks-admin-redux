@@ -70,8 +70,39 @@ const DsApplicationStatus = () => {
       }
     }
   };
-  console.log(result);
   // Fetch report data ends ------
+
+  // Row and Table totals start ------
+  const totalProvisional = result.reduce(
+    (t, c) => Number(t) + Number(c.provisional),
+    0
+  );
+  const totalDocUploaded = result.reduce(
+    (t, c) => Number(t) + Number(c.docuploaded),
+    0
+  );
+  const totalUnderProcess = result.reduce(
+    (t, c) => Number(t) + Number(c.underprocess),
+    0
+  );
+  const totalRejected = result.reduce(
+    (t, c) => Number(t) + Number(c.rejected),
+    0
+  );
+  const totalPermanent = result.reduce(
+    (t, c) => Number(t) + Number(c.permanent),
+    0
+  );
+  const totalCount =
+    Number(totalProvisional) +
+    Number(totalDocUploaded) +
+    Number(totalUnderProcess) +
+    Number(totalRejected) +
+    Number(totalPermanent);
+
+  let tableTotal = 0,
+    tableTotalExcel = 0;
+  // Row and Table totals end ------
 
   useEffect(() => {
     fetchReport();
@@ -137,11 +168,32 @@ const DsApplicationStatus = () => {
                             Number(row.underprocess) +
                             Number(row.rejected) +
                             Number(row.permanent);
+
+                          // Set column 2 and 3 values start ------
+                          let colTwoLabel, colThreeLabel;
+                          if (
+                            queryParams.get("dist") &&
+                            !queryParams.get("subdiv")
+                          ) {
+                            colTwoLabel = row.district_name;
+                            colThreeLabel = `ALL`;
+                          } else if (
+                            queryParams.get("subdiv") &&
+                            !queryParams.get("block")
+                          ) {
+                            colTwoLabel = row.district_name;
+                            colThreeLabel = `ALL`;
+                          } else if (queryParams.get("block")) {
+                            colTwoLabel = row.district_name;
+                            colThreeLabel = `ALL`;
+                          }
+                          // Set column 2 and 3 values end ------
+
                           return (
                             <tr key={nanoid()}>
                               <td>{index + 1}.</td>
-                              <td>{row.district_name}</td>
-                              <td>{row.subdiv_name}</td>
+                              <td>{colTwoLabel}</td>
+                              <td>{colThreeLabel}</td>
                               <td>{row.provisional || 0}</td>
                               <td>{row.docuploaded || 0}</td>
                               <td>{row.underprocess || 0}</td>
@@ -151,6 +203,27 @@ const DsApplicationStatus = () => {
                             </tr>
                           );
                         })}
+                        <tr>
+                          <th className="bg-dark text-white" colSpan={3}>
+                            TOTAL
+                          </th>
+                          <th className="bg-dark text-white">
+                            {totalProvisional}
+                          </th>
+                          <th className="bg-dark text-white">
+                            {totalDocUploaded}
+                          </th>
+                          <th className="bg-dark text-white">
+                            {totalUnderProcess}
+                          </th>
+                          <th className="bg-dark text-white">
+                            {totalRejected}
+                          </th>
+                          <th className="bg-dark text-white">
+                            {totalPermanent}
+                          </th>
+                          <th className="bg-dark text-white">{totalCount}</th>
+                        </tr>
                       </>
                     )}
                   </tbody>
