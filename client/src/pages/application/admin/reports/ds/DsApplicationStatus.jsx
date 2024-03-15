@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
   FilterBlockDate,
+  ReportTableLoader,
   UserPageHeader,
   UserPageWrapper,
 } from "../../../../../components";
 import { Link, useLocation, useParams } from "react-router-dom";
 import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
+import { nanoid } from "nanoid";
 
 const DsApplicationStatus = () => {
   const { id } = useParams();
@@ -49,14 +51,14 @@ const DsApplicationStatus = () => {
       setIsLoading(true);
       try {
         const response = await customFetch.get(
-          `/reports/ds-application-status-report`,
+          `/reports/ds-application-status`,
           {
             params: {
               dist: queryParams.get("dist"),
               subdiv: queryParams.get("subdiv") || "",
               block: queryParams.get("block") || "",
               startDate: queryParams.get("start"),
-              endDate: queryParams.get("ends"),
+              endDate: queryParams.get("end"),
             },
           }
         );
@@ -68,6 +70,7 @@ const DsApplicationStatus = () => {
       }
     }
   };
+  console.log(result);
   // Fetch report data ends ------
 
   useEffect(() => {
@@ -77,6 +80,8 @@ const DsApplicationStatus = () => {
     queryParams.get("subdiv"),
     queryParams.get("btype"),
     queryParams.get("block"),
+    queryParams.get("start"),
+    queryParams.get("end"),
   ]);
 
   return (
@@ -102,7 +107,7 @@ const DsApplicationStatus = () => {
 
             <div className="card-body p-2">
               <div className="table-responsive">
-                <table className="table table-vcenter text-nowrap datatable table-hover table-bordered card-table">
+                <table className="table table-vcenter text-nowrap datatable table-hover table-bordered card-table fs-5">
                   <thead>
                     <tr>
                       <th className="bg-dark text-white">SL. NO.</th>
@@ -117,17 +122,37 @@ const DsApplicationStatus = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan={9}>
+                          <ReportTableLoader />
+                        </td>
+                      </tr>
+                    ) : (
+                      <>
+                        {result.map((row, index) => {
+                          const rowTotal =
+                            Number(row.provisional) +
+                            Number(row.docuploaded) +
+                            Number(row.underprocess) +
+                            Number(row.rejected) +
+                            Number(row.permanent);
+                          return (
+                            <tr key={nanoid()}>
+                              <td>{index + 1}.</td>
+                              <td>{row.district_name}</td>
+                              <td>{row.subdiv_name}</td>
+                              <td>{row.provisional || 0}</td>
+                              <td>{row.docuploaded || 0}</td>
+                              <td>{row.underprocess || 0}</td>
+                              <td>{row.rejected || 0}</td>
+                              <td>{row.permanent || 0}</td>
+                              <td>{rowTotal}</td>
+                            </tr>
+                          );
+                        })}
+                      </>
+                    )}
                   </tbody>
                 </table>
               </div>
