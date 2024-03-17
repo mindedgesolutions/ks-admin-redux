@@ -4,32 +4,28 @@ export const notifications = [
   {
     title: "Test title 1",
     name: "Payal Karmakar",
-    body:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: true,
   },
   {
     title: "Test title 2",
     name: "Arko Banerjee",
-    body:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: true,
   },
   {
     title: "Test title 3",
     name: "Jyoti Bag",
-    body:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: false,
   },
   {
     title: "Test title 4",
     name: "Moumita Chatterjee",
-    body:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: false,
   },
@@ -38,30 +34,48 @@ export const notifications = [
 export const reports = [
   {
     id: 1,
-    title: "Duare Sarkar Reports",
+    title: "Duare Sarkar VII Reports",
     children: [
       {
         title: "Application status report",
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
-        url: "/admin/reports/ds/application-status",
+        url: "/admin/reports/ds/application-status/7",
       },
       {
-        title: "Migration status report",
+        title: "Static cumulative 5pm report",
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
-        url: "/admin/reports/ds/migration-status",
+        url: "/admin/reports/ds/static/7",
       },
       {
-        title: "DEO report",
+        title: "DEO report for DS-VII",
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
-        url: "/admin/reports/ds/deo",
+        url: "/admin/reports/ds/deo/7",
       },
     ],
   },
   {
     id: 2,
+    title: "Duare Sarkar VIII Reports",
+    children: [
+      {
+        title: "Static cumulative 5pm report",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/ds/static/8",
+      },
+      {
+        title: "DEO report for DS-VIII",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/ds/deo/8",
+      },
+    ],
+  },
+  {
+    id: 3,
     title: "BSK Reports",
     children: [
       {
@@ -73,9 +87,15 @@ export const reports = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     title: "Karmasathi Reports",
     children: [
+      {
+        title: "Origination report",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/ks/origination",
+      },
       {
         title: "Application status report",
         description:
@@ -85,14 +105,80 @@ export const reports = [
     ],
   },
   {
-    id: 4,
-    title: "Special Drive Reports (Nov-2023)",
+    id: 5,
+    title: "Special Drive Reports",
     children: [
       {
-        title: "Static Cumulative Report at 5pm - ( Annexure II )",
+        title: "Static cumulative report at 5pm - (Annexure II)",
         description:
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
         url: "/admin/reports/sd/static",
+      },
+      {
+        title: "Special Drive : Total Digitised",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/sd/digitised",
+      },
+      {
+        title: "DEO report",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/sd/deo",
+      },
+    ],
+  },
+  {
+    id: 6,
+    title: "Analysis",
+    children: [
+      {
+        title: "Social category",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/analysis/social-category",
+      },
+      {
+        title: "Religion",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/analysis/religion",
+      },
+      {
+        title: "Gender",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/analysis/gender",
+      },
+      {
+        title: "Rural-Urban",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/analysis/rural-urban",
+      },
+      {
+        title: "Destination",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/analysis/destination",
+      },
+    ],
+  },
+  {
+    id: 7,
+    title: "SSJS Reports",
+    children: [
+      {
+        title: "Application Status Report",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/ssjs/application-status",
+      },
+      {
+        title: "DEO Report",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+        url: "/admin/reports/ssjs/deo",
       },
     ],
   },

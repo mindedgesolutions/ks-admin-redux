@@ -18,6 +18,7 @@ import { action as otpLogin } from "./components/website/LoginForm";
 import { action as adminLogin } from "./pages/application/admin/login/AdminLogin";
 import { action as adminForgotPass } from "./pages/application/admin/login/AdminForgotPassword";
 import { action as updateProfile } from "./pages/application/admin/profile/UpdateProfile";
+import { action as changePassword } from "./pages/application/admin/profile/ChangePassword";
 
 const router = createBrowserRouter([
   // Website related starts ------
@@ -99,8 +100,51 @@ const router = createBrowserRouter([
         element: <Ks.UpdateProfile />,
         action: updateProfile(store),
       },
-      { path: "change-password", element: <Ks.ChangePassword /> },
+      {
+        path: "change-password",
+        element: <Ks.ChangePassword />,
+        action: changePassword,
+      },
       { path: "notifications", element: <Ks.AdminNotifications /> },
+      { path: "search-application", element: <Ks.SearchApplication /> },
+      {
+        path: "reports", // Admin reports start ------
+        children: [
+          { index: true, element: <Ks.AllReports /> },
+          {
+            path: "ds/application-status/:id?",
+            element: <Ks.DsApplicationStatus />,
+          },
+          { path: "ds/static/:id?", element: <Ks.DsStaticAtFive /> },
+          { path: "ds/deo/:id?", element: <Ks.DsDeo /> },
+          {
+            path: "bsk/application-status",
+            element: <Ks.BskApplicationStatus />,
+          },
+          { path: "ks/origination", element: <Ks.KsOrigination /> },
+          {
+            path: "ks/application-status",
+            element: <Ks.KsApplicationStatus />,
+          },
+          { path: "sd/static", element: <Ks.SdStaticAtFive /> },
+          { path: "sd/digitised", element: <Ks.SdTotalDigitised /> },
+          { path: "sd/deo", element: <Ks.SdDeo /> },
+          {
+            path: "analysis/social-category",
+            element: <Ks.AnalysisSocialCategory />,
+          },
+          { path: "analysis/religion", element: <Ks.AnalysisReligion /> },
+          { path: "analysis/gender", element: <Ks.AnalysisGender /> },
+          { path: "analysis/rural-urban", element: <Ks.AnalysisRuralUrban /> },
+          { path: "analysis/destination", element: <Ks.AnalysisDestination /> },
+          {
+            path: "ssjs/application-status",
+            element: <Ks.SsjsApplicationStatus />,
+          },
+          { path: "ssjs/deo", element: <Ks.SsjsDeo /> },
+        ],
+      }, // Admin reports end ------
+      { path: "applications", element: <Ks.AllApplications /> },
     ],
   },
   // Admin app related ends ------

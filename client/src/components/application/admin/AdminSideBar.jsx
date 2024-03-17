@@ -25,7 +25,7 @@ const AdminSideBar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <h1 className="navbar-brand navbar-brand-autodark">
-          <Link to="/user/dashboard">
+          <Link to="/admin/dashboard">
             <img
               src={Logo}
               style={{ height: "40px" }}
@@ -65,75 +65,50 @@ const AdminSideBar = () => {
         <div className="collapse navbar-collapse" id="sidebar-menu">
           <ul className="navbar-nav pt-lg-3">
             <li className="nav-item">
-              <Link className="nav-link" to="/user/dashboard">
+              <Link className="nav-link" to="/admin/dashboard">
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
                   <AiOutlineHome size={18} />
                 </span>
                 <span className="nav-link-title">Home</span>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="">
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <AiOutlineFile size={18} />
-                </span>
-                <span className="nav-link-title">Applications</span>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="">
-                <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <BsGraphUpArrow size={16} />
-                </span>
-                <span className="nav-link-title">Reports</span>
-              </Link>
-            </li>
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
-                href="#navbar-base"
+                href="#navbar-extra"
                 data-bs-toggle="dropdown"
                 data-bs-auto-close="false"
                 role="button"
                 aria-expanded="false"
               >
                 <span className="nav-link-icon d-md-none d-lg-inline-block">
-                  <GoPackage />
+                  <AiOutlineFile size={18} />
                 </span>
-                <span className="nav-link-title">Interface</span>
+                <span className="nav-link-title">Applications</span>
               </a>
               <div className="dropdown-menu">
                 <div className="dropdown-menu-columns">
                   <div className="dropdown-menu-column">
-                    <div className="dropend">
-                      <a
-                        className="dropdown-item dropdown-toggle"
-                        href="#sidebar-cards"
-                        data-bs-toggle="dropdown"
-                        data-bs-auto-close="false"
-                        role="button"
-                        aria-expanded="false"
-                      >
-                        Cards
-                      </a>
-                      <div className="dropdown-menu">
-                        <a href="./cards.html" className="dropdown-item">
-                          Sample cards
-                        </a>
-                        <a href="./card-actions.html" className="dropdown-item">
-                          Card actions
-                        </a>
-                        <a
-                          href="./cards-masonry.html"
-                          className="dropdown-item"
-                        >
-                          Cards Masonry
-                        </a>
-                      </div>
-                    </div>
+                    <Link to="/admin/applications" className="dropdown-item">
+                      All applications
+                    </Link>
+                    <Link
+                      to="/admin/search-application"
+                      className="dropdown-item"
+                    >
+                      Search application
+                    </Link>
                   </div>
                 </div>
               </div>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/reports">
+                <span className="nav-link-icon d-md-none d-lg-inline-block">
+                  <BsGraphUpArrow size={16} />
+                </span>
+                <span className="nav-link-title">Reports</span>
+              </Link>
             </li>
           </ul>
         </div>
