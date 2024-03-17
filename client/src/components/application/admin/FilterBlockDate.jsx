@@ -12,7 +12,7 @@ import { blockType } from "../../../utils/data";
 import { unsetDistricts } from "../../../features/masters/districtSlice";
 import DatePicker from "react-datepicker";
 
-const FilterBlockDate = ({ resetUrl, startDate, endDate }) => {
+const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -22,8 +22,8 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate }) => {
   const { subdivs } = useSelector((store) => store.msubdivs);
   const { blLabel, blocks } = useSelector((store) => store.mblocks);
 
-  const [filterStart, setFilterStart] = useState(startDate || null);
-  const [filterEnd, setFilterEnd] = useState(endDate || null);
+  const [filterStart, setFilterStart] = useState(startDate);
+  const [filterEnd, setFilterEnd] = useState(endDate);
 
   // State management starts ------
   const [loc, setLoc] = useState({
@@ -72,9 +72,11 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate }) => {
       inputBlCode: "",
     });
 
-    dispatch(unsetDistricts());
     dispatch(resetSubdiv());
     dispatch(resetBlock());
+    setFilterStart(startDate);
+    setFilterEnd(endDate);
+    setResult([]);
 
     navigate(resetUrl);
   };
