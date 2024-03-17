@@ -175,7 +175,7 @@ const DsApplicationStatus = () => {
                             queryParams.get("dist") &&
                             !queryParams.get("subdiv")
                           ) {
-                            colTwoLabel = row.district_name;
+                            colTwoLabel = row.district_name.toUpperCase();
                             colThreeLabel = `ALL`;
                           } else if (
                             queryParams.get("subdiv") &&
