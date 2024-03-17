@@ -11,9 +11,11 @@ import {
   migWard,
 } from "../../../models/admin/dsMigStatusModel.js";
 
-// Duare Sarkar (DS) Application report starts ---
+// Duare Sarkar (DS) Application report starts ------
+
+// Duare Sarkar (DS) Application report (WITH FILTERS) starts ------
 export const dsApplicationStatusReport = async (req, res) => {
-  const { dist, subdiv, block, ward, startDate, endDate } = req.query;
+  const { dist, subdiv, block, startDate, endDate } = req.query;
 
   const start = formatStartDate(startDate);
   const end = formatEndDate(endDate);
@@ -211,7 +213,63 @@ export const dsApplicationStatusReport = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data });
 };
-// Duare Sarkar (DS) Application report ends ---
+// Duare Sarkar (DS) Application report (WITH FILTERS) ends ------
+
+// Duare Sarkar (DS) Application report (ALL 480 WARDS) starts ------
+export const dsApplicationStatusReportAll = async (req, res) => {
+  const { startDate, endDate } = req.query;
+
+  const start = formatStartDate(startDate);
+  const end = formatEndDate(endDate);
+
+  const data = await pool.query(
+    `select sm.subdiv_name,
+    bm.block_mun_code,
+    bm.block_mun_name,
+    wmp.provisional,
+    wmd.docuploaded,
+    wmu.underprocess,
+    wmr.rejected,
+    wms.permanent
+    from master_block_mun as bm
+    join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
+    left join (
+      select count(kwm.id) as provisional, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ($5) AND kdm.created_date between $2 AND $3 AND kwm.flag=$13 AND kdm.is_active=$1 AND kdm.service_provided=$4 group by kwm.permanent_areacode
+    ) as wmp on wmp.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(kwm.id) as docuploaded, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ($6, $7) AND kdm.created_date between $2 AND $3 AND kwm.flag=$13 AND kdm.is_active=$1 AND kdm.service_provided=$4 group by kwm.permanent_areacode
+    ) as wmd on wmd.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(kwm.id) as underprocess, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ($8, $9, $10) AND kdm.created_date between $2 AND $3 AND kwm.flag=$13 AND kdm.is_active=$1 AND kdm.service_provided=$4 group by kwm.permanent_areacode
+    ) as wmu on wmu.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(kwm.id) as rejected, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ($11) AND kdm.created_date between $2 AND $3 AND kwm.flag=$13 AND kdm.is_active=$1 AND kdm.service_provided=$4 group by kwm.permanent_areacode
+    ) as wmr on wmr.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(kwm.id) as permanent, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ($12) AND kdm.created_date between $2 AND $3 AND kwm.flag=$13 AND kdm.is_active=$1 AND kdm.service_provided=$4 group by kwm.permanent_areacode
+    ) as wms on wms.permanent_areacode = bm.block_mun_code
+    where sm.is_active=$1 and bm.is_active=$1 order by bm.block_mun_name`,
+    [
+      1,
+      start,
+      end,
+      "Y",
+      "P" /*5*/,
+      "A",
+      "BA" /*6,7*/,
+      "B",
+      "BP",
+      "BI" /*8,9,10*/,
+      "R" /*11*/,
+      "C" /*12*/,
+      "DS-SEP2023" /*13*/,
+    ]
+  );
+  res.status(StatusCodes.OK).json({ data });
+};
+// Duare Sarkar (DS) Application report (ALL 480 WARDS) ends ------
+
+// Duare Sarkar (DS) Application report ends ------
 
 // Duare Sarkar (DS) Static Cumulative 5pm report starts ---
 export const dsMigrationStatusReport = async (req, res) => {

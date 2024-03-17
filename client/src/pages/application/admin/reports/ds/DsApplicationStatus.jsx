@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  ExportBtnGroup,
   FilterBlockDate,
   ReportTableLoader,
   UserPageHeader,
@@ -9,6 +10,8 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
 import { nanoid } from "nanoid";
+import { useDispatch } from "react-redux";
+import { setReportData } from "../../../../../features/reports/reportSlice";
 
 const DsApplicationStatus = () => {
   const { id } = useParams();
@@ -16,13 +19,17 @@ const DsApplicationStatus = () => {
   document.title = `Duare Sarkar ${idLabel} Application Status Report | ${
     import.meta.env.VITE_ADMIN_TITLE
   }`;
-  const breadCrumb = <Link to="/admin/reports">Back to Reports</Link>;
-  const resetUrl = `/admin/reports/ds/application-status/${id}`;
 
+  // Report based static data starts ------
   const startDate = new Date("09-01-2023");
   const endDate = new Date("10-17-2023");
+  const allDataApi = `/reports/ds-application-status-all`;
+  const breadCrumb = <Link to="/admin/reports">Back to Reports</Link>;
+  const resetUrl = `/admin/reports/ds/application-status/${id}`;
+  // Report based static data ends ------
 
   const { search } = useLocation();
+  const dispatch = useDispatch();
   const queryParams = new URLSearchParams(search);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState([]);
@@ -63,7 +70,7 @@ const DsApplicationStatus = () => {
           }
         );
         setIsLoading(false);
-        console.log(response.data.data.rows);
+        dispatch(setReportData(response.data.data.rows));
         setResult(response.data.data.rows);
       } catch (error) {
         splitErrors(error?.response?.data?.msg);
@@ -129,11 +136,11 @@ const DsApplicationStatus = () => {
 
         <div className="col-12">
           <div className="card">
-            <div className="card-header justify-content-end">
-              <button type="button" className="btn btn-success">
-                Export
-              </button>
-            </div>
+            <ExportBtnGroup
+              startDate="09-01-2023"
+              endDate="17-10-2023"
+              allDataApi={allDataApi}
+            />
 
             <div className="card-body p-2">
               <div className="table-responsive">
