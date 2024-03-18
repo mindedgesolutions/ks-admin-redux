@@ -117,6 +117,7 @@ const router = createBrowserRouter([
           },
           { path: "ds/static/:id?", element: <Ks.DsStaticAtFive /> },
           { path: "ds/deo/:id?", element: <Ks.DsDeo /> },
+          { path: "ds/deo-list/:id?", element: <Ks.DsDeoList /> },
           {
             path: "bsk/application-status",
             element: <Ks.BskApplicationStatus />,

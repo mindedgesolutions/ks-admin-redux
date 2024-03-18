@@ -24,21 +24,28 @@ import {
 import { resetSubdiv } from "../../../features/masters/subdivSlice.js";
 import { resetBlock } from "../../../features/masters/blockSlice.js";
 
+// Loader starts ------
 export const loader = (store) => async () => {
   try {
-    const response = await customFetch.get("/users/current-user");
-    const districts = await customFetch.get("/master/districts");
+    const stDist = store.getState().districts;
+    const stAdminBasic = store.getState().adminBasic;
 
-    store.dispatch(details(response.data.data.rows[0]));
-    store.dispatch(setDistricts(districts.data.data.rows));
-
-    return { response, districts };
+    if (stDist.districts.length === 0) {
+      const districts = await customFetch.get("/master/districts");
+      store.dispatch(setDistricts(districts.data.data.rows));
+    }
+    if (!stAdminBasic.admin.uid) {
+      const response = await customFetch.get("/users/current-user");
+      store.dispatch(details(response.data.data.rows[0]));
+    }
+    return null;
   } catch (error) {
     splitErrors(error?.response?.data?.msg);
     return redirect("/admin/login");
   }
 };
 
+// Main component starts ------
 const AdminLayout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

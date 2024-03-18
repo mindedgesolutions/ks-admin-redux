@@ -9,12 +9,17 @@ const initialState = {
 export const getSubdivs = createAsyncThunk(
   "masters/sub-division",
   async (value) => {
-    try {
-      const response = await customFetch.get(`/master/sub-divisions/${value}`);
-      return response.data.data.rows;
-    } catch (error) {
-      console.log(error);
+    if (value !== import.meta.env.VITE_ALL_DISTRICTS) {
+      try {
+        const response = await customFetch.get(
+          `/master/sub-divisions/${value}`
+        );
+        return response.data.data.rows;
+      } catch (error) {
+        console.log(error);
+      }
     }
+    return [];
   }
 );
 
