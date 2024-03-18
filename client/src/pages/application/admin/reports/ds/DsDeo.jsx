@@ -5,6 +5,7 @@ import customFetch from "../../../../../utils/customFetch";
 import {
   setReportData,
   setSearch,
+  unsetSearch,
 } from "../../../../../features/reports/reportSlice";
 import { splitErrors } from "../../../../../utils/showErrors";
 import {
@@ -50,7 +51,6 @@ const DsDeo = () => {
   }
   if (queryParams.get("block")) {
     colTwo = `BLOCK / MUNICIPALITY`;
-    colThree = `VILLAGE / WARD`;
   }
   // Set column labels end ------
 
@@ -90,7 +90,15 @@ const DsDeo = () => {
   ]);
 
   const gotoDeoList = () => {
-    dispatch(setSearch(search));
+    dispatch(unsetSearch());
+    dispatch(
+      setSearch({
+        dist: queryParams.get("dist"),
+        subdiv: queryParams.get("subdiv") || null,
+        btype: queryParams.get("btype") || null,
+        block: queryParams.get("block") || null,
+      })
+    );
     navigate(`/admin/reports/ds/deo-list/${id}`);
   };
 
@@ -119,14 +127,16 @@ const DsDeo = () => {
                     <tr>
                       <th className="bg-dark text-white">SL. NO.</th>
                       <th className="bg-dark text-white">{colTwo}</th>
-                      <th className="bg-dark text-white">{colThree}</th>
+                      {!queryParams.get("block") && (
+                        <th className="bg-dark text-white">{colThree}</th>
+                      )}
                       <th className="bg-dark text-white">Total DEO</th>
                     </tr>
                   </thead>
                   <tbody>
                     {isLoading ? (
                       <tr>
-                        <td colSpan={9}>
+                        <td colSpan={!queryParams.get("block") ? 9 : 8}>
                           <ReportTableLoader />
                         </td>
                       </tr>
@@ -164,9 +174,6 @@ const DsDeo = () => {
                               colTwoLabel = row?.block_mun_name
                                 ?.trim()
                                 ?.toUpperCase();
-                              colThreeLabel = row?.village_ward_name
-                                ?.trim()
-                                ?.toUpperCase();
                             }
                             // Set column 2 and 3 values end ------
 
@@ -174,7 +181,9 @@ const DsDeo = () => {
                               <tr key={nanoid()}>
                                 <td>{index + 1}.</td>
                                 <td>{colTwoLabel}</td>
-                                <td>{colThreeLabel}</td>
+                                {!queryParams.get("block") && (
+                                  <td>{colThreeLabel}</td>
+                                )}
                                 <td>
                                   <button
                                     type="button"
@@ -190,7 +199,10 @@ const DsDeo = () => {
                           })}
                         {result.length > 0 ? (
                           <tr>
-                            <th className="bg-dark text-white" colSpan={3}>
+                            <th
+                              className="bg-dark text-white"
+                              colSpan={!queryParams.get("block") ? 3 : 2}
+                            >
                               TOTAL
                             </th>
                             <th className="bg-dark text-white">{totalDeo}</th>
