@@ -3,22 +3,16 @@ dotenv.config();
 import pool from "../../../db.js";
 import { StatusCodes } from "http-status-codes";
 import { formatEndDate, formatStartDate } from "../../../utils/functions.js";
-import {
-  migAllDist,
-  migBlock,
-  migDist,
-  migSubdiv,
-  migWard,
-} from "../../../models/admin/dsMigStatusModel.js";
 
-// Duare Sarkar (DS) Application report starts ------
+// Duare Sarkar (DS) Application report starts ------ >>
 
 // Duare Sarkar (DS) Application report (WITH FILTERS) starts ------
 export const dsApplicationStatusReport = async (req, res) => {
-  const { dist, subdiv, block, startDate, endDate } = req.query;
+  const { dist, subdiv, block, startDate, endDate, version } = req.query;
 
   const start = formatStartDate(startDate);
   const end = formatEndDate(endDate);
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "";
 
   let data;
   // For ALL Districts starts ------
@@ -62,7 +56,7 @@ export const dsApplicationStatusReport = async (req, res) => {
         "BI" /*8,9,10*/,
         "R" /*11*/,
         "C" /*12*/,
-        "DS-SEP2023" /*13*/,
+        dbFlag /*13*/,
       ]
     );
     // For ALL Districts ends ------
@@ -108,7 +102,7 @@ export const dsApplicationStatusReport = async (req, res) => {
           "BI" /*8,9,10*/,
           "R" /*11*/,
           "C" /*12*/,
-          "DS-SEP2023" /*13*/,
+          dbFlag /*13*/,
           Number(dist),
         ]
       );
@@ -155,7 +149,7 @@ export const dsApplicationStatusReport = async (req, res) => {
           "BI" /*8,9,10*/,
           "R" /*11*/,
           "C" /*12*/,
-          "DS-SEP2023" /*13*/,
+          dbFlag /*13*/,
           Number(subdiv),
         ]
       );
@@ -203,7 +197,7 @@ export const dsApplicationStatusReport = async (req, res) => {
           "BI" /*8,9,10*/,
           "R" /*11*/,
           "C" /*12*/,
-          "DS-SEP2023" /*13*/,
+          dbFlag /*13*/,
           Number(block),
         ]
       );
@@ -217,10 +211,11 @@ export const dsApplicationStatusReport = async (req, res) => {
 
 // Duare Sarkar (DS) Application report (ALL 480 WARDS) starts ------
 export const dsApplicationStatusReportAll = async (req, res) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate, version } = req.query;
 
   const start = formatStartDate(startDate);
   const end = formatEndDate(endDate);
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "";
 
   const data = await pool.query(
     `select sm.subdiv_name,
@@ -262,45 +257,118 @@ export const dsApplicationStatusReportAll = async (req, res) => {
       "BI" /*8,9,10*/,
       "R" /*11*/,
       "C" /*12*/,
-      "DS-SEP2023" /*13*/,
+      dbFlag /*13*/,
     ]
   );
   res.status(StatusCodes.OK).json({ data });
 };
 // Duare Sarkar (DS) Application report (ALL 480 WARDS) ends ------
 
-// Duare Sarkar (DS) Application report ends ------
+// Duare Sarkar (DS) Static Cumulative 5pm report starts ------
+export const dsStaticReport = async (req, res) => {
+  const { dist, subdiv, block } = req.query;
 
-// Duare Sarkar (DS) Static Cumulative 5pm report starts ---
-export const dsMigrationStatusReport = async (req, res) => {
-  const { dist, subdiv, block, ward, startDate } = req.query;
-
-  const start = formatStartDate(startDate);
-  const values = [1, start];
-
+  let data;
   if (dist === process.env.ALL_DISTRICTS_CODE) {
-    const text = migAllDist();
-    const data = await pool.query(text, values);
-    res.status(StatusCodes.OK).json({ data });
+    data = await pool.query(
+      `SELECT district_name, district_code, sum(service_delivered) as delivered from ds_static_application_view group by district_code, district_name order by district_name`,
+      []
+    );
   } else {
-    let data;
     if (dist && !subdiv) {
-      const text = migDist(dist);
-      data = await pool.query(text, values);
+      data = await pool.query(
+        `SELECT district_name, district_code, subdiv_name, subdiv_code, sum(service_delivered) as delivered from ds_static_application_view where district_code=$1 group by district_name, district_code, subdiv_name, subdiv_code order by district_name, subdiv_name`,
+        [dist]
+      );
+    } else if (subdiv && !block) {
+      data = await pool.query(
+        `SELECT subdiv_name, subdiv_code, block_mun_name, block_mun_code, sum(service_delivered) as delivered from ds_static_application_view where subdiv_code=$1 group by subdiv_name, subdiv_code, block_mun_name, block_mun_code order by subdiv_name, block_mun_name`,
+        [subdiv]
+      );
+    } else if (block) {
+      data = await pool.query(
+        `SELECT subdiv_name, subdiv_code, block_mun_name, block_mun_code, sum(service_delivered) as delivered from ds_static_application_view where block_mun_code=$1 group by subdiv_name, subdiv_code, block_mun_name, block_mun_code order by subdiv_name, block_mun_name`,
+        [block]
+      );
     }
-    if (subdiv && !block) {
-      const text = migSubdiv(subdiv);
-      data = await pool.query(text, values);
-    }
-    if (block && !ward) {
-      const text = migBlock(block);
-      data = await pool.query(text, values);
-    }
-    if (ward) {
-      const text = migWard(ward);
-      data = await pool.query(text, values);
-    }
-    res.status(StatusCodes.OK).json({ data });
   }
+
+  res.status(StatusCodes.OK).json({ data });
 };
-// Duare Sarkar (DS) Static Cumulative 5pm report ends ---
+// Duare Sarkar (DS) Static Cumulative 5pm report ends ------
+
+// Duare Sarkar (DS) Static Cumulative 5pm (ALL 480 WARDS) report starts ------
+export const dsStaticReportAll = async (req, res) => {
+  let data;
+  data = await pool.query(
+    `SELECT district_name, district_code, subdiv_name, subdiv_code, block_mun_name, block_mun_code, sum(service_delivered) as delivered from ds_static_application_view group by district_name, district_code, subdiv_name, subdiv_code, block_mun_name, block_mun_code order by district_name, subdiv_name, block_mun_name`,
+    []
+  );
+  res.status(StatusCodes.OK).json({ data });
+};
+// Duare Sarkar (DS) Static Cumulative 5pm (ALL 480 WARDS) report ends ------
+
+// Duare Sarkar (DS) DEO report starts ------
+export const dsDeoCount = async (req, res) => {
+  const { dist, subdiv, block } = req.query;
+
+  let data;
+  if (dist === process.env.ALL_DISTRICTS_CODE) {
+    data = await pool.query(
+      `SELECT dm.district_name,
+      dm.district_code,
+      deo.deocount
+      from master_district dm
+      LEFT JOIN (
+        SELECT count(dui.id) AS deocount, dui.allotted_district FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_district
+      ) AS deo ON deo.allotted_district = dm.district_code
+      WHERE dm.is_active=$1 AND dm.state_code=1 ORDER BY dm.district_name`,
+      [1]
+    );
+  } else {
+    if (dist && !subdiv) {
+      data = await pool.query(
+        `select sm.district_name,
+        sm.subdiv_code,
+        sm.subdiv_name,
+        deo.deocount
+        from master_subdivision as sm
+        left JOIN (
+          SELECT count(dui.id) AS deocount, dui.allotted_subdivision FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_subdivision
+        ) as deo on deo.allotted_subdivision = sm.subdiv_code
+        where sm.is_active=$1 and sm.district_code=$2 order by sm.subdiv_name`,
+        [1, dist]
+      );
+    } else if (subdiv && !block) {
+      data = await pool.query(
+        `select sm.subdiv_name,
+        bm.block_mun_code,
+        bm.block_mun_name,
+        deo.deocount
+        from master_block_mun as bm
+        join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
+        left JOIN (
+          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_areatype_code
+        ) as deo on deo.allotted_areatype_code = bm.block_mun_code
+        where bm.is_active=$1 and bm.subdiv_code=$2 order by sm.subdiv_name, bm.block_mun_name`,
+        [1, subdiv]
+      );
+    } else if (block) {
+      data = await pool.query(
+        `select bm.block_mun_code,
+        bm.block_mun_name,
+        deo.deocount
+        from master_block_mun as bm
+        left JOIN (
+          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_areatype_code
+        ) as deo on deo.allotted_areatype_code = bm.block_mun_code
+        where bm.is_active=$1 and bm.block_mun_code=$2 order by bm.block_mun_name`,
+        [1, block]
+      );
+    }
+  }
+  res.status(StatusCodes.OK).json({ data });
+};
+// Duare Sarkar (DS) DEO report ends ------
+
+// Duare Sarkar (DS) Application report ends ------ >>

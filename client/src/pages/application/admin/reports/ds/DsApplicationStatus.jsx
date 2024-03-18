@@ -66,6 +66,7 @@ const DsApplicationStatus = () => {
               block: queryParams.get("block") || "",
               startDate: queryParams.get("start"),
               endDate: queryParams.get("end"),
+              version: id,
             },
           }
         );
@@ -136,11 +137,7 @@ const DsApplicationStatus = () => {
 
         <div className="col-12">
           <div className="card">
-            <ExportBtnGroup
-              startDate="09-01-2023"
-              endDate="17-10-2023"
-              allDataApi={allDataApi}
-            />
+            {result.length > 0 && <ExportBtnGroup allDataApi={allDataApi} />}
 
             <div className="card-body p-2">
               <div className="table-responsive">

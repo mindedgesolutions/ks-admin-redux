@@ -6,7 +6,7 @@ import { setReportAllData } from "../../../features/reports/reportSlice";
 import { useLocation } from "react-router-dom";
 import BtnSpinner from "../../BtnSpinner";
 
-const ExportBtnGroup = ({ startDate, endDate, allDataApi }) => {
+const ExportBtnGroup = ({ allDataApi }) => {
   const dispatch = useDispatch();
   const { search } = useLocation();
   const [isLoading, setIsLoading] = useState(false);
@@ -18,10 +18,10 @@ const ExportBtnGroup = ({ startDate, endDate, allDataApi }) => {
       setIsLoading(true);
       const response = await customFetch.get(
         allDataApi,
-        startDate && {
+        queryParams.get("start") && {
           params: {
-            startDate: queryParams.get("start") || startDate,
-            endDate: queryParams.get("end") || endDate,
+            startDate: queryParams.get("start"),
+            endDate: queryParams.get("end"),
           },
         }
       );
@@ -33,6 +33,7 @@ const ExportBtnGroup = ({ startDate, endDate, allDataApi }) => {
       return error;
     }
   };
+  console.log(reportAllData);
 
   return (
     <div className="card-header justify-content-end">

@@ -49,4 +49,5 @@ export { default as AnalysisDestination } from "./application/admin/reports/anal
 export { default as SsjsApplicationStatus } from "./application/admin/reports/ssjs/SsjsApplicationStatus";
 export { default as SsjsDeo } from "./application/admin/reports/ssjs/SsjsDeo";
 export { default as SearchApplication } from "./application/admin/SearchApplication";
+export { default as DsDeoList } from "./application/admin/reports/ds/DsDeoList";
 // Admin related ends ------
