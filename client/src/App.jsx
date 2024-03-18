@@ -12,6 +12,7 @@ import { loader as familyLoader } from "./pages/application/user/application/Fam
 import { loader as viewLoader } from "./pages/application/user/application/OverView";
 
 import { loader as adminLayout } from "./pages/application/admin/AdminLayout";
+import { loader as deoListLoader } from "./pages/application/admin/reports/ds/DsDeoList";
 
 // Actions ------
 import { action as otpLogin } from "./components/website/LoginForm";
@@ -117,6 +118,11 @@ const router = createBrowserRouter([
           },
           { path: "ds/static/:id?", element: <Ks.DsStaticAtFive /> },
           { path: "ds/deo/:id?", element: <Ks.DsDeo /> },
+          {
+            path: "ds/deo-list/:id?",
+            element: <Ks.DsDeoList />,
+            loader: deoListLoader,
+          },
           {
             path: "bsk/application-status",
             element: <Ks.BskApplicationStatus />,

@@ -5,6 +5,7 @@ const initialState = {
   title: null,
   reportData: [],
   reportAllData: [],
+  search: {},
 };
 
 const reportSlice = createSlice({
@@ -21,6 +22,13 @@ const reportSlice = createSlice({
     setReportAllData: (state, action) => {
       state.reportAllData = action.payload;
     },
+    setSearch: (state, action) => {
+      state.search = JSON.stringify(action.payload);
+      localStorage.setItem("search", state.search);
+    },
+    unsetSearch: () => {
+      localStorage.removeItem("search");
+    },
   },
 });
 
@@ -28,5 +36,7 @@ export const {
   setReport,
   setReportData,
   setReportAllData,
+  setSearch,
+  unsetSearch,
 } = reportSlice.actions;
 export default reportSlice.reducer;

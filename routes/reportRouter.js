@@ -3,11 +3,15 @@ const router = Router();
 import {
   dsApplicationStatusReport,
   dsApplicationStatusReportAll,
-  dsMigrationStatusReport,
+  dsDeoCount,
+  dsStaticReport,
+  dsStaticReportAll,
 } from "../controllers/admin/reports/dsReportsController.js";
 
 router.get("/ds-application-status", dsApplicationStatusReport);
 router.get("/ds-application-status-all", dsApplicationStatusReportAll);
-router.get("/ds-migration-status-report", dsMigrationStatusReport);
+router.get("/ds-static", dsStaticReport);
+router.get("/ds-static-all", dsStaticReportAll);
+router.get("/deo-count", dsDeoCount);
 
 export default router;

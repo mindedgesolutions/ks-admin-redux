@@ -23,6 +23,7 @@ import {
 } from "../../../features/masters/districtSlice.js";
 import { resetSubdiv } from "../../../features/masters/subdivSlice.js";
 import { resetBlock } from "../../../features/masters/blockSlice.js";
+import { unsetSearch } from "../../../features/reports/reportSlice.js";
 
 // Loader starts ------
 export const loader = (store) => async () => {
@@ -57,6 +58,7 @@ const AdminLayout = () => {
     dispatch(unsetDistricts());
     dispatch(resetSubdiv());
     dispatch(resetBlock());
+    dispatch(unsetSearch());
 
     toast.success(`User logged out`);
     navigate("/admin/login");
