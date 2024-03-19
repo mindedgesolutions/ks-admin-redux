@@ -33,7 +33,6 @@ const ExportBtnGroup = ({ allDataApi }) => {
       return error;
     }
   };
-  console.log(reportAllData);
 
   return (
     <div className="card-header justify-content-end">
