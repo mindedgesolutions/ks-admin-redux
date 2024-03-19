@@ -89,14 +89,23 @@ const DsDeo = () => {
     queryParams.get("block"),
   ]);
 
-  const gotoDeoList = () => {
+  const gotoDeoList = (filterDist, filterSubdiv, filterBlock) => {
     dispatch(unsetSearch());
+    console.log(`${filterDist}, ${filterSubdiv || ""}, ${filterBlock || ""}`);
     dispatch(
       setSearch({
-        dist: queryParams.get("dist"),
-        subdiv: queryParams.get("subdiv") || null,
-        btype: queryParams.get("btype") || null,
-        block: queryParams.get("block") || null,
+        search: {
+          dist: queryParams.get("dist"),
+          subdiv: queryParams.get("subdiv") || null,
+          btype: queryParams.get("btype") || null,
+          block: queryParams.get("block") || null,
+        },
+        deoFilter: {
+          filterDist: filterDist,
+          filterSubdiv: filterSubdiv || "",
+          filterBlock: filterBlock || "",
+          version: id,
+        },
       })
     );
     navigate(`/admin/reports/ds/deo-list/${id}`);
@@ -189,9 +198,15 @@ const DsDeo = () => {
                                     type="button"
                                     className="btn btn-success btn-sm"
                                     style={{ minWidth: 40 }}
-                                    onClick={gotoDeoList}
+                                    onClick={() =>
+                                      gotoDeoList(
+                                        row.district_code,
+                                        row.subdiv_code,
+                                        row.block_mun_code
+                                      )
+                                    }
                                   >
-                                    {row.deocount}
+                                    {row.deocount || 0}
                                   </button>
                                 </td>
                               </tr>
