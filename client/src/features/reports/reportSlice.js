@@ -6,6 +6,7 @@ const initialState = {
   reportData: [],
   reportAllData: [],
   search: {},
+  deoFilter: {},
 };
 
 const reportSlice = createSlice({
@@ -23,11 +24,14 @@ const reportSlice = createSlice({
       state.reportAllData = action.payload;
     },
     setSearch: (state, action) => {
-      state.search = JSON.stringify(action.payload);
+      state.search = JSON.stringify(action.payload.search);
+      state.deoFilter = JSON.stringify(action.payload.deoFilter);
       localStorage.setItem("search", state.search);
+      localStorage.setItem("filter", state.deoFilter);
     },
     unsetSearch: () => {
       localStorage.removeItem("search");
+      localStorage.removeItem("filter");
     },
   },
 });

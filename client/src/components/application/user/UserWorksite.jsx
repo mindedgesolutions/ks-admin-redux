@@ -72,7 +72,7 @@ const UserWorksite = () => {
             <label
               htmlFor="passportNo"
               className={`form-label ${
-                Number(loc.country) === 3 || Number(loc.country) === 4
+                Number(loc.country) === 152 || Number(loc.country) === 27
                   ? ""
                   : "required"
               }`}
