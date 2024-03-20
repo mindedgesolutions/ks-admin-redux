@@ -13,7 +13,7 @@ export const dsApplicationStatusReport = async (req, res) => {
 
   const start = formatStartDate(startDate);
   const end = formatEndDate(endDate);
-  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "";
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
 
   let data;
   // For ALL Districts starts ------
@@ -157,7 +157,7 @@ export const dsApplicationStatusReportAll = async (req, res) => {
 
   const start = formatStartDate(startDate);
   const end = formatEndDate(endDate);
-  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "";
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
 
   const data = await pool.query(
     `select sm.subdiv_name,
@@ -310,7 +310,7 @@ export const dsDeoList = async (req, res) => {
   const pagination = paginationLogic(page, limit);
   const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "AA";
 
-  let data, condition;
+  let condition;
 
   if (dist && !subdiv && !block) {
     condition = `uinfo.allotted_district = ${Number(dist)}`;
@@ -319,8 +319,8 @@ export const dsDeoList = async (req, res) => {
   } else if (dist && subdiv && block) {
     condition = `uinfo.allotted_areatype_code = ${Number(block)}`;
   }
-
-  data = await pool.query(
+  // For data ------
+  const data = await pool.query(
     `select t1.*,
       uinfo.mobile,
       uinfo.email,
@@ -339,96 +339,40 @@ export const dsDeoList = async (req, res) => {
         group by created_by
       ) as t1
       join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
-      where $2
-      order by uinfo.name asc offset $3 limit $4`,
-    [dbFlag, condition, pagination.offset, pagination.pageLimit]
+      where ${condition}
+      order by uinfo.name asc offset $2 limit $3`,
+    [dbFlag, pagination.offset, pagination.pageLimit]
   );
 
-  // if (dist && !subdiv && !block) {
-  //   data = await pool.query(
-  //     `select t1.*,
-  //     uinfo.mobile,
-  //     uinfo.email,
-  //     uinfo.name,
-  //     uinfo.allotted_areatype_code
-  //     from(
-  //       SELECT
-  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
-  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
-  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-  //       created_by
-  //       from k_duaresarkar_application_mapping as dmp
-  //       where flag=$1
-  //       and service_provided='Y' and application_status is not null and application_status!='I'
-  //       group by created_by
-  //     ) as t1
-  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
-  //     where $2
-  //     order by uinfo.name asc offset $3 limit $4`,
-  //     [
-  //       dbFlag,
-  //       `uinfo.allotted_district = ${Number(dist)}`,
-  //       pagination.offset,
-  //       pagination.pageLimit,
-  //     ]
-  //   );
-  // } else if (dist && subdiv && !block) {
-  //   data = await pool.query(
-  //     `select t1.*,
-  //     uinfo.mobile,
-  //     uinfo.email,
-  //     uinfo.name,
-  //     uinfo.allotted_areatype_code
-  //     from(
-  //       SELECT
-  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
-  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
-  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-  //       created_by
-  //       from k_duaresarkar_application_mapping as dmp
-  //       where flag=$1
-  //       and service_provided='Y' and application_status is not null and application_status!='I'
-  //       group by created_by
-  //     ) as t1
-  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
-  //     where uinfo.allotted_subdivision=$2
-  //     order by uinfo.name asc offset $3 limit $4`,
-  //     [dbFlag, Number(subdiv), pagination.offset, pagination.pageLimit]
-  //   );
-  // } else if (dist && subdiv && block) {
-  //   data = await pool.query(
-  //     `select t1.*,
-  //     uinfo.mobile,
-  //     uinfo.email,
-  //     uinfo.name,
-  //     uinfo.allotted_areatype_code
-  //     from(
-  //       SELECT
-  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
-  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
-  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-  //       created_by
-  //       from k_duaresarkar_application_mapping as dmp
-  //       where flag=$1
-  //       and service_provided='Y' and application_status is not null and application_status!='I'
-  //       group by created_by
-  //     ) as t1
-  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
-  //     where uinfo.allotted_areatype_code=$2
-  //     order by uinfo.name asc offset $3 limit $4`,
-  //     [dbFlag, Number(block), pagination.offset, pagination.pageLimit]
-  //   );
-  // }
+  // For pagination ------
+  const records = await pool.query(
+    `select t1.*,
+      uinfo.mobile,
+      uinfo.email,
+      uinfo.name,
+      uinfo.allotted_areatype_code
+      from(
+        SELECT
+        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
+        count(case when dmp.application_status in ('C') then 1 else null end) approved,
+        count(case when dmp.application_status in ('R') then 1 else null end) reject,
+        count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
+        created_by
+        from k_duaresarkar_application_mapping as dmp 
+        where flag=$1
+        and service_provided='Y' and application_status is not null and application_status!='I'
+        group by created_by
+      ) as t1
+      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
+      where ${condition}`,
+    [dbFlag]
+  );
 
-  const totalPages = Math.ceil(data.rowCount / pagination.pageLimit);
+  const totalPages = Math.ceil(records.rowCount / pagination.pageLimit);
   const meta = {
     totalPages: totalPages,
     currentPage: pagination.pageNo,
   };
-  console.log(data);
 
   res.status(StatusCodes.OK).json({ data, meta });
 };

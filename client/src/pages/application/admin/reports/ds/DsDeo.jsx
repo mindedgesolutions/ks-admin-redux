@@ -91,7 +91,6 @@ const DsDeo = () => {
 
   const gotoDeoList = (filterDist, filterSubdiv, filterBlock) => {
     dispatch(unsetSearch());
-    console.log(`${filterDist}, ${filterSubdiv || ""}, ${filterBlock || ""}`);
     dispatch(
       setSearch({
         search: {

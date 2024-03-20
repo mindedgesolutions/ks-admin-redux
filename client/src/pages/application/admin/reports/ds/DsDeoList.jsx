@@ -2,6 +2,7 @@ import React from "react";
 import {
   Link,
   useLoaderData,
+  useLocation,
   useNavigation,
   useParams,
 } from "react-router-dom";
@@ -43,6 +44,9 @@ export const loader = async ({ request }) => {
 // Main component starts ------
 const DsDeoList = () => {
   const { id } = useParams();
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+
   const params = JSON.parse(localStorage.getItem("search"));
   const returnUrl = `/admin/reports/ds/deo/${id}?dist=${params.dist}&subdiv=${
     params.subdiv || ""
@@ -54,26 +58,10 @@ const DsDeoList = () => {
 
   const pageCount = response.data.meta.totalPages;
   const currentPage = response.data.meta.currentPage;
-  console.log(pageCount);
-
-  // Row and Table totals start ------
-  const totalProvisional = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.provisional),
-    0
-  );
-  const totalSubmitted = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.submitted),
-    0
-  );
-  const totalApproved = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.approved),
-    0
-  );
-  const totalReject = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.reject),
-    0
-  );
-  // Row and Table totals end ------
+  const slno =
+    !queryParams.get("page") || queryParams.get("page") === 1
+      ? 1
+      : (queryParams.get("page") - 1) * 10 + 1;
 
   return (
     <>
@@ -117,7 +105,7 @@ const DsDeoList = () => {
                           response.data.data.rows.map((row, index) => {
                             return (
                               <tr key={nanoid()}>
-                                <td>{index + 1}.</td>
+                                <td>{slno + index}.</td>
                                 <td>{row?.name?.toUpperCase()}</td>
                                 <td>{row?.mobile}</td>
                                 <td>{row?.email}</td>
@@ -136,33 +124,6 @@ const DsDeoList = () => {
                               </tr>
                             );
                           })}
-                        {response.data.data.rowCount > 0 ? (
-                          <tr>
-                            <th className="bg-dark text-white" colSpan={4}>
-                              TOTAL
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalProvisional}
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalSubmitted}
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalApproved}
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalReject}
-                            </th>
-                            <th className="bg-dark text-white">00</th>
-                            <th className="bg-dark text-white"></th>
-                          </tr>
-                        ) : (
-                          <tr>
-                            <td colSpan={10} className="text-center">
-                              NO DATA FOUND
-                            </td>
-                          </tr>
-                        )}
                       </>
                     )}
                   </tbody>
@@ -172,7 +133,6 @@ const DsDeoList = () => {
           </div>
         </div>
       </UserPageWrapper>
-
       <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
     </>
   );
