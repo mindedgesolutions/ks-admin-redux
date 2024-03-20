@@ -36,13 +36,24 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
 
   // Change district starts ------
   const handleDistChange = (e) => {
-    setLoc({ ...loc, inputDist: e.target.value });
+    setLoc({
+      ...loc,
+      inputDist: e.target.value,
+      inputSubdiv: "",
+      inputBlType: "",
+      inputBlCode: "",
+    });
     dispatch(getSubdivs(e.target.value));
   };
 
   // Change sub-division starts ------
   const handleSdChange = (e) => {
-    setLoc({ ...loc, inputSubdiv: e.target.value });
+    setLoc({
+      ...loc,
+      inputSubdiv: e.target.value,
+      inputBlType: "",
+      inputBlCode: "",
+    });
     const payload = {
       bltype: loc.inputBlType || null,
       sdcode: e.target.value,
@@ -54,6 +65,7 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
   const handleBlTypeChange = (e) => {
     setLoc({ ...loc, inputBlType: e.target.value });
     const payload = {
+      dist: loc.inputDist,
       bltype: e.target.value,
       sdcode: loc.inputSubdiv,
     };

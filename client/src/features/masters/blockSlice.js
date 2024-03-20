@@ -9,7 +9,7 @@ const initialState = {
 
 export const getBlocks = createAsyncThunk("masters/block", async (data) => {
   try {
-    if (data.bltype) {
+    if (data.sdcode && data.bltype) {
       const response = await customFetch.get(
         `/master/blocks/${data.sdcode}/${data.bltype}`
       );
@@ -18,7 +18,7 @@ export const getBlocks = createAsyncThunk("masters/block", async (data) => {
       return [];
     }
   } catch (error) {
-    console.log(error);
+    return [];
   }
 });
 

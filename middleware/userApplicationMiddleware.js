@@ -134,8 +134,8 @@ export const validateWorksite = withValidationErrors([
     const { country } = req.body;
     if (
       Number(country) !== 1 &&
-      Number(country) !== 3 &&
-      Number(country) !== 4 &&
+      Number(country) !== 152 &&
+      Number(country) !== 27 &&
       !value
     ) {
       throw new BadRequestError(`Enter passport number`);
