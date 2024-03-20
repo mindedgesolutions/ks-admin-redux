@@ -132,8 +132,8 @@ const DsDeoList = () => {
             </div>
           </div>
         </div>
+        <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
       </UserPageWrapper>
-      <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
     </>
   );
 };
