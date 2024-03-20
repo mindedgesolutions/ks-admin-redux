@@ -1,6 +1,12 @@
 import React from "react";
 
-const UserPageHeader = ({ preTitle, title, breadCrumb }) => {
+const UserPageHeader = ({
+  preTitle,
+  postTitle,
+  textClass,
+  title,
+  breadCrumb,
+}) => {
   return (
     <div className="page-header d-print-none">
       <div className="container-xl">
@@ -11,6 +17,11 @@ const UserPageHeader = ({ preTitle, title, breadCrumb }) => {
             <h2 className="page-title">{title}</h2>{" "}
             {breadCrumb && (
               <div className="page-pretitle mt-2">{breadCrumb}</div>
+            )}
+            {postTitle && (
+              <div className={`page-pretitle mt-2 ${textClass || ""}`}>
+                {postTitle}
+              </div>
             )}
           </div>
         </div>

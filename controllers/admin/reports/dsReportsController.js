@@ -3,6 +3,7 @@ dotenv.config();
 import pool from "../../../db.js";
 import { StatusCodes } from "http-status-codes";
 import { formatEndDate, formatStartDate } from "../../../utils/functions.js";
+import { paginationLogic } from "../../../utils/pagination.js";
 
 // Duare Sarkar (DS) Application report starts ------ >>
 
@@ -304,86 +305,132 @@ export const dsDeoCount = async (req, res) => {
 };
 
 export const dsDeoList = async (req, res) => {
-  const { dist, subdiv, block, version } = req.query;
+  const { dist, subdiv, block, version, page, limit } = req.query;
 
+  const pagination = paginationLogic(page, limit);
   const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "AA";
 
-  let data;
+  let data, condition;
+
   if (dist && !subdiv && !block) {
-    data = await pool.query(
-      `select t1.*,
-      uinfo.mobile,
-      uinfo.email,
-      uinfo.name,
-      uinfo.allotted_areatype_code
-      from(
-        SELECT
-        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisinol,
-        count(case when dmp.application_status in ('C') then 1 else null end) approved,
-        count(case when dmp.application_status in ('R') then 1 else null end) reject,
-        count(case when dmp.application_status in ('A','BA') then 1 else null end) subbmitted,
-        created_by
-        from k_duaresarkar_application_mapping as dmp 
-        where flag=$1
-        and service_provided='Y' and application_status is not null and application_status!='I'
-        group by created_by
-      ) as t1
-      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
-      where uinfo.allotted_district=$2 
-      order by uinfo.name asc`,
-      [dbFlag, Number(dist)]
-    );
+    condition = `uinfo.allotted_district = ${Number(dist)}`;
   } else if (dist && subdiv && !block) {
-    data = await pool.query(
-      `select t1.*,
-      uinfo.mobile,
-      uinfo.email,
-      uinfo.name,
-      uinfo.allotted_areatype_code
-      from(
-        SELECT
-        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisinol,
-        count(case when dmp.application_status in ('C') then 1 else null end) approved,
-        count(case when dmp.application_status in ('R') then 1 else null end) reject,
-        count(case when dmp.application_status in ('A','BA') then 1 else null end) subbmitted,
-        created_by
-        from k_duaresarkar_application_mapping as dmp 
-        where flag=$1
-        and service_provided='Y' and application_status is not null and application_status!='I'
-        group by created_by
-      ) as t1
-      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
-      where uinfo.allotted_subdivision=$2 
-      order by uinfo.name asc`,
-      [dbFlag, Number(subdiv)]
-    );
+    condition = `uinfo.allotted_subdivision = ${Number(subdiv)}`;
   } else if (dist && subdiv && block) {
-    data = await pool.query(
-      `select t1.*,
-      uinfo.mobile,
-      uinfo.email,
-      uinfo.name,
-      uinfo.allotted_areatype_code
-      from(
-        SELECT
-        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisinol,
-        count(case when dmp.application_status in ('C') then 1 else null end) approved,
-        count(case when dmp.application_status in ('R') then 1 else null end) reject,
-        count(case when dmp.application_status in ('A','BA') then 1 else null end) subbmitted,
-        created_by
-        from k_duaresarkar_application_mapping as dmp 
-        where flag=$1
-        and service_provided='Y' and application_status is not null and application_status!='I'
-        group by created_by
-      ) as t1
-      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
-      where uinfo.allotted_areatype_code=$2 
-      order by uinfo.name asc`,
-      [dbFlag, Number(block)]
-    );
+    condition = `uinfo.allotted_areatype_code = ${Number(block)}`;
   }
 
-  res.status(StatusCodes.OK).json({ data });
+  data = await pool.query(
+    `select t1.*,
+      uinfo.mobile,
+      uinfo.email,
+      uinfo.name,
+      uinfo.allotted_areatype_code
+      from(
+        SELECT
+        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
+        count(case when dmp.application_status in ('C') then 1 else null end) approved,
+        count(case when dmp.application_status in ('R') then 1 else null end) reject,
+        count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
+        created_by
+        from k_duaresarkar_application_mapping as dmp 
+        where flag=$1
+        and service_provided='Y' and application_status is not null and application_status!='I'
+        group by created_by
+      ) as t1
+      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
+      where $2
+      order by uinfo.name asc offset $3 limit $4`,
+    [dbFlag, condition, pagination.offset, pagination.pageLimit]
+  );
+
+  // if (dist && !subdiv && !block) {
+  //   data = await pool.query(
+  //     `select t1.*,
+  //     uinfo.mobile,
+  //     uinfo.email,
+  //     uinfo.name,
+  //     uinfo.allotted_areatype_code
+  //     from(
+  //       SELECT
+  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
+  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
+  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
+  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
+  //       created_by
+  //       from k_duaresarkar_application_mapping as dmp
+  //       where flag=$1
+  //       and service_provided='Y' and application_status is not null and application_status!='I'
+  //       group by created_by
+  //     ) as t1
+  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
+  //     where $2
+  //     order by uinfo.name asc offset $3 limit $4`,
+  //     [
+  //       dbFlag,
+  //       `uinfo.allotted_district = ${Number(dist)}`,
+  //       pagination.offset,
+  //       pagination.pageLimit,
+  //     ]
+  //   );
+  // } else if (dist && subdiv && !block) {
+  //   data = await pool.query(
+  //     `select t1.*,
+  //     uinfo.mobile,
+  //     uinfo.email,
+  //     uinfo.name,
+  //     uinfo.allotted_areatype_code
+  //     from(
+  //       SELECT
+  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
+  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
+  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
+  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
+  //       created_by
+  //       from k_duaresarkar_application_mapping as dmp
+  //       where flag=$1
+  //       and service_provided='Y' and application_status is not null and application_status!='I'
+  //       group by created_by
+  //     ) as t1
+  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
+  //     where uinfo.allotted_subdivision=$2
+  //     order by uinfo.name asc offset $3 limit $4`,
+  //     [dbFlag, Number(subdiv), pagination.offset, pagination.pageLimit]
+  //   );
+  // } else if (dist && subdiv && block) {
+  //   data = await pool.query(
+  //     `select t1.*,
+  //     uinfo.mobile,
+  //     uinfo.email,
+  //     uinfo.name,
+  //     uinfo.allotted_areatype_code
+  //     from(
+  //       SELECT
+  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
+  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
+  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
+  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
+  //       created_by
+  //       from k_duaresarkar_application_mapping as dmp
+  //       where flag=$1
+  //       and service_provided='Y' and application_status is not null and application_status!='I'
+  //       group by created_by
+  //     ) as t1
+  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
+  //     where uinfo.allotted_areatype_code=$2
+  //     order by uinfo.name asc offset $3 limit $4`,
+  //     [dbFlag, Number(block), pagination.offset, pagination.pageLimit]
+  //   );
+  // }
+
+  const totalPages = Math.ceil(data.rowCount / pagination.pageLimit);
+  const meta = {
+    totalPages: totalPages,
+    currentPage: pagination.pageNo,
+  };
+  console.log(data);
+
+  res.status(StatusCodes.OK).json({ data, meta });
 };
 // Duare Sarkar (DS) DEO report ends ------
 
