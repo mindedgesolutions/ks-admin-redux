@@ -6,6 +6,7 @@ import {
   useParams,
 } from "react-router-dom";
 import {
+  PaginationContainer,
   ReportTableLoader,
   UserPageHeader,
   UserPageWrapper,
@@ -13,17 +14,24 @@ import {
 import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
 import { nanoid } from "nanoid";
+import { FaRegFolder } from "react-icons/fa6";
 
-export const loader = async () => {
+// Loader starts ------
+export const loader = async ({ request }) => {
   const filter = JSON.parse(localStorage.getItem("filter"));
+  let params = Object.fromEntries([
+    ...new URL(request.url).searchParams.entries(),
+  ]);
+  params = {
+    ...params,
+    dist: filter.filterDist,
+    subdiv: filter.filterSubdiv || "",
+    block: filter.filterBlock || "",
+    version: filter.version,
+  };
   try {
     const response = await customFetch.get(`/reports/deo-list`, {
-      params: {
-        dist: filter.filterDist,
-        subdiv: filter.filterSubdiv || "",
-        block: filter.filterBlock || "",
-        version: filter.version,
-      },
+      params: params,
     });
     return response;
   } catch (error) {
@@ -32,6 +40,7 @@ export const loader = async () => {
   }
 };
 
+// Main component starts ------
 const DsDeoList = () => {
   const { id } = useParams();
   const params = JSON.parse(localStorage.getItem("search"));
@@ -43,12 +52,38 @@ const DsDeoList = () => {
 
   const breadCrumb = <Link to={returnUrl}>Back to DEO Report</Link>;
 
+  const pageCount = response.data.meta.totalPages;
+  const currentPage = response.data.meta.currentPage;
+  console.log(pageCount);
+
+  // Row and Table totals start ------
+  const totalProvisional = response.data.data.rows.reduce(
+    (t, c) => Number(t) + Number(c.provisional),
+    0
+  );
+  const totalSubmitted = response.data.data.rows.reduce(
+    (t, c) => Number(t) + Number(c.submitted),
+    0
+  );
+  const totalApproved = response.data.data.rows.reduce(
+    (t, c) => Number(t) + Number(c.approved),
+    0
+  );
+  const totalReject = response.data.data.rows.reduce(
+    (t, c) => Number(t) + Number(c.reject),
+    0
+  );
+  // Row and Table totals end ------
+
   return (
     <>
       <UserPageHeader
         title={`Duare Sarkar DEO Report`}
         breadCrumb={breadCrumb}
+        postTitle={`* Service NOT Provided`}
+        textClass={`text-danger`}
       />
+
       <UserPageWrapper>
         <div className="col-12">
           <div className="card">
@@ -65,9 +100,7 @@ const DsDeoList = () => {
                       <th className="bg-dark text-white">Submitted</th>
                       <th className="bg-dark text-white">Approved</th>
                       <th className="bg-dark text-white">Rejected</th>
-                      <th className="bg-dark text-white">
-                        Service NOT Provided
-                      </th>
+                      <th className="bg-dark text-white">SNP *</th>
                       <th className="bg-dark text-white"></th>
                     </tr>
                   </thead>
@@ -82,19 +115,24 @@ const DsDeoList = () => {
                       <>
                         {response.data.data.rowCount > 0 &&
                           response.data.data.rows.map((row, index) => {
-                            console.log(row);
                             return (
                               <tr key={nanoid()}>
                                 <td>{index + 1}.</td>
                                 <td>{row?.name?.toUpperCase()}</td>
                                 <td>{row?.mobile}</td>
                                 <td>{row?.email}</td>
-                                <td>{row?.provisinol}</td>
-                                <td>{row?.subbmitted}</td>
+                                <td>{row?.provisional}</td>
+                                <td>{row?.submitted}</td>
                                 <td>{row?.approved}</td>
                                 <td>{row?.reject}</td>
                                 <td></td>
-                                <td></td>
+                                <td>
+                                  <FaRegFolder
+                                    title="View"
+                                    className="me-2 fs-3 text-yellow cursor-pointer"
+                                    size={16}
+                                  />
+                                </td>
                               </tr>
                             );
                           })}
@@ -103,12 +141,20 @@ const DsDeoList = () => {
                             <th className="bg-dark text-white" colSpan={4}>
                               TOTAL
                             </th>
+                            <th className="bg-dark text-white">
+                              {totalProvisional}
+                            </th>
+                            <th className="bg-dark text-white">
+                              {totalSubmitted}
+                            </th>
+                            <th className="bg-dark text-white">
+                              {totalApproved}
+                            </th>
+                            <th className="bg-dark text-white">
+                              {totalReject}
+                            </th>
                             <th className="bg-dark text-white">00</th>
-                            <th className="bg-dark text-white">00</th>
-                            <th className="bg-dark text-white">00</th>
-                            <th className="bg-dark text-white">00</th>
-                            <th className="bg-dark text-white">00</th>
-                            <th className="bg-dark text-white">00</th>
+                            <th className="bg-dark text-white"></th>
                           </tr>
                         ) : (
                           <tr>
@@ -126,6 +172,8 @@ const DsDeoList = () => {
           </div>
         </div>
       </UserPageWrapper>
+
+      <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
     </>
   );
 };

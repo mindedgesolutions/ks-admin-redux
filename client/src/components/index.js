@@ -7,6 +7,7 @@ export { default as InputTextarea } from "./InputTextarea";
 export { default as SubmitBtn } from "./SubmitBtn";
 export { default as FormBtn } from "./FormBtn";
 export { default as BtnSpinner } from "./BtnSpinner";
+export { default as PaginationContainer } from "./application/PaginationContainer";
 // Common related ends ------
 
 // Website related starts ------
