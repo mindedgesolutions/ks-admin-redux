@@ -5,8 +5,8 @@ import { getApplicationId } from "../../../utils/functions.js";
 export const getCurrentApplication = async (req, res) => {
   const { mobile } = req.appUser;
   const data = await pool.query(
-    `select * from k_migrant_worker_master where mobile=$1 and is_active=1`,
-    [mobile]
+    `select * from k_migrant_worker_master where mobile=$1 and is_active=$2`,
+    [mobile, 1]
   );
   res.status(StatusCodes.OK).json({ data });
 };

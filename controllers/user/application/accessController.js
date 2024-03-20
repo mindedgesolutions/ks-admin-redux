@@ -6,20 +6,20 @@ export const availableAccess = async (req, res) => {
   const { mobile } = req.appUser;
   const applicationId = await getApplicationId(mobile);
   const master = await pool.query(
-    `select id from k_migrant_worker_master where is_active=1 and id=$1`,
-    [applicationId]
+    `select id from k_migrant_worker_master where is_active=$2 and id=$1`,
+    [applicationId, 1]
   );
   const work = await pool.query(
-    `select present_country, engaged_as from k_migrant_work_details where is_active=1 and application_id=$1`,
-    [applicationId]
+    `select present_country, engaged_as from k_migrant_work_details where is_active=$2 and application_id=$1`,
+    [applicationId, 1]
   );
   const nominee = await pool.query(
-    `select id from k_migrant_worker_nominees where is_active=1 and application_id=$1`,
-    [applicationId]
+    `select id from k_migrant_worker_nominees where is_active=$2 and application_id=$1`,
+    [applicationId, 1]
   );
   const family = await pool.query(
-    `select id from k_migrant_family_info where is_active=1 and application_id=$1`,
-    [applicationId]
+    `select id from k_migrant_family_info where is_active=$2 and application_id=$1`,
+    [applicationId, 1]
   );
   const accessPersonal = true;
   const accessWorksite = master.rowCount > 0 ? true : false;

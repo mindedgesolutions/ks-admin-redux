@@ -38,24 +38,24 @@ export const getPs = async (req, res) => {
 
 export const getStates = async (req, res) => {
   const data = await pool.query(
-    `select id, statename from master_state where is_active=1 order by statename`,
-    []
+    `select id, statename from master_state where is_active=$1 order by statename`,
+    [1]
   );
   res.status(StatusCodes.OK).json({ data });
 };
 
 export const getCountries = async (req, res) => {
   const data = await pool.query(
-    `select id, country_name from master_country where is_active=1 order by country_name`,
-    []
+    `select id, country_name from master_country where is_active=$1 order by country_name`,
+    [1]
   );
   res.status(StatusCodes.OK).json({ data });
 };
 
 export const getJobs = async (req, res) => {
   const data = await pool.query(
-    `select id, nature_of_work from master_work where is_active=1 order by order_by`,
-    []
+    `select id, nature_of_work from master_work where is_active=$1 order by order_by`,
+    [1]
   );
   res.status(StatusCodes.OK).json({ data });
 };
@@ -79,8 +79,8 @@ export const getBankSingle = async (req, res) => {
 
 export const getSchemes = async (req, res) => {
   const data = await pool.query(
-    `select * from master_schemes where is_active=1 order by schemes_name`,
-    []
+    `select * from master_schemes where is_active=$1 order by schemes_name`,
+    [1]
   );
   res.status(StatusCodes.OK).json({ data });
 };
