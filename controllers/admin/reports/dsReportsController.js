@@ -322,6 +322,7 @@ export const dsDeoList = async (req, res) => {
   // For data ------
   const data = await pool.query(
     `select t1.*,
+      uinfo.id,
       uinfo.mobile,
       uinfo.email,
       uinfo.name,

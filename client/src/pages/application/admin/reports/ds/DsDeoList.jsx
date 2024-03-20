@@ -7,6 +7,7 @@ import {
   useParams,
 } from "react-router-dom";
 import {
+  ModalDeoDetails,
   PaginationContainer,
   ReportTableLoader,
   UserPageHeader,
@@ -16,6 +17,8 @@ import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
 import { nanoid } from "nanoid";
 import { FaRegFolder } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { setDeo } from "../../../../../features/deo/deoSlice";
 
 // Loader starts ------
 export const loader = async ({ request }) => {
@@ -45,6 +48,7 @@ export const loader = async ({ request }) => {
 const DsDeoList = () => {
   const { id } = useParams();
   const { search } = useLocation();
+  const dispatch = useDispatch();
   const queryParams = new URLSearchParams(search);
 
   const params = JSON.parse(localStorage.getItem("search"));
@@ -62,6 +66,11 @@ const DsDeoList = () => {
     !queryParams.get("page") || queryParams.get("page") === 1
       ? 1
       : (queryParams.get("page") - 1) * 10 + 1;
+
+  const viewDeo = (id) => {
+    const deo = response?.data?.data?.rows.find((c) => c.id === id);
+    dispatch(setDeo(deo));
+  };
 
   return (
     <>
@@ -101,8 +110,8 @@ const DsDeoList = () => {
                       </tr>
                     ) : (
                       <>
-                        {response.data.data.rowCount > 0 &&
-                          response.data.data.rows.map((row, index) => {
+                        {response?.data?.data?.rowCount > 0 &&
+                          response?.data?.data?.rows.map((row, index) => {
                             return (
                               <tr key={nanoid()}>
                                 <td>{slno + index}.</td>
@@ -119,6 +128,7 @@ const DsDeoList = () => {
                                     title="View"
                                     className="me-2 fs-3 text-yellow cursor-pointer"
                                     size={16}
+                                    onClick={() => viewDeo(row.id)}
                                   />
                                 </td>
                               </tr>
@@ -132,6 +142,7 @@ const DsDeoList = () => {
             </div>
           </div>
         </div>
+        <ModalDeoDetails />
         <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
       </UserPageWrapper>
     </>
