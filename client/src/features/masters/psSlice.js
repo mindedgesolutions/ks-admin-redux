@@ -7,12 +7,15 @@ const initialState = {
 };
 
 export const getPsList = createAsyncThunk("master/ps", async (data) => {
-  try {
-    const response = await customFetch.get(`/master/ps/${data}`);
-    return response.data.data.rows;
-  } catch (error) {
-    console.log(error);
+  if (data) {
+    try {
+      const response = await customFetch.get(`/master/ps/${data}`);
+      return response.data.data.rows;
+    } catch (error) {
+      return [];
+    }
   }
+  return [];
 });
 
 const psSlice = createSlice({

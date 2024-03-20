@@ -95,7 +95,7 @@ const UserLocation = () => {
           onChange={handleDistChange}
         >
           <option value="">- Select district -</option>
-          {districts.data.data.rows.map((district) => {
+          {districts?.data?.data?.rows?.map((district) => {
             return (
               <option key={nanoid()} value={district.district_code}>
                 {district.district_name}
@@ -116,7 +116,7 @@ const UserLocation = () => {
           onChange={handleSdChange}
         >
           <option value="">- Select sub-division -</option>
-          {subdivs.map((value) => {
+          {subdivs?.map((value) => {
             return (
               <option key={value.subdiv_code} value={value.subdiv_code}>
                 {value.subdiv_name}
@@ -137,7 +137,7 @@ const UserLocation = () => {
           onChange={handleBlTypeChange}
         >
           <option value="">- Select area type -</option>
-          {blockType.map((type) => {
+          {blockType?.map((type) => {
             return (
               <option key={nanoid()} value={type.value}>
                 {type.text}
@@ -160,7 +160,7 @@ const UserLocation = () => {
           <option value="">
             - Select {blLabel.toLowerCase() || "block"} -
           </option>
-          {blocks.map((block) => {
+          {blocks?.map((block) => {
             return (
               <option key={block.block_mun_code} value={block.block_mun_code}>
                 {block.block_mun_name}
@@ -181,7 +181,7 @@ const UserLocation = () => {
           onChange={handleGpChange}
         >
           <option value="">- Select gram panchayat name -</option>
-          {gpWards.map((gp) => {
+          {gpWards?.map((gp) => {
             return (
               <option key={gp.village_ward_code} value={gp.village_ward_code}>
                 {gp.village_ward_name.toUpperCase()}
@@ -202,7 +202,7 @@ const UserLocation = () => {
           onChange={(e) => setLoc({ ...loc, inputPs: e.target.value })}
         >
           <option value="">- Select police station -</option>
-          {psList.map((p) => {
+          {psList?.map((p) => {
             return (
               <option key={p.ps_code} value={p.ps_code}>
                 {p.ps_name.toUpperCase()}

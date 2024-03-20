@@ -6,13 +6,16 @@ const initialState = {
   isLoading: false,
 };
 
-export const getGpWards = createAsyncThunk("masters/gpwards", async (data) => {
-  try {
-    const response = await customFetch.get(`/master/wards/${data}`);
-    return response.data.data.rows;
-  } catch (error) {
-    console.log(error);
+export const getGpWards = createAsyncThunk("masters/gpwards", async (value) => {
+  if (value) {
+    try {
+      const response = await customFetch.get(`/master/wards/${value}`);
+      return response?.data?.data?.rows;
+    } catch (error) {
+      return [];
+    }
   }
+  return [];
 });
 
 const gpSlice = createSlice({
