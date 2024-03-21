@@ -8,6 +8,8 @@ import {
 import { Modal } from "react-bootstrap";
 import customFetch from "../../../utils/customFetch";
 import { splitErrors } from "../../../utils/showErrors";
+import { nanoid } from "nanoid";
+import { randomBadgeBg } from "../../../utils/functions";
 
 const ModalDeoDetails = () => {
   const dispatch = useDispatch();
@@ -37,11 +39,30 @@ const ModalDeoDetails = () => {
     getBlockWards();
   }, []);
 
-  let block;
+  let block,
+    ward,
+    allottedWards = [];
+
   if (viewDeo?.allotted_areatype_code) {
     block = deoBlocks
       .find((c) => c.block_mun_code === viewDeo?.allotted_areatype_code)
       ?.block_mun_name?.toUpperCase();
+  }
+
+  if (viewDeo?.allotted_vill_ward) {
+    ward = deoWards
+      .find((c) => c.village_ward_code === viewDeo?.allotted_vill_ward)
+      ?.village_ward_name?.toUpperCase();
+  }
+
+  if (viewDeo?.allotted_vill_ward_all) {
+    const newWardAll = viewDeo?.allotted_vill_ward_all?.split(",");
+    newWardAll.map((n) => {
+      const wardFilter = deoWards.filter(
+        (c) => Number(c.village_ward_code) === Number(n)
+      );
+      allottedWards.push(wardFilter[0]?.village_ward_name);
+    });
   }
 
   return (
@@ -95,25 +116,25 @@ const ModalDeoDetails = () => {
           <div className="mb-3 col-md-6 mt-0 pt-0">
             <label className="datagrid-title">Block : </label>
             <label className="form-label">
-              {viewDeo?.allotted_vill_ward
-                ? viewDeo?.allotted_vill_ward + ", "
-                : "" + block}
+              {ward ? ward + ", " : "" + block}
             </label>
           </div>
-          {/* <div className="mb-3 col-md-12 mt-0 pt-0">
-            <label className="datagrid-title">Schemes : </label>
+          <div className="mb-3 col-md-12 mt-0 pt-0">
+            <label className="datagrid-title">
+              Allotted wards ({allottedWards.length}) :{" "}
+            </label>
             <br />
-            {fMember?.member_schemes?.map((scheme) => {
+            {allottedWards?.map((a) => {
               return (
                 <span
                   key={nanoid()}
                   className={`badge bg-${randomBadgeBg()}-lt p-2 me-2 my-1`}
                 >
-                  {scheme?.schemes_name?.toUpperCase()}
+                  {a?.toUpperCase()}
                 </span>
               );
             })}
-          </div> */}
+          </div>
         </div>
       </Modal.Body>
       <Modal.Footer>
