@@ -10,6 +10,7 @@ import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
 import { nanoid } from "nanoid";
 import { FaRegFolder } from "react-icons/fa6";
+import { dateFormat } from "../../../../../utils/functions";
 
 // Main component starts ------
 const DsDeoApplicationList = () => {
@@ -113,7 +114,7 @@ const DsDeoApplicationList = () => {
                                 <td>{row?.identification_number}</td>
                                 <td>{row?.mobile}</td>
                                 <td>{row?.aadhar_no}</td>
-                                <td>{row?.dob}</td>
+                                <td>{dateFormat(row?.dob)}</td>
                                 <td>{filter.status.toUpperCase()}</td>
                                 <td>
                                   <FaRegFolder
