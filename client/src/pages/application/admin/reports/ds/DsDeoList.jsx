@@ -3,6 +3,7 @@ import {
   Link,
   useLoaderData,
   useLocation,
+  useNavigate,
   useNavigation,
   useParams,
 } from "react-router-dom";
@@ -64,6 +65,7 @@ const DsDeoList = () => {
   const { search } = useLocation();
   const { response } = useLoaderData();
   const navigation = useNavigation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const queryParams = new URLSearchParams(search);
 
@@ -92,6 +94,14 @@ const DsDeoList = () => {
   const viewDeo = (id) => {
     const deo = response?.data?.data?.rows.find((c) => c.id === id);
     dispatch(setDeo(deo));
+  };
+
+  const goToDeoApplicationList = (status, userId) => {
+    const filter = JSON.parse(localStorage.getItem("filter"));
+    const newFilter = { ...filter, userId: userId, status: status };
+    localStorage.setItem("filter", JSON.stringify(newFilter));
+
+    navigate(`/admin/reports/ds/deo-application-list/${id}`);
   };
 
   return (
@@ -162,10 +172,62 @@ const DsDeoList = () => {
                                     </span>
                                   )}
                                 </td>
-                                <td>{data?.provisional || 0}</td>
-                                <td>{data?.submitted || 0}</td>
-                                <td>{data?.approved || 0}</td>
-                                <td>{data?.reject || 0}</td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn btn-light btn-sm w-75"
+                                    onClick={() =>
+                                      goToDeoApplicationList(
+                                        "provisional",
+                                        row.user_id
+                                      )
+                                    }
+                                  >
+                                    {data?.provisional || 0}
+                                  </button>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn btn-light btn-sm w-75"
+                                    onClick={() =>
+                                      goToDeoApplicationList(
+                                        "submitted",
+                                        row.user_id
+                                      )
+                                    }
+                                  >
+                                    {data?.submitted || 0}
+                                  </button>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn btn-light btn-sm w-75"
+                                    onClick={() =>
+                                      goToDeoApplicationList(
+                                        "approved",
+                                        row.user_id
+                                      )
+                                    }
+                                  >
+                                    {data?.approved || 0}
+                                  </button>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn btn-light btn-sm w-75"
+                                    onClick={() =>
+                                      goToDeoApplicationList(
+                                        "reject",
+                                        row.user_id
+                                      )
+                                    }
+                                  >
+                                    {data?.reject || 0}
+                                  </button>
+                                </td>
                                 <td></td>
                                 <td>
                                   <FaRegFolder
