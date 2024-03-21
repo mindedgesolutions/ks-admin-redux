@@ -17,46 +17,68 @@ import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
 import { nanoid } from "nanoid";
 import { FaRegFolder } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
-import { setDeo } from "../../../../../features/deo/deoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setDeo, setReport } from "../../../../../features/deo/deoSlice";
 
 // Loader starts ------
-export const loader = async ({ request }) => {
-  const filter = JSON.parse(localStorage.getItem("filter"));
-  let params = Object.fromEntries([
-    ...new URL(request.url).searchParams.entries(),
-  ]);
-  params = {
-    ...params,
-    dist: filter.filterDist,
-    subdiv: filter.filterSubdiv || "",
-    block: filter.filterBlock || "",
-    version: filter.version,
+export const loader =
+  (store) =>
+  async ({ request }) => {
+    const filter = JSON.parse(localStorage.getItem("filter"));
+    let params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(),
+    ]);
+    params = {
+      ...params,
+      dist: filter.filterDist,
+      subdiv: filter.filterSubdiv || "",
+      block: filter.filterBlock || "",
+      version: filter.version,
+    };
+    const stReports = store.getState().deo.reports;
+    try {
+      const response = await customFetch.get(`/reports/deo-list`, {
+        params: params,
+      });
+      if (stReports.length === 0) {
+        const reports = await customFetch.get(`/reports/deo-entries`, {
+          params: {
+            dist: filter.filterDist,
+            subdiv: filter.filterSubdiv || "",
+            block: filter.filterBlock || "",
+            version: filter.version,
+          },
+        });
+        store.dispatch(setReport(reports.data.data.rows));
+      }
+      return { response };
+    } catch (error) {
+      splitErrors(error?.response?.data?.msg);
+      return error;
+    }
   };
-  try {
-    const response = await customFetch.get(`/reports/deo-list`, {
-      params: params,
-    });
-    return response;
-  } catch (error) {
-    splitErrors(error?.response?.data?.msg);
-    return error;
-  }
-};
 
 // Main component starts ------
 const DsDeoList = () => {
   const { id } = useParams();
   const { search } = useLocation();
+  const { response } = useLoaderData();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const queryParams = new URLSearchParams(search);
 
+  const { reports } = useSelector((store) => store.deo);
   const params = JSON.parse(localStorage.getItem("search"));
+  const labels = JSON.parse(localStorage.getItem("labels"));
+
+  let locLabel;
+  locLabel = labels.block ? labels.block.toUpperCase() + ", " : "";
+  locLabel = labels.subdiv ? locLabel + labels.subdiv.toUpperCase() + ", " : "";
+  locLabel = labels.dist ? locLabel + labels.dist.toUpperCase() : "";
+
   const returnUrl = `/admin/reports/ds/deo/${id}?dist=${params.dist}&subdiv=${
     params.subdiv || ""
   }&btype=${params.btype || ""}&block=${params.block || ""}`;
-  const response = useLoaderData();
-  const navigation = useNavigation();
 
   const breadCrumb = <Link to={returnUrl}>Back to DEO Report</Link>;
 
@@ -84,6 +106,11 @@ const DsDeoList = () => {
       <UserPageWrapper>
         <div className="col-12">
           <div className="card">
+            <div className="card-header">
+              Total <span className="text-warning mx-1">{labels.count}</span>{" "}
+              results in <span className="text-danger mx-1">{locLabel}</span>
+            </div>
+
             <div className="card-body p-2">
               <div className="table-responsive">
                 <table className="table table-vcenter text-nowrap datatable table-hover table-bordered card-table fs-5">
@@ -93,6 +120,7 @@ const DsDeoList = () => {
                       <th className="bg-dark text-white">Name</th>
                       <th className="bg-dark text-white">Mobile</th>
                       <th className="bg-dark text-white">Email</th>
+                      <th className="bg-dark text-white">Status</th>
                       <th className="bg-dark text-white">Provisional</th>
                       <th className="bg-dark text-white">Submitted</th>
                       <th className="bg-dark text-white">Approved</th>
@@ -112,16 +140,32 @@ const DsDeoList = () => {
                       <>
                         {response?.data?.data?.rowCount > 0 &&
                           response?.data?.data?.rows.map((row, index) => {
+                            const data = reports.find(
+                              (c) =>
+                                Number(c.created_by) === Number(row.user_id)
+                            );
+
                             return (
                               <tr key={nanoid()}>
                                 <td>{slno + index}.</td>
                                 <td>{row?.name?.toUpperCase()}</td>
                                 <td>{row?.mobile}</td>
                                 <td>{row?.email}</td>
-                                <td>{row?.provisional}</td>
-                                <td>{row?.submitted}</td>
-                                <td>{row?.approved}</td>
-                                <td>{row?.reject}</td>
+                                <td>
+                                  {row?.is_active ? (
+                                    <span className="badge bg-green-lt">
+                                      Active
+                                    </span>
+                                  ) : (
+                                    <span className="badge bg-red-lt">
+                                      Deact.
+                                    </span>
+                                  )}
+                                </td>
+                                <td>{data?.provisional || 0}</td>
+                                <td>{data?.submitted || 0}</td>
+                                <td>{data?.approved || 0}</td>
+                                <td>{data?.reject || 0}</td>
                                 <td></td>
                                 <td>
                                   <FaRegFolder
