@@ -29,6 +29,18 @@ export const getWards = async (req, res) => {
   res.status(StatusCodes.OK).json({ data });
 };
 
+export const getBlockWards = async (req, res) => {
+  const blocks = await pool.query(
+    `select block_mun_code, block_mun_name from master_block_mun where is_active=1 order by block_mun_name`,
+    []
+  );
+  const wards = await pool.query(
+    `select village_ward_code, village_ward_name from master_village_ward where is_active=1 order by village_ward_name`,
+    []
+  );
+  res.status(StatusCodes.OK).json({ blocks, wards });
+};
+
 export const getPs = async (req, res) => {
   const text = `select ps_code, ps_name from master_policestation where district_code=$1 and is_active=$2 order by ps_name`;
   const values = [req.params.district, 1];

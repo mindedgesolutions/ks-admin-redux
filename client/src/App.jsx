@@ -121,7 +121,7 @@ const router = createBrowserRouter([
           {
             path: "ds/deo-list/:id?",
             element: <Ks.DsDeoList />,
-            loader: deoListLoader,
+            loader: deoListLoader(store),
           },
           {
             path: "bsk/application-status",

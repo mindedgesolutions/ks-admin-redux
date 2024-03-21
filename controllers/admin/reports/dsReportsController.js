@@ -13,7 +13,7 @@ export const dsApplicationStatusReport = async (req, res) => {
 
   const start = formatStartDate(startDate);
   const end = formatEndDate(endDate);
-  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "";
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
 
   let data;
   // For ALL Districts starts ------
@@ -157,7 +157,7 @@ export const dsApplicationStatusReportAll = async (req, res) => {
 
   const start = formatStartDate(startDate);
   const end = formatEndDate(endDate);
-  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "";
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
 
   const data = await pool.query(
     `select sm.subdiv_name,
@@ -248,7 +248,7 @@ export const dsDeoCount = async (req, res) => {
       deo.deocount
       from master_district dm
       LEFT JOIN (
-        SELECT count(dui.id) AS deocount, dui.allotted_district FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_district
+        SELECT count(dui.id) AS deocount, dui.allotted_district FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_district
       ) AS deo ON deo.allotted_district = dm.district_code
       WHERE dm.is_active=$1 AND dm.state_code=1 ORDER BY dm.district_name`,
       [1]
@@ -263,7 +263,7 @@ export const dsDeoCount = async (req, res) => {
         deo.deocount
         from master_subdivision as sm
         left JOIN (
-          SELECT count(dui.id) AS deocount, dui.allotted_subdivision FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_subdivision
+          SELECT count(dui.id) AS deocount, dui.allotted_subdivision FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_subdivision
         ) as deo on deo.allotted_subdivision = sm.subdiv_code
         where sm.is_active=$1 and sm.district_code=$2 order by sm.subdiv_name`,
         [1, dist]
@@ -279,7 +279,7 @@ export const dsDeoCount = async (req, res) => {
         from master_block_mun as bm
         join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
         left JOIN (
-          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_areatype_code
+          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_areatype_code
         ) as deo on deo.allotted_areatype_code = bm.block_mun_code
         where bm.is_active=$1 and bm.subdiv_code=$2 order by sm.subdiv_name, bm.block_mun_name`,
         [1, subdiv]
@@ -294,7 +294,7 @@ export const dsDeoCount = async (req, res) => {
         from master_block_mun as bm
         join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
         left JOIN (
-          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_areatype_code
+          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_areatype_code
         ) as deo on deo.allotted_areatype_code = bm.block_mun_code
         where bm.is_active=$1 and bm.block_mun_code=$2 order by bm.block_mun_name`,
         [1, block]
@@ -305,12 +305,11 @@ export const dsDeoCount = async (req, res) => {
 };
 
 export const dsDeoList = async (req, res) => {
-  const { dist, subdiv, block, version, page, limit } = req.query;
+  const { dist, subdiv, block, page, limit } = req.query;
 
   const pagination = paginationLogic(page, limit);
-  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "AA";
 
-  let data, condition;
+  let condition;
 
   if (dist && !subdiv && !block) {
     condition = `uinfo.allotted_district = ${Number(dist)}`;
@@ -319,118 +318,80 @@ export const dsDeoList = async (req, res) => {
   } else if (dist && subdiv && block) {
     condition = `uinfo.allotted_areatype_code = ${Number(block)}`;
   }
-
-  data = await pool.query(
-    `select t1.*,
+  // For data ------
+  const data = await pool.query(
+    `select uinfo.id,
+      uinfo.user_id,
       uinfo.mobile,
       uinfo.email,
       uinfo.name,
-      uinfo.allotted_areatype_code
-      from(
-        SELECT
-        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-        count(case when dmp.application_status in ('C') then 1 else null end) approved,
-        count(case when dmp.application_status in ('R') then 1 else null end) reject,
-        count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-        created_by
-        from k_duaresarkar_application_mapping as dmp 
-        where flag=$1
-        and service_provided='Y' and application_status is not null and application_status!='I'
-        group by created_by
-      ) as t1
-      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
-      where $2
-      order by uinfo.name asc offset $3 limit $4`,
-    [dbFlag, condition, pagination.offset, pagination.pageLimit]
+      uinfo.aadhaar_number,
+      uinfo.pan_number,
+      uinfo.ifsc_code,
+      uinfo.bank_name,
+      uinfo.branch_name,
+      uinfo.bank_account_number,
+      uinfo.user_address,
+      uinfo.allotted_district,
+      uinfo.allotted_subdivision,
+      uinfo.allotted_areatype,
+      uinfo.allotted_areatype_code,
+      uinfo.allotted_vill_ward,
+      uinfo.allotted_ps,
+      uinfo.allotted_pin,
+      uinfo.is_active,
+      uinfo.allotted_vill_ward_all,
+      uinfo.duplicate_gp,
+      uinfo.is_multiple
+      from k_duaresarkar_user_info as uinfo 
+      where ${condition}
+      order by uinfo.name asc offset $1 limit $2`,
+    [pagination.offset, pagination.pageLimit]
   );
 
-  // if (dist && !subdiv && !block) {
-  //   data = await pool.query(
-  //     `select t1.*,
-  //     uinfo.mobile,
-  //     uinfo.email,
-  //     uinfo.name,
-  //     uinfo.allotted_areatype_code
-  //     from(
-  //       SELECT
-  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
-  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
-  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-  //       created_by
-  //       from k_duaresarkar_application_mapping as dmp
-  //       where flag=$1
-  //       and service_provided='Y' and application_status is not null and application_status!='I'
-  //       group by created_by
-  //     ) as t1
-  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
-  //     where $2
-  //     order by uinfo.name asc offset $3 limit $4`,
-  //     [
-  //       dbFlag,
-  //       `uinfo.allotted_district = ${Number(dist)}`,
-  //       pagination.offset,
-  //       pagination.pageLimit,
-  //     ]
-  //   );
-  // } else if (dist && subdiv && !block) {
-  //   data = await pool.query(
-  //     `select t1.*,
-  //     uinfo.mobile,
-  //     uinfo.email,
-  //     uinfo.name,
-  //     uinfo.allotted_areatype_code
-  //     from(
-  //       SELECT
-  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
-  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
-  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-  //       created_by
-  //       from k_duaresarkar_application_mapping as dmp
-  //       where flag=$1
-  //       and service_provided='Y' and application_status is not null and application_status!='I'
-  //       group by created_by
-  //     ) as t1
-  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
-  //     where uinfo.allotted_subdivision=$2
-  //     order by uinfo.name asc offset $3 limit $4`,
-  //     [dbFlag, Number(subdiv), pagination.offset, pagination.pageLimit]
-  //   );
-  // } else if (dist && subdiv && block) {
-  //   data = await pool.query(
-  //     `select t1.*,
-  //     uinfo.mobile,
-  //     uinfo.email,
-  //     uinfo.name,
-  //     uinfo.allotted_areatype_code
-  //     from(
-  //       SELECT
-  //       count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-  //       count(case when dmp.application_status in ('C') then 1 else null end) approved,
-  //       count(case when dmp.application_status in ('R') then 1 else null end) reject,
-  //       count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-  //       created_by
-  //       from k_duaresarkar_application_mapping as dmp
-  //       where flag=$1
-  //       and service_provided='Y' and application_status is not null and application_status!='I'
-  //       group by created_by
-  //     ) as t1
-  //     join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by
-  //     where uinfo.allotted_areatype_code=$2
-  //     order by uinfo.name asc offset $3 limit $4`,
-  //     [dbFlag, Number(block), pagination.offset, pagination.pageLimit]
-  //   );
-  // }
+  // For pagination ------
+  const records = await pool.query(
+    `select uinfo.id from k_duaresarkar_user_info uinfo where ${condition}`,
+    []
+  );
 
-  const totalPages = Math.ceil(data.rowCount / pagination.pageLimit);
+  const totalPages = Math.ceil(records.rowCount / pagination.pageLimit);
   const meta = {
     totalPages: totalPages,
     currentPage: pagination.pageNo,
   };
-  console.log(data);
 
   res.status(StatusCodes.OK).json({ data, meta });
+};
+
+export const dsDeoEntries = async (req, res) => {
+  const { dist, subdiv, block, version } = req.query;
+
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
+
+  let condition;
+
+  if (dist && !subdiv && !block) {
+    condition = `district = ${Number(dist)}`;
+  } else if (dist && subdiv && !block) {
+    condition = `subdivision = ${Number(subdiv)}`;
+  } else if (dist && subdiv && block) {
+    condition = `block_mun = ${Number(block)}`;
+  }
+
+  const data = await pool.query(
+    `SELECT
+    count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
+    count(case when dmp.application_status in ('C') then 1 else null end) approved,
+    count(case when dmp.application_status in ('R') then 1 else null end) reject,
+    count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
+    created_by
+    from k_duaresarkar_application_mapping dmp 
+    where flag=$1 and service_provided='Y' and application_status is not null and application_status!='I' and ${condition} group by created_by`,
+    [dbFlag]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
 };
 // Duare Sarkar (DS) DEO report ends ------
 

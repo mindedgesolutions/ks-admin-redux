@@ -19,6 +19,7 @@ import bankReducer from "./features/masters/bankSlice";
 import adminLoginReducer from "./features/adminLogin/adminLoginSlice";
 import adminBasicReducer from "./features/admin/adminBasicSlice";
 import reportReducer from "./features/reports/reportSlice";
+import deoReducer from "./features/deo/deoSlice";
 
 export const store = configureStore({
   reducer: {
@@ -42,5 +43,6 @@ export const store = configureStore({
     adminLogin: adminLoginReducer,
     adminBasic: adminBasicReducer,
     reports: reportReducer,
+    deo: deoReducer,
   },
 });

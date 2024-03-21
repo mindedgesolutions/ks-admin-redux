@@ -2,10 +2,12 @@ import React from "react";
 import {
   Link,
   useLoaderData,
+  useLocation,
   useNavigation,
   useParams,
 } from "react-router-dom";
 import {
+  ModalDeoDetails,
   PaginationContainer,
   ReportTableLoader,
   UserPageHeader,
@@ -15,65 +17,82 @@ import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
 import { nanoid } from "nanoid";
 import { FaRegFolder } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { setDeo, setReport } from "../../../../../features/deo/deoSlice";
 
 // Loader starts ------
-export const loader = async ({ request }) => {
-  const filter = JSON.parse(localStorage.getItem("filter"));
-  let params = Object.fromEntries([
-    ...new URL(request.url).searchParams.entries(),
-  ]);
-  params = {
-    ...params,
-    dist: filter.filterDist,
-    subdiv: filter.filterSubdiv || "",
-    block: filter.filterBlock || "",
-    version: filter.version,
+export const loader =
+  (store) =>
+  async ({ request }) => {
+    const filter = JSON.parse(localStorage.getItem("filter"));
+    let params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(),
+    ]);
+    params = {
+      ...params,
+      dist: filter.filterDist,
+      subdiv: filter.filterSubdiv || "",
+      block: filter.filterBlock || "",
+      version: filter.version,
+    };
+    const stReports = store.getState().deo.reports;
+    try {
+      const response = await customFetch.get(`/reports/deo-list`, {
+        params: params,
+      });
+      if (stReports.length === 0) {
+        const reports = await customFetch.get(`/reports/deo-entries`, {
+          params: {
+            dist: filter.filterDist,
+            subdiv: filter.filterSubdiv || "",
+            block: filter.filterBlock || "",
+            version: filter.version,
+          },
+        });
+        store.dispatch(setReport(reports.data.data.rows));
+      }
+      return { response };
+    } catch (error) {
+      splitErrors(error?.response?.data?.msg);
+      return error;
+    }
   };
-  try {
-    const response = await customFetch.get(`/reports/deo-list`, {
-      params: params,
-    });
-    return response;
-  } catch (error) {
-    splitErrors(error?.response?.data?.msg);
-    return error;
-  }
-};
 
 // Main component starts ------
 const DsDeoList = () => {
   const { id } = useParams();
+  const { search } = useLocation();
+  const { response } = useLoaderData();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const queryParams = new URLSearchParams(search);
+
+  const { reports } = useSelector((store) => store.deo);
   const params = JSON.parse(localStorage.getItem("search"));
+  const labels = JSON.parse(localStorage.getItem("labels"));
+
+  let locLabel;
+  locLabel = labels.block ? labels.block.toUpperCase() + ", " : "";
+  locLabel = labels.subdiv ? locLabel + labels.subdiv.toUpperCase() + ", " : "";
+  locLabel = labels.dist ? locLabel + labels.dist.toUpperCase() : "";
+
   const returnUrl = `/admin/reports/ds/deo/${id}?dist=${params.dist}&subdiv=${
     params.subdiv || ""
   }&btype=${params.btype || ""}&block=${params.block || ""}`;
-  const response = useLoaderData();
-  const navigation = useNavigation();
 
   const breadCrumb = <Link to={returnUrl}>Back to DEO Report</Link>;
 
   const pageCount = response.data.meta.totalPages;
   const currentPage = response.data.meta.currentPage;
-  console.log(pageCount);
+  const slno =
+    !queryParams.get("page") || queryParams.get("page") === 1
+      ? 1
+      : (queryParams.get("page") - 1) * 10 + 1;
 
-  // Row and Table totals start ------
-  const totalProvisional = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.provisional),
-    0
-  );
-  const totalSubmitted = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.submitted),
-    0
-  );
-  const totalApproved = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.approved),
-    0
-  );
-  const totalReject = response.data.data.rows.reduce(
-    (t, c) => Number(t) + Number(c.reject),
-    0
-  );
-  // Row and Table totals end ------
+  const viewDeo = (id) => {
+    const deo = response?.data?.data?.rows.find((c) => c.id === id);
+    dispatch(setDeo(deo));
+  };
 
   return (
     <>
@@ -87,6 +106,11 @@ const DsDeoList = () => {
       <UserPageWrapper>
         <div className="col-12">
           <div className="card">
+            <div className="card-header">
+              Total <span className="text-warning mx-1">{labels.count}</span>{" "}
+              results in <span className="text-danger mx-1">{locLabel}</span>
+            </div>
+
             <div className="card-body p-2">
               <div className="table-responsive">
                 <table className="table table-vcenter text-nowrap datatable table-hover table-bordered card-table fs-5">
@@ -96,6 +120,7 @@ const DsDeoList = () => {
                       <th className="bg-dark text-white">Name</th>
                       <th className="bg-dark text-white">Mobile</th>
                       <th className="bg-dark text-white">Email</th>
+                      <th className="bg-dark text-white">Status</th>
                       <th className="bg-dark text-white">Provisional</th>
                       <th className="bg-dark text-white">Submitted</th>
                       <th className="bg-dark text-white">Approved</th>
@@ -113,56 +138,46 @@ const DsDeoList = () => {
                       </tr>
                     ) : (
                       <>
-                        {response.data.data.rowCount > 0 &&
-                          response.data.data.rows.map((row, index) => {
+                        {response?.data?.data?.rowCount > 0 &&
+                          response?.data?.data?.rows.map((row, index) => {
+                            const data = reports.find(
+                              (c) =>
+                                Number(c.created_by) === Number(row.user_id)
+                            );
+
                             return (
                               <tr key={nanoid()}>
-                                <td>{index + 1}.</td>
+                                <td>{slno + index}.</td>
                                 <td>{row?.name?.toUpperCase()}</td>
                                 <td>{row?.mobile}</td>
                                 <td>{row?.email}</td>
-                                <td>{row?.provisional}</td>
-                                <td>{row?.submitted}</td>
-                                <td>{row?.approved}</td>
-                                <td>{row?.reject}</td>
+                                <td>
+                                  {row?.is_active ? (
+                                    <span className="badge bg-green-lt">
+                                      Active
+                                    </span>
+                                  ) : (
+                                    <span className="badge bg-red-lt">
+                                      Deact.
+                                    </span>
+                                  )}
+                                </td>
+                                <td>{data?.provisional || 0}</td>
+                                <td>{data?.submitted || 0}</td>
+                                <td>{data?.approved || 0}</td>
+                                <td>{data?.reject || 0}</td>
                                 <td></td>
                                 <td>
                                   <FaRegFolder
                                     title="View"
                                     className="me-2 fs-3 text-yellow cursor-pointer"
                                     size={16}
+                                    onClick={() => viewDeo(row.id)}
                                   />
                                 </td>
                               </tr>
                             );
                           })}
-                        {response.data.data.rowCount > 0 ? (
-                          <tr>
-                            <th className="bg-dark text-white" colSpan={4}>
-                              TOTAL
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalProvisional}
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalSubmitted}
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalApproved}
-                            </th>
-                            <th className="bg-dark text-white">
-                              {totalReject}
-                            </th>
-                            <th className="bg-dark text-white">00</th>
-                            <th className="bg-dark text-white"></th>
-                          </tr>
-                        ) : (
-                          <tr>
-                            <td colSpan={10} className="text-center">
-                              NO DATA FOUND
-                            </td>
-                          </tr>
-                        )}
                       </>
                     )}
                   </tbody>
@@ -171,9 +186,9 @@ const DsDeoList = () => {
             </div>
           </div>
         </div>
+        <ModalDeoDetails />
+        <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
       </UserPageWrapper>
-
-      <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import customFetch from "../../../../../utils/customFetch";
 import {
@@ -16,6 +16,7 @@ import {
   UserPageWrapper,
 } from "../../../../../components";
 import { nanoid } from "nanoid";
+import { unsetReports } from "../../../../../features/deo/deoSlice";
 
 const DsDeo = () => {
   const { id } = useParams();
@@ -36,6 +37,10 @@ const DsDeo = () => {
   const queryParams = new URLSearchParams(search);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState([]);
+
+  const { districts } = useSelector((store) => store.districts);
+  const { subdivs } = useSelector((store) => store.msubdivs);
+  const { blocks } = useSelector((store) => store.mblocks);
 
   // Set column labels start ------
   let colTwo = `DISTRICT`,
@@ -76,9 +81,7 @@ const DsDeo = () => {
     }
   };
 
-  // Row and Table totals start ------
   const totalDeo = result.reduce((t, c) => Number(t) + Number(c.deocount), 0);
-  // Row and Table totals end ------
 
   useEffect(() => {
     fetchReport();
@@ -89,9 +92,21 @@ const DsDeo = () => {
     queryParams.get("block"),
   ]);
 
-  const gotoDeoList = (filterDist, filterSubdiv, filterBlock) => {
+  const gotoDeoList = (filterDist, filterSubdiv, filterBlock, count) => {
+    const dist = districts.find(
+      (c) => c.district_code === filterDist
+    ).district_name;
+    const subdiv = subdivs?.find(
+      (c) => c.subdiv_code === filterSubdiv || Number(queryParams.get("subdiv"))
+    )?.subdiv_name;
+    const block = blocks?.find(
+      (c) =>
+        c.block_mun_code === filterBlock || Number(queryParams.get("block"))
+    )?.block_mun_name;
+
     dispatch(unsetSearch());
-    console.log(`${filterDist}, ${filterSubdiv || ""}, ${filterBlock || ""}`);
+    dispatch(unsetReports());
+
     dispatch(
       setSearch({
         search: {
@@ -105,6 +120,12 @@ const DsDeo = () => {
           filterSubdiv: filterSubdiv || "",
           filterBlock: filterBlock || "",
           version: id,
+        },
+        deoLabels: {
+          dist: dist,
+          subdiv: subdiv || null,
+          block: block || null,
+          count: count || 0,
         },
       })
     );
@@ -200,9 +221,10 @@ const DsDeo = () => {
                                     style={{ minWidth: 40 }}
                                     onClick={() =>
                                       gotoDeoList(
-                                        row.district_code,
-                                        row.subdiv_code,
-                                        row.block_mun_code
+                                        row?.district_code,
+                                        row?.subdiv_code,
+                                        row?.block_mun_code,
+                                        row.deocount
                                       )
                                     }
                                   >
