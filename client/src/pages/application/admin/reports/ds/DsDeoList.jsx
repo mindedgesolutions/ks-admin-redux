@@ -22,42 +22,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDeo, setReport } from "../../../../../features/deo/deoSlice";
 
 // Loader starts ------
-export const loader =
-  (store) =>
-  async ({ request }) => {
-    const filter = JSON.parse(localStorage.getItem("filter"));
-    let params = Object.fromEntries([
-      ...new URL(request.url).searchParams.entries(),
-    ]);
-    params = {
-      ...params,
-      dist: filter.filterDist,
-      subdiv: filter.filterSubdiv || "",
-      block: filter.filterBlock || "",
-      version: filter.version,
-    };
-    const stReports = store.getState().deo.reports;
-    try {
-      const response = await customFetch.get(`/reports/deo-list`, {
-        params: params,
-      });
-      if (stReports.length === 0) {
-        const reports = await customFetch.get(`/reports/deo-entries`, {
-          params: {
-            dist: filter.filterDist,
-            subdiv: filter.filterSubdiv || "",
-            block: filter.filterBlock || "",
-            version: filter.version,
-          },
-        });
-        store.dispatch(setReport(reports.data.data.rows));
-      }
-      return { response };
-    } catch (error) {
-      splitErrors(error?.response?.data?.msg);
-      return error;
-    }
+export const loader = (store) => async ({ request }) => {
+  const filter = JSON.parse(localStorage.getItem("filter"));
+  let params = Object.fromEntries([
+    ...new URL(request.url).searchParams.entries(),
+  ]);
+  params = {
+    ...params,
+    dist: filter.filterDist,
+    subdiv: filter.filterSubdiv || "",
+    block: filter.filterBlock || "",
+    version: filter.version,
   };
+  const stReports = store.getState().deo.reports;
+  try {
+    const response = await customFetch.get(`/reports/deo-list`, {
+      params: params,
+    });
+    if (stReports.length === 0) {
+      const reports = await customFetch.get(`/reports/deo-entries`, {
+        params: {
+          dist: filter.filterDist,
+          subdiv: filter.filterSubdiv || "",
+          block: filter.filterBlock || "",
+          version: filter.version,
+        },
+      });
+      store.dispatch(setReport(reports.data.data.rows));
+    }
+    return { response };
+  } catch (error) {
+    splitErrors(error?.response?.data?.msg);
+    return error;
+  }
+};
 
 // Main component starts ------
 const DsDeoList = () => {
@@ -96,9 +94,15 @@ const DsDeoList = () => {
     dispatch(setDeo(deo));
   };
 
-  const goToDeoApplicationList = (status, userId) => {
+  const goToDeoApplicationList = (status, userId, name) => {
     const filter = JSON.parse(localStorage.getItem("filter"));
-    const newFilter = { ...filter, userId: userId, status: status };
+    const newFilter = {
+      ...filter,
+      userId: userId,
+      status: status,
+      page: queryParams.get("page"),
+      name: name,
+    };
     localStorage.setItem("filter", JSON.stringify(newFilter));
 
     navigate(`/admin/reports/ds/deo-application-list/${id}`);
@@ -179,7 +183,8 @@ const DsDeoList = () => {
                                     onClick={() =>
                                       goToDeoApplicationList(
                                         "provisional",
-                                        row.user_id
+                                        row.user_id,
+                                        row.name
                                       )
                                     }
                                   >
@@ -193,7 +198,8 @@ const DsDeoList = () => {
                                     onClick={() =>
                                       goToDeoApplicationList(
                                         "submitted",
-                                        row.user_id
+                                        row.user_id,
+                                        row.name
                                       )
                                     }
                                   >
@@ -207,7 +213,8 @@ const DsDeoList = () => {
                                     onClick={() =>
                                       goToDeoApplicationList(
                                         "approved",
-                                        row.user_id
+                                        row.user_id,
+                                        row.name
                                       )
                                     }
                                   >
@@ -221,7 +228,8 @@ const DsDeoList = () => {
                                     onClick={() =>
                                       goToDeoApplicationList(
                                         "reject",
-                                        row.user_id
+                                        row.user_id,
+                                        row.name
                                       )
                                     }
                                   >

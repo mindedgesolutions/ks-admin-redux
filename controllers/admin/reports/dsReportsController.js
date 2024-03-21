@@ -393,6 +393,69 @@ export const dsDeoEntries = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data });
 };
+
+export const dsDeoApplications = async (req, res) => {
+  const { block, dist, subdiv, status, userId, version, page } = req.query;
+
+  const pagination = paginationLogic(page, null);
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
+
+  let statusCond, condition;
+
+  switch (status) {
+    case "provisional":
+      statusCond = `dmp.application_status in ('P', 'BI', 'BP', 'B')`;
+      break;
+    case "submitted":
+      statusCond = `dmp.application_status in ('A','B')`;
+      break;
+    case "approved":
+      statusCond = `dmp.application_status in ('C')`;
+      break;
+    case "reject":
+      statusCond = `dmp.application_status in ('R')`;
+      break;
+  }
+
+  if (dist && !subdiv && !block) {
+    condition = `wm.permanent_dist = ${Number(dist)}`;
+  } else if (dist && subdiv && !block) {
+    condition = `wm.permanent_subdivision = ${Number(subdiv)}`;
+  } else if (dist && subdiv && block) {
+    condition = `wm.permanent_areacode = ${Number(block)}`;
+  }
+
+  const data = await pool.query(
+    `SELECT wm.identification_number,
+    wm.name,
+    wm.mobile,
+    wm.aadhar_no,
+    wm.id,
+    wm.dob,
+    wm.status
+    from k_duaresarkar_application_mapping as dmp
+    join k_migrant_worker_master as wm on wm.id = dmp.application_id
+    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition} offset $3 limit $4`,
+    [userId, dbFlag, pagination.offset, pagination.pageLimit]
+  );
+
+  const records = await pool.query(
+    `SELECT wm.id
+    from k_duaresarkar_application_mapping as dmp
+    join k_migrant_worker_master as wm on wm.id = dmp.application_id
+    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition}`,
+    [userId, dbFlag]
+  );
+
+  const totalPages = Math.ceil(records.rowCount / pagination.pageLimit);
+  const meta = {
+    totalPages: totalPages,
+    currentPage: pagination.pageNo,
+    totalRecords: records.rowCount,
+  };
+
+  res.status(StatusCodes.OK).json({ data, meta });
+};
 // Duare Sarkar (DS) DEO report ends ------
 
 // Duare Sarkar (DS) Application report ends ------ >>
