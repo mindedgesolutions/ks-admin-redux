@@ -3,7 +3,9 @@ const router = Router();
 import {
   dsApplicationStatusReport,
   dsApplicationStatusReportAll,
+  dsDeoApplications,
   dsDeoCount,
+  dsDeoEntries,
   dsDeoList,
   dsStaticReport,
   dsStaticReportAll,
@@ -15,5 +17,7 @@ router.get("/ds-static", dsStaticReport);
 router.get("/ds-static-all", dsStaticReportAll);
 router.get("/deo-count", dsDeoCount);
 router.get("/deo-list", dsDeoList);
+router.get("/deo-entries", dsDeoEntries);
+router.get("/deo-applications", dsDeoApplications);
 
 export default router;

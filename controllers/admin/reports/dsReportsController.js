@@ -248,7 +248,7 @@ export const dsDeoCount = async (req, res) => {
       deo.deocount
       from master_district dm
       LEFT JOIN (
-        SELECT count(dui.id) AS deocount, dui.allotted_district FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_district
+        SELECT count(dui.id) AS deocount, dui.allotted_district FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_district
       ) AS deo ON deo.allotted_district = dm.district_code
       WHERE dm.is_active=$1 AND dm.state_code=1 ORDER BY dm.district_name`,
       [1]
@@ -263,7 +263,7 @@ export const dsDeoCount = async (req, res) => {
         deo.deocount
         from master_subdivision as sm
         left JOIN (
-          SELECT count(dui.id) AS deocount, dui.allotted_subdivision FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_subdivision
+          SELECT count(dui.id) AS deocount, dui.allotted_subdivision FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_subdivision
         ) as deo on deo.allotted_subdivision = sm.subdiv_code
         where sm.is_active=$1 and sm.district_code=$2 order by sm.subdiv_name`,
         [1, dist]
@@ -279,7 +279,7 @@ export const dsDeoCount = async (req, res) => {
         from master_block_mun as bm
         join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
         left JOIN (
-          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_areatype_code
+          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_areatype_code
         ) as deo on deo.allotted_areatype_code = bm.block_mun_code
         where bm.is_active=$1 and bm.subdiv_code=$2 order by sm.subdiv_name, bm.block_mun_name`,
         [1, subdiv]
@@ -294,7 +294,7 @@ export const dsDeoCount = async (req, res) => {
         from master_block_mun as bm
         join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
         left JOIN (
-          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui where dui.is_active=$1 GROUP BY dui.allotted_areatype_code
+          SELECT count(dui.id) AS deocount, dui.allotted_areatype_code FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_areatype_code
         ) as deo on deo.allotted_areatype_code = bm.block_mun_code
         where bm.is_active=$1 and bm.block_mun_code=$2 order by bm.block_mun_name`,
         [1, block]
@@ -305,10 +305,9 @@ export const dsDeoCount = async (req, res) => {
 };
 
 export const dsDeoList = async (req, res) => {
-  const { dist, subdiv, block, version, page, limit } = req.query;
+  const { dist, subdiv, block, page, limit } = req.query;
 
   const pagination = paginationLogic(page, limit);
-  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : "AA";
 
   let condition;
 
@@ -321,58 +320,138 @@ export const dsDeoList = async (req, res) => {
   }
   // For data ------
   const data = await pool.query(
-    `select t1.*,
-      uinfo.id,
+    `select uinfo.id,
+      uinfo.user_id,
       uinfo.mobile,
       uinfo.email,
       uinfo.name,
-      uinfo.allotted_areatype_code
-      from(
-        SELECT
-        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-        count(case when dmp.application_status in ('C') then 1 else null end) approved,
-        count(case when dmp.application_status in ('R') then 1 else null end) reject,
-        count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-        created_by
-        from k_duaresarkar_application_mapping as dmp 
-        where flag=$1
-        and service_provided='Y' and application_status is not null and application_status!='I'
-        group by created_by
-      ) as t1
-      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
+      uinfo.aadhaar_number,
+      uinfo.pan_number,
+      uinfo.ifsc_code,
+      uinfo.bank_name,
+      uinfo.branch_name,
+      uinfo.bank_account_number,
+      uinfo.user_address,
+      uinfo.allotted_district,
+      uinfo.allotted_subdivision,
+      uinfo.allotted_areatype,
+      uinfo.allotted_areatype_code,
+      uinfo.allotted_vill_ward,
+      uinfo.allotted_ps,
+      uinfo.allotted_pin,
+      uinfo.is_active,
+      uinfo.allotted_vill_ward_all,
+      uinfo.duplicate_gp,
+      uinfo.is_multiple
+      from k_duaresarkar_user_info as uinfo 
       where ${condition}
-      order by uinfo.name asc offset $2 limit $3`,
-    [dbFlag, pagination.offset, pagination.pageLimit]
+      order by uinfo.name asc offset $1 limit $2`,
+    [pagination.offset, pagination.pageLimit]
   );
 
   // For pagination ------
   const records = await pool.query(
-    `select t1.*,
-      uinfo.mobile,
-      uinfo.email,
-      uinfo.name,
-      uinfo.allotted_areatype_code
-      from(
-        SELECT
-        count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
-        count(case when dmp.application_status in ('C') then 1 else null end) approved,
-        count(case when dmp.application_status in ('R') then 1 else null end) reject,
-        count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-        created_by
-        from k_duaresarkar_application_mapping as dmp 
-        where flag=$1
-        and service_provided='Y' and application_status is not null and application_status!='I'
-        group by created_by
-      ) as t1
-      join k_duaresarkar_user_info as uinfo on uinfo.user_id = t1.created_by 
-      where ${condition}`,
-    [dbFlag]
+    `select uinfo.id from k_duaresarkar_user_info uinfo where ${condition}`,
+    []
   );
 
   const totalPages = Math.ceil(records.rowCount / pagination.pageLimit);
   const meta = {
     totalPages: totalPages,
     currentPage: pagination.pageNo,
+  };
+
+  res.status(StatusCodes.OK).json({ data, meta });
+};
+
+export const dsDeoEntries = async (req, res) => {
+  const { dist, subdiv, block, version } = req.query;
+
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
+
+  let condition;
+
+  if (dist && !subdiv && !block) {
+    condition = `district = ${Number(dist)}`;
+  } else if (dist && subdiv && !block) {
+    condition = `subdivision = ${Number(subdiv)}`;
+  } else if (dist && subdiv && block) {
+    condition = `block_mun = ${Number(block)}`;
+  }
+
+  const data = await pool.query(
+    `SELECT
+    count(case when dmp.application_status in ('P','BI','BP','B') then 1 else null end) provisional,
+    count(case when dmp.application_status in ('C') then 1 else null end) approved,
+    count(case when dmp.application_status in ('R') then 1 else null end) reject,
+    count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
+    created_by
+    from k_duaresarkar_application_mapping dmp 
+    where flag=$1 and service_provided='Y' and application_status is not null and application_status!='I' and ${condition} group by created_by`,
+    [dbFlag]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
+
+export const dsDeoApplications = async (req, res) => {
+  const { block, dist, subdiv, status, userId, version, page } = req.query;
+
+  const pagination = paginationLogic(page, null);
+  const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
+
+  let statusCond, condition;
+
+  switch (status) {
+    case "provisional":
+      statusCond = `dmp.application_status in ('P', 'BI', 'BP', 'B')`;
+      break;
+    case "submitted":
+      statusCond = `dmp.application_status in ('A','B')`;
+      break;
+    case "approved":
+      statusCond = `dmp.application_status in ('C')`;
+      break;
+    case "reject":
+      statusCond = `dmp.application_status in ('R')`;
+      break;
+  }
+
+  if (dist && !subdiv && !block) {
+    condition = `wm.permanent_dist = ${Number(dist)}`;
+  } else if (dist && subdiv && !block) {
+    condition = `wm.permanent_subdivision = ${Number(subdiv)}`;
+  } else if (dist && subdiv && block) {
+    condition = `wm.permanent_areacode = ${Number(block)}`;
+  }
+
+  const data = await pool.query(
+    `SELECT wm.identification_number,
+    wm.name,
+    wm.mobile,
+    wm.aadhar_no,
+    wm.id,
+    wm.dob,
+    wm.status
+    from k_duaresarkar_application_mapping as dmp
+    join k_migrant_worker_master as wm on wm.id = dmp.application_id
+    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition} offset $3 limit $4`,
+    [userId, dbFlag, pagination.offset, pagination.pageLimit]
+  );
+
+  const records = await pool.query(
+    `SELECT wm.id
+    from k_duaresarkar_application_mapping as dmp
+    join k_migrant_worker_master as wm on wm.id = dmp.application_id
+    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition}`,
+    [userId, dbFlag]
+  );
+
+  const totalPages = Math.ceil(records.rowCount / pagination.pageLimit);
+  const meta = {
+    totalPages: totalPages,
+    currentPage: pagination.pageNo,
+    totalRecords: records.rowCount,
   };
 
   res.status(StatusCodes.OK).json({ data, meta });

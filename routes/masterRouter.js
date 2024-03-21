@@ -3,6 +3,7 @@ const router = Router();
 import {
   getBankSingle,
   getBanks,
+  getBlockWards,
   getBlocks,
   getCountries,
   getDistrictName,
@@ -20,6 +21,7 @@ router.get("/districts", getDistricts);
 router.get("/sub-divisions/:district", getSubDivisions);
 router.get("/blocks/:subDivCode/:blType", getBlocks);
 router.get("/wards/:blockCode", getWards);
+router.get("/blocks-wards", getBlockWards);
 router.get("/ps/:district", getPs);
 router.get("/states", getStates);
 router.get("/countries", getCountries);
