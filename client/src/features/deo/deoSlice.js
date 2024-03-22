@@ -9,7 +9,9 @@ const initialState = {
   deoAppModal: false,
   deoAppDetails: {},
   religions: [],
-  subdivs: [],
+  countries: [],
+  states: [],
+  jobs: [],
 };
 
 const deoSlice = createSlice({
@@ -47,8 +49,14 @@ const deoSlice = createSlice({
     setReligions: (state, action) => {
       state.religions = action.payload;
     },
-    setSubdivs: (state, action) => {
-      state.subdivs = action.payload;
+    setCountries: (state, action) => {
+      state.countries = action.payload;
+    },
+    setStates: (state, action) => {
+      state.states = action.payload;
+    },
+    setJobs: (state, action) => {
+      state.jobs = action.payload;
     },
   },
 });
@@ -63,6 +71,8 @@ export const {
   setDeoApp,
   unsetDeoApp,
   setReligions,
-  setSubdivs,
+  setCountries,
+  setStates,
+  setJobs,
 } = deoSlice.actions;
 export default deoSlice.reducer;

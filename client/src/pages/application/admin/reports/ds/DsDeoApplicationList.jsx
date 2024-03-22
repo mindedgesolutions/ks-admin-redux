@@ -15,7 +15,9 @@ import { dateFormat } from "../../../../../utils/functions";
 import {
   setDeoApp,
   setReligions,
-  setSubdivs,
+  setCountries,
+  setStates,
+  setJobs,
 } from "../../../../../features/deo/deoSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,7 +25,9 @@ import { useDispatch, useSelector } from "react-redux";
 const DsDeoApplicationList = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { religions, subdivs } = useSelector((store) => store.deo);
+  const { religions, countries, states, jobs } = useSelector(
+    (store) => store.deo
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState([]);
@@ -58,6 +62,21 @@ const DsDeoApplicationList = () => {
       if (religions.length === 0) {
         const religions = await customFetch.get(`/master/religions`);
         dispatch(setReligions(religions.data.data.rows));
+      }
+
+      if (countries.length === 0) {
+        const countries = await customFetch.get(`/master/countries`);
+        dispatch(setCountries(countries.data.data.rows));
+      }
+
+      if (states.length === 0) {
+        const states = await customFetch.get(`/master/states`);
+        dispatch(setStates(states.data.data.rows));
+      }
+
+      if (jobs.length === 0) {
+        const jobs = await customFetch.get(`/master/jobs`);
+        dispatch(setJobs(jobs.data.data.rows));
       }
 
       setIsLoading(false);
