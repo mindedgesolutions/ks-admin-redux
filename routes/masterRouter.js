@@ -10,6 +10,7 @@ import {
   getDistricts,
   getJobs,
   getPs,
+  getReligions,
   getSchemes,
   getStates,
   getSubDivisions,
@@ -29,6 +30,7 @@ router.get("/jobs", getJobs);
 router.get("/banks", getBanks);
 router.get("/bank-single/:ifsc", getBankSingle);
 router.get("/schemes", getSchemes);
+router.get("/religions", getReligions);
 
 router.get("/district-name/:id", getDistrictName);
 router.get("/update-bank-id", updateOldBankId);

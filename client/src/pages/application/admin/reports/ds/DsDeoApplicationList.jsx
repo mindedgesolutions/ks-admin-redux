@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import {
+  ModalViewApplication,
   PaginationContainer,
   ReportTableLoader,
   UserPageHeader,
@@ -11,10 +12,19 @@ import { splitErrors } from "../../../../../utils/showErrors";
 import { nanoid } from "nanoid";
 import { FaRegFolder } from "react-icons/fa6";
 import { dateFormat } from "../../../../../utils/functions";
+import {
+  setDeoApp,
+  setReligions,
+  setSubdivs,
+} from "../../../../../features/deo/deoSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 // Main component starts ------
 const DsDeoApplicationList = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const { religions, subdivs } = useSelector((store) => store.deo);
+
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState([]);
   const [metaData, setMetaData] = useState([]);
@@ -29,7 +39,6 @@ const DsDeoApplicationList = () => {
   const breadCrumb = <Link to={returnUrl}>Back to DEO List</Link>;
 
   const fetchReport = async () => {
-    const params = filter;
     try {
       setIsLoading(true);
       const response = await customFetch.get(`/reports/deo-applications`, {
@@ -45,6 +54,12 @@ const DsDeoApplicationList = () => {
       });
       setResult(response.data.data.rows);
       setMetaData(response.data.meta);
+
+      if (religions.length === 0) {
+        const religions = await customFetch.get(`/master/religions`);
+        dispatch(setReligions(religions.data.data.rows));
+      }
+
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -64,6 +79,11 @@ const DsDeoApplicationList = () => {
   useEffect(() => {
     fetchReport();
   }, [queryParams.get("page")]);
+
+  const showDeoModal = (id) => {
+    const app = result.find((c) => c.id === id);
+    dispatch(setDeoApp(app));
+  };
 
   return (
     <>
@@ -121,6 +141,7 @@ const DsDeoApplicationList = () => {
                                     title="View"
                                     className="me-2 fs-3 text-yellow cursor-pointer"
                                     size={16}
+                                    onClick={() => showDeoModal(row.id)}
                                   />
                                 </td>
                               </tr>
@@ -134,6 +155,8 @@ const DsDeoApplicationList = () => {
             </div>
           </div>
         </div>
+
+        <ModalViewApplication />
         <PaginationContainer pageCount={pageCount} currentPage={currentPage} />
       </UserPageWrapper>
     </>
