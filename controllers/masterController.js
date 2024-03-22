@@ -103,3 +103,11 @@ export const getDistrictName = async (req, res) => {
   const data = await pool.query(text, values);
   res.status(StatusCodes.OK).json({ data });
 };
+
+export const getReligions = async (req, res) => {
+  const data = await pool.query(
+    `select id, religion_name from master_religion where is_active=1`,
+    []
+  );
+  res.status(StatusCodes.OK).json({ data });
+};

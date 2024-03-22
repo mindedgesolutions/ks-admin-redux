@@ -350,17 +350,6 @@ export const reportNames = [
   { id: nanoid(), name: "ds migration status" },
 ];
 
-// export const homeSliderImages = [
-//   {
-//     original: { SliderOne },
-//     thumbnail: { SliderOneThumb },
-//   },
-//   {
-//     original: { SliderTwo },
-//     thumbnail: { SliderTwoThumb },
-//   },
-// ];
-
 // Add application access to local storage starts ------
 export const addAccessToLocalStorage = (access) => {
   localStorage.setItem("access", JSON.stringify(access));

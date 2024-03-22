@@ -57,4 +57,5 @@ export { default as FilterBlockDate } from "./application/admin/FilterBlockDate"
 export { default as ReportTableLoader } from "./application/admin/ReportTableLoader";
 export { default as ExportBtnGroup } from "./application/admin/ExportBtnGroup";
 export { default as ModalDeoDetails } from "./application/admin/ModalDeoDetails";
+export { default as ModalViewApplication } from "./application/admin/ModalViewApplication";
 // Admin related ends ------
