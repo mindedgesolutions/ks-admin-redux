@@ -56,6 +56,7 @@ const DsDeoApplicationList = () => {
           page: queryParams.get("page") || "",
         },
       });
+      console.log(response.data.data.rows);
       setResult(response.data.data.rows);
       setMetaData(response.data.meta);
 

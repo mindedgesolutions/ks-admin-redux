@@ -72,7 +72,7 @@ const ModalViewPersonal = ({ activeTab }) => {
         <div className="mb-3 col-md-12 m-0 p-0">
           <label className="datagrid-title m-0 p-0">Present address : </label>
           <label className="form-label m-0 p-0">
-            {deoAppDetails?.permanent_address || "NA"}
+            {deoAppDetails?.permanent_address?.toUpperCase() || "NA"}
           </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
