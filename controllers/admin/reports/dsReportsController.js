@@ -431,8 +431,7 @@ export const dsDeoApplications = async (req, res) => {
     ms.subdiv_name,
     mbm.block_mun_name,
     mvw.village_ward_name,
-    mps.ps_name,
-    kas.scheme_id
+    mps.ps_name
     from k_duaresarkar_application_mapping as dmp
     join k_migrant_worker_master as wm on wm.id = dmp.application_id
     join k_migrant_work_details wd on wd.application_id = dmp.application_id
