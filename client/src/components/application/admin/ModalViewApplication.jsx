@@ -132,7 +132,7 @@ const ModalViewApplication = () => {
               </li>
             </ul>
           </div>
-          <div className="card-body px-0">
+          <div className="card-body">
             <div className="tab-content">
               <ModalViewPersonal activeTab={activeTab} />
               <ModalViewWorksite activeTab={activeTab} />

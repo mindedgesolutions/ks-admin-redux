@@ -6,8 +6,8 @@ const ModalViewBank = ({ activeTab }) => {
 
   return (
     <div className={`tab-pane ${activeTab === "bank" ? "active show" : ""}`}>
-      <div className="row row-cards mt-1">
-        <div className="mb-3 col-md-6 m-0 p-0">
+      <div className="row row-cards m-0 p-0">
+        <div className="mb-3 col-md-12 m-0 p-0">
           <label className="datagrid-title m-0 p-0">IFSC code : </label>
           <label className="form-label m-0 p-0">
             {deoAppDetails?.ifsc_code}

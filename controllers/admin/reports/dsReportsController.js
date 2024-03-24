@@ -417,7 +417,7 @@ export const dsDeoApplications = async (req, res) => {
       statusCond = `dmp.application_status in ('P', 'BI', 'BP', 'B')`;
       break;
     case "submitted":
-      statusCond = `dmp.application_status in ('A','B')`;
+      statusCond = `dmp.application_status in ('A','BA')`;
       break;
     case "approved":
       statusCond = `dmp.application_status in ('C')`;
