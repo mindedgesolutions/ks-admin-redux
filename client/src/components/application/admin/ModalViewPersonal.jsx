@@ -41,11 +41,13 @@ const ModalViewPersonal = ({ activeTab }) => {
       <div className="row row-cards m-0 p-0">
         <div className="mb-3 col-md-6 m-0 p-0">
           <label className="datagrid-title m-0 p-0">Category : </label>
-          <label className="form-label m-0 p-0">{deoAppDetails?.caste}</label>
+          <label className="form-label m-0 p-0">
+            {deoAppDetails?.caste?.toUpperCase() || `NA`}
+          </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
           <label className="datagrid-title m-0 p-0">Religion : </label>
-          <label className="form-label m-0 p-0">{religion}</label>
+          <label className="form-label m-0 p-0">{religion || `NA`}</label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
           <label className="datagrid-title m-0 p-0">

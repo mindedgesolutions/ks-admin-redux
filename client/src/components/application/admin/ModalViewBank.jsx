@@ -47,6 +47,51 @@ const ModalViewBank = ({ activeTab }) => {
             {deoAppDetails?.sasthyasathi_no || `NA`}
           </label>
         </div>
+        <div className="mb-3 col-md-6 m-0 p-0">
+          <label className="datagrid-title m-0 p-0">Nominee name : </label>
+          <label className="form-label m-0 p-0">
+            {deoAppDetails?.nominee_name?.toUpperCase() || `NA`}
+          </label>
+        </div>
+        <div className="mb-3 col-md-6 m-0 p-0">
+          <label className="datagrid-title m-0 p-0">
+            Relationship with nominee :{" "}
+          </label>
+          <label className="form-label m-0 p-0">
+            {deoAppDetails?.nominee_relationship?.toUpperCase() || `NA`}
+          </label>
+        </div>
+        <div className="mb-3 col-md-6 m-0 p-0">
+          <label className="datagrid-title m-0 p-0">Nominee mobile : </label>
+          <label className="form-label m-0 p-0">
+            {deoAppDetails?.nominee_mobile || `NA`}
+          </label>
+        </div>
+        <div className="mb-3 col-md-6 m-0 p-0">
+          <label className="datagrid-title m-0 p-0">
+            Nominee Aadhaar no. :{" "}
+          </label>
+          <label className="form-label m-0 p-0">
+            {deoAppDetails?.nominee_aadhar || `NA`}
+          </label>
+        </div>
+        <div className="mb-3 col-md-12 m-0 p-0">
+          <label className="datagrid-title m-0 p-0">Availed schemes :</label>
+          <label className="form-label m-0 p-0">
+            {deoAppDetails?.scheme_details
+              ? deoAppDetails?.scheme_details?.map((i) => {
+                  return (
+                    <span
+                      key={nanoid()}
+                      className={`badge bg-default-lt p-2 me-2 my-1`}
+                    >
+                      {i?.toUpperCase()}
+                    </span>
+                  );
+                })
+              : `NA`}
+          </label>
+        </div>
       </div>
     </div>
   );
