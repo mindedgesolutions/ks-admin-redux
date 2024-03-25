@@ -14,6 +14,11 @@ import {
   bskApplicationStatusReport,
   bskApplicationStatusReportAll,
 } from "../controllers/admin/reports/bskReportsController.js";
+import {
+  ksApplicationStatusReport,
+  ksApplicationStatusReportAll,
+  ksOrigination,
+} from "../controllers/admin/reports/ksReportsController.js";
 
 // DS starts ------
 router.get("/ds-application-status", dsApplicationStatusReport);
@@ -30,5 +35,11 @@ router.get("/deo-applications", dsDeoApplications);
 router.get("/bsk-application-status", bskApplicationStatusReport);
 router.get("/bsk-application-status-all", bskApplicationStatusReportAll);
 // BSK ends ------
+
+// KS starts ------
+router.get("/ks-application-status", ksApplicationStatusReport);
+router.get("/ks-application-status-all", ksApplicationStatusReportAll);
+router.get("/ks-origination", ksOrigination);
+// KS ends ------
 
 export default router;
