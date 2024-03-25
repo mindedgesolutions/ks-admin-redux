@@ -10,25 +10,25 @@ const ModalViewBank = ({ activeTab }) => {
         <div className="mb-3 col-md-12 m-0 p-0">
           <label className="datagrid-title m-0 p-0">IFSC code : </label>
           <label className="form-label m-0 p-0">
-            {deoAppDetails?.ifsc_code}
+            {deoAppDetails?.ifsc_code || `NA`}
           </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
           <label className="datagrid-title m-0 p-0">Bank name : </label>
           <label className="form-label m-0 p-0">
-            {deoAppDetails?.bank_name?.toUpperCase()}
+            {deoAppDetails?.bank_name?.toUpperCase() || `NA`}
           </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
           <label className="datagrid-title m-0 p-0">Branch name : </label>
           <label className="form-label m-0 p-0">
-            {deoAppDetails?.bank_branch?.toUpperCase()}
+            {deoAppDetails?.bank_branch?.toUpperCase() || `NA`}
           </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
           <label className="datagrid-title m-0 p-0">Account no. : </label>
           <label className="form-label m-0 p-0">
-            {deoAppDetails?.bank_account}
+            {deoAppDetails?.bank_account || `NA`}
           </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
@@ -36,7 +36,7 @@ const ModalViewBank = ({ activeTab }) => {
             Ration Card / Khadya Sathi Card no. :{" "}
           </label>
           <label className="form-label m-0 p-0">
-            {deoAppDetails?.khadyasathi_no}
+            {deoAppDetails?.khadyasathi_no || `NA`}
           </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">

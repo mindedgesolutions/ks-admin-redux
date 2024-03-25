@@ -93,9 +93,9 @@ const DsDeo = () => {
   ]);
 
   const gotoDeoList = (filterDist, filterSubdiv, filterBlock, count) => {
-    const dist = districts.find(
-      (c) => c.district_code === filterDist
-    ).district_name;
+    setIsLoading(true);
+    const dist = districts.find((c) => c.district_code === filterDist)
+      .district_name;
     const subdiv = subdivs?.find(
       (c) => c.subdiv_code === filterSubdiv || Number(queryParams.get("subdiv"))
     )?.subdiv_name;
@@ -129,6 +129,7 @@ const DsDeo = () => {
         },
       })
     );
+    setIsLoading(false);
     navigate(`/admin/reports/ds/deo-list/${id}`);
   };
 

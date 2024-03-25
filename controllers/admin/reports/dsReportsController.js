@@ -171,7 +171,7 @@ export const dsApplicationStatusReportAll = async (req, res) => {
     from master_block_mun as bm
     join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
     left join (
-      select count(kwm.id) as provisional, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('C') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
+      select count(kwm.id) as provisional, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('P') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
     ) as wmp on wmp.permanent_areacode = bm.block_mun_code
     left join (
       select count(kwm.id) as docuploaded, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('A', 'BA') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
