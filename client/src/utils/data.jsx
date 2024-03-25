@@ -4,28 +4,32 @@ export const notifications = [
   {
     title: "Test title 1",
     name: "Payal Karmakar",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: true,
   },
   {
     title: "Test title 2",
     name: "Arko Banerjee",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: true,
   },
   {
     title: "Test title 3",
     name: "Jyoti Bag",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: false,
   },
   {
     title: "Test title 4",
     name: "Moumita Chatterjee",
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
+    body:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic animi odit asperiores! Perspiciatis, voluptatibus vero repudiandae sit tempora laudantium incidunt officiis animi laboriosam. Assumenda quasi nisi quidem? Natus, nisi aut.",
     date: "2023-01-12 15:30:56",
     avatar: false,
   },
@@ -348,6 +352,28 @@ export const migrationTypes = [
 export const reportNames = [
   { id: nanoid(), name: "ds application status" },
   { id: nanoid(), name: "ds migration status" },
+];
+
+export const originationTypes = [
+  { id: nanoid(), value: "A", text: "App" },
+  { id: nanoid(), value: "W", text: "Website" },
+  { id: nanoid(), value: "ALL", text: "All" },
+];
+
+export const originationNames = [
+  { id: nanoid(), value: "BSK", text: "Bangla Sahayata Kendra" },
+  { id: nanoid(), value: "DS", text: "Duare Sarkar" },
+  { id: nanoid(), value: "SD", text: "Special Drive" },
+  { id: nanoid(), value: "ALL", text: "All" },
+];
+
+export const applicationStatus = [
+  { id: nanoid(), value: "P", text: "Provisional" },
+  { id: nanoid(), value: "A", text: "Submitted" },
+  { id: nanoid(), value: "B", text: "Back for Correction/ Inprocess" },
+  { id: nanoid(), value: "R", text: "Rejected" },
+  { id: nanoid(), value: "C", text: "Approved" },
+  { id: nanoid(), value: "ALL", text: "All" },
 ];
 
 // Add application access to local storage starts ------

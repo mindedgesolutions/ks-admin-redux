@@ -1,18 +1,22 @@
+import React, { useState } from "react";
+import {
+  applicationStatus,
+  blockType,
+  originationNames,
+  originationTypes,
+} from "../../../utils/data";
+import { Form, Link, useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
-import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, useLocation, useNavigate } from "react-router-dom";
 import { getSubdivs, resetSubdiv } from "../../../features/masters/subdivSlice";
 import {
   changeBlLabel,
   getBlocks,
   resetBlock,
 } from "../../../features/masters/blockSlice";
-import { blockType } from "../../../utils/data";
-import { unsetDistricts } from "../../../features/masters/districtSlice";
-import DatePicker from "react-datepicker";
+import InputSelect from "../../InputSelect";
 
-const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
+const FilterKsOrigin = ({ resetUrl }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -22,22 +26,21 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
   const { subdivs } = useSelector((store) => store.msubdivs);
   const { blLabel, blocks } = useSelector((store) => store.mblocks);
 
-  const [filterStart, setFilterStart] = useState(startDate);
-  const [filterEnd, setFilterEnd] = useState(endDate);
-
-  // State management starts ------
-  const [loc, setLoc] = useState({
+  const [form, setForm] = useState({
     inputDist: queryParams.get("dist") || "",
     inputSubdiv: queryParams.get("subdiv") || "",
     inputBlType: queryParams.get("btype") || "",
     inputBlLabel: "",
     inputBlCode: queryParams.get("block") || "",
+    inputOrigintype: queryParams.get("otype") || "ALL",
+    inputOriginName: queryParams.get("oname") || "ALL",
+    status: queryParams.get("status") || "ALL",
   });
 
   // Change district starts ------
   const handleDistChange = (e) => {
-    setLoc({
-      ...loc,
+    setForm({
+      ...form,
       inputDist: e.target.value,
       inputSubdiv: "",
       inputBlType: "",
@@ -48,14 +51,14 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
 
   // Change sub-division starts ------
   const handleSdChange = (e) => {
-    setLoc({
-      ...loc,
+    setForm({
+      ...form,
       inputSubdiv: e.target.value,
       inputBlType: "",
       inputBlCode: "",
     });
     const payload = {
-      bltype: loc.inputBlType || null,
+      bltype: form.inputBlType || null,
       sdcode: e.target.value,
     };
     dispatch(getBlocks(payload));
@@ -63,46 +66,42 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
 
   // Change block type starts ------
   const handleBlTypeChange = (e) => {
-    setLoc({ ...loc, inputBlType: e.target.value });
+    setForm({ ...form, inputBlType: e.target.value });
     const payload = {
-      dist: loc.inputDist,
+      dist: form.inputDist,
       bltype: e.target.value,
-      sdcode: loc.inputSubdiv,
+      sdcode: form.inputSubdiv,
     };
     dispatch(changeBlLabel(payload));
     dispatch(getBlocks(payload));
   };
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // Change origination type starts ------
+  const handleOriginTypeChange = (e) => {
+    setForm({ ...form, inputOrigintype: e.target.value });
+  };
+
   // Reset all states ------
   const handleReset = () => {
-    setLoc({
-      ...loc,
+    setForm({
+      ...form,
       inputDist: "",
       inputSubdiv: "",
       inputBlType: "",
       inputBlLabel: "",
       inputBlCode: "",
+      inputOrigintype: "ALL",
+      inputOriginName: "ALL",
+      status: "ALL",
     });
-
     dispatch(resetSubdiv());
     dispatch(resetBlock());
-    setFilterStart(startDate);
-    setFilterEnd(endDate);
-    setResult([]);
-
     navigate(resetUrl);
   };
-
-  // UseEffect / on load data fetch starts ------
-  useEffect(() => {
-    loc.inputDist && dispatch(getSubdivs(loc.inputDist));
-    if (loc.inputBlType && loc.inputSubdiv) {
-      dispatch(
-        changeBlLabel({ bltype: loc.inputBlType, sdcode: loc.inputSubdiv })
-      );
-      dispatch(getBlocks({ bltype: loc.inputBlType, sdcode: loc.inputSubdiv }));
-    }
-  }, []);
 
   return (
     <div className="col-12">
@@ -121,7 +120,7 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
                   name="dist"
                   id="dist"
                   className="form-select"
-                  value={loc.inputDist}
+                  value={form.inputDist}
                   onChange={handleDistChange}
                 >
                   <option value="">- Select district -</option>
@@ -142,7 +141,7 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
                   name="subdiv"
                   id="subdiv"
                   className="form-select"
-                  value={loc.inputSubdiv}
+                  value={form.inputSubdiv}
                   onChange={handleSdChange}
                 >
                   <option value="">- Select sub-division -</option>
@@ -163,7 +162,7 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
                   name="btype"
                   id="btype"
                   className="form-select"
-                  value={loc.inputBlType}
+                  value={form.inputBlType}
                   onChange={handleBlTypeChange}
                 >
                   <option value="">- Select area type -</option>
@@ -184,9 +183,9 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
                   name="block"
                   id="block"
                   className="form-select"
-                  value={loc.inputBlCode}
+                  value={form.inputBlCode}
                   onChange={(e) =>
-                    setLoc({ ...loc, inputBlCode: e.target.value })
+                    setForm({ ...form, inputBlCode: e.target.value })
                   }
                 >
                   <option value="">
@@ -204,34 +203,60 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
                   })}
                 </select>
               </div>
-              {startDate && (
-                <div className="mb-2 col-sm-3 col-md-3">
-                  <label className="form-label">Camp date (start)</label>
-                  <DatePicker
-                    className="form-control"
-                    name="start"
-                    dateFormat={import.meta.env.VITE_DATE_FORMAT}
-                    selected={filterStart}
-                    minDate={new Date(startDate)}
-                    maxDate={filterEnd}
-                    onChange={(date) => setFilterStart(date)}
-                  />
-                </div>
-              )}
-              {endDate && (
-                <div className="mb-2 col-sm-3 col-md-3">
-                  <label className="form-label">Camp date (end)</label>
-                  <DatePicker
-                    className="form-control"
-                    name="end"
-                    dateFormat={import.meta.env.VITE_DATE_FORMAT}
-                    selected={filterEnd}
-                    minDate={filterStart}
-                    maxDate={new Date(endDate)}
-                    onChange={(date) => setFilterEnd(date)}
-                  />
-                </div>
-              )}
+              <div className="mb-2 col-sm-3 col-md-3">
+                <label htmlFor="otype" className={`form-label`}>
+                  Select origination type
+                </label>
+                <select
+                  name="otype"
+                  id="otype"
+                  className="form-select"
+                  value={form.inputOrigintype}
+                  onChange={handleOriginTypeChange}
+                >
+                  <option value="">- Select origination type -</option>
+                  {originationTypes.map((type) => {
+                    return (
+                      <option key={nanoid()} value={type.value}>
+                        {type.text}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div className="mb-2 col-sm-3 col-md-3">
+                <label htmlFor="oname" className="form-label">
+                  Select origination name
+                </label>
+                <select
+                  name="oname"
+                  id="oname"
+                  className="form-select"
+                  value={form.inputOriginName}
+                  onChange={(e) =>
+                    setForm({ ...form, inputOriginName: e.target.value })
+                  }
+                >
+                  <option value="">- Select origination name -</option>
+                  {originationNames.map((i) => {
+                    return (
+                      <option key={i.value} value={i.value}>
+                        {i.text}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div className="mb-2 col-sm-3 col-md-3">
+                <InputSelect
+                  label="Select application status"
+                  name="status"
+                  required={false}
+                  options={applicationStatus}
+                  value={form.status}
+                  handleChange={handleChange}
+                />
+              </div>
             </div>
             <div className="card-footer text-center">
               <button type="submit" className="btn btn-primary me-2">
@@ -252,4 +277,4 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
   );
 };
 
-export default FilterBlockDate;
+export default FilterKsOrigin;
