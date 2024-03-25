@@ -102,6 +102,7 @@ const FilterKsOrigin = ({ resetUrl }) => {
       inputOrigintype: "ALL",
       inputOriginName: "ALL",
       status: "ALL",
+      isWeb: false,
     });
     dispatch(resetSubdiv());
     dispatch(resetBlock());
@@ -219,7 +220,6 @@ const FilterKsOrigin = ({ resetUrl }) => {
                   value={form.inputOrigintype}
                   onChange={handleOriginTypeChange}
                 >
-                  <option value="">- Select origination type -</option>
                   {originationTypes.map((type) => {
                     return (
                       <option key={nanoid()} value={type.value}>
@@ -243,7 +243,6 @@ const FilterKsOrigin = ({ resetUrl }) => {
                       setForm({ ...form, inputOriginName: e.target.value })
                     }
                   >
-                    <option value="">- Select origination name -</option>
                     {originationNames.map((i) => {
                       return (
                         <option key={i.value} value={i.value}>
@@ -255,14 +254,24 @@ const FilterKsOrigin = ({ resetUrl }) => {
                 </div>
               )}
               <div className="mb-2 col-sm-3 col-md-3">
-                <InputSelect
-                  label="Select application status"
+                <label htmlFor="status" className="form-label">
+                  Select application status
+                </label>
+                <select
                   name="status"
-                  required={false}
-                  options={applicationStatus}
+                  id="status"
+                  className="form-select"
                   value={form.status}
-                  handleChange={handleChange}
-                />
+                  onChange={handleChange}
+                >
+                  {applicationStatus.map((i) => {
+                    return (
+                      <option key={i.value} value={i.value}>
+                        {i.text}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
             </div>
             <div className="card-footer text-center">
