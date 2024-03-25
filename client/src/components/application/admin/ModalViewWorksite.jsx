@@ -51,7 +51,7 @@ const ModalViewWorksite = ({ activeTab }) => {
             Worksite police station :{" "}
           </label>
           <label className="form-label m-0 p-0">
-            {deoAppDetails?.present_ps?.toUpperCase()}
+            {deoAppDetails?.present_ps?.toUpperCase() || `NA`}
           </label>
         </div>
         <div className="mb-3 col-md-6 m-0 p-0">
