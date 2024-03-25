@@ -35,6 +35,7 @@ const FilterKsOrigin = ({ resetUrl }) => {
     inputOrigintype: queryParams.get("otype") || "ALL",
     inputOriginName: queryParams.get("oname") || "ALL",
     status: queryParams.get("status") || "ALL",
+    isWeb: false,
   });
 
   // Change district starts ------
@@ -82,7 +83,11 @@ const FilterKsOrigin = ({ resetUrl }) => {
 
   // Change origination type starts ------
   const handleOriginTypeChange = (e) => {
-    setForm({ ...form, inputOrigintype: e.target.value });
+    setForm({
+      ...form,
+      inputOrigintype: e.target.value,
+      isWeb: e.target.value === "W",
+    });
   };
 
   // Reset all states ------
@@ -224,29 +229,31 @@ const FilterKsOrigin = ({ resetUrl }) => {
                   })}
                 </select>
               </div>
-              <div className="mb-2 col-sm-3 col-md-3">
-                <label htmlFor="oname" className="form-label">
-                  Select origination name
-                </label>
-                <select
-                  name="oname"
-                  id="oname"
-                  className="form-select"
-                  value={form.inputOriginName}
-                  onChange={(e) =>
-                    setForm({ ...form, inputOriginName: e.target.value })
-                  }
-                >
-                  <option value="">- Select origination name -</option>
-                  {originationNames.map((i) => {
-                    return (
-                      <option key={i.value} value={i.value}>
-                        {i.text}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
+              {form.isWeb && (
+                <div className="mb-2 col-sm-3 col-md-3">
+                  <label htmlFor="oname" className="form-label">
+                    Select origination name
+                  </label>
+                  <select
+                    name="oname"
+                    id="oname"
+                    className="form-select"
+                    value={form.inputOriginName}
+                    onChange={(e) =>
+                      setForm({ ...form, inputOriginName: e.target.value })
+                    }
+                  >
+                    <option value="">- Select origination name -</option>
+                    {originationNames.map((i) => {
+                      return (
+                        <option key={i.value} value={i.value}>
+                          {i.text}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
               <div className="mb-2 col-sm-3 col-md-3">
                 <InputSelect
                   label="Select application status"
