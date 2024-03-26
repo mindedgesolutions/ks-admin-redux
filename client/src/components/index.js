@@ -58,7 +58,4 @@ export { default as ReportTableLoader } from "./application/admin/ReportTableLoa
 export { default as ExportBtnGroup } from "./application/admin/ExportBtnGroup";
 export { default as ModalDeoDetails } from "./application/admin/ModalDeoDetails";
 export { default as ModalViewApplication } from "./application/admin/ModalViewApplication";
-export { default as FilterKsOrigin } from "./application/admin/FilterKsOrigin";
-export { default as KsOriginReportOne } from "./application/admin/KsOriginReportOne";
-export { default as KsOriginReportTwo } from "./application/admin/KsOriginReportTwo";
 // Admin related ends ------
