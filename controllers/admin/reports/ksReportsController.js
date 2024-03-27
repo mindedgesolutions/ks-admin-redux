@@ -4,7 +4,49 @@ import pool from "../../../db.js";
 import { StatusCodes } from "http-status-codes";
 import { formatEndDate, formatStartDate } from "../../../utils/functions.js";
 
-export const ksApplicationStatusReport = async (req, res) => {};
+export const ksApplicationStatusReport = async (req, res) => {
+  const { dist, subdiv, block, startDate, endDate } = req.query;
+
+  const start = formatStartDate(startDate);
+  const end = formatEndDate(endDate);
+
+  let data;
+
+  if (dist === process.env.ALL_DISTRICTS_CODE) {
+    data = await pool.query(
+      `select sm.district_name,
+      sm.district_code,
+      sm.subdiv_name,
+      aldt.pcnt,
+      aldt.dcucnt,
+      aldt.ucnt,
+      aldt.rcnt,
+      aldt.acnt
+      from master_district dm
+      left join (
+        select mstr.permanent_dist,
+        count(case when rm.status in ('P') then 1 else null end) as pcnt,
+        count(case when rm.status in ('A', 'BA') then 1 else null end) as dcucnt,
+        count(case when rm.status in ('B', 'BP', 'BI') then 1 else null end) as ucnt,
+        count(case when rm.status in ('R') then 1 else null end) as rcnt,
+        count(case when rm.status in ('C') then 1 else null end) as acnt
+        from (
+          select max(id) as rmid, application_id 
+          from k_migrant_worker_remark_master	krm	
+          where status in ('P','A','B','BI','BP','BA','C','R') and krm.remark_date_l 
+          between $1 and $2 group by application_id
+        ) as t
+        join k_migrant_worker_remark_master rm on rm.id = t.rmid
+        join k_migrant_worker_master mstr on mstr.id = t.application_id
+        group by mstr.permanent_dist
+      ) as aldt on aldt.permanent_dist = dm.district_code
+      where bm.is_active = 1 order by sm.district_name, sm.subdiv_name`,
+      [start, end]
+    );
+  }
+
+  res.status(StatusCodes.OK).json({ data });
+};
 
 export const ksApplicationStatusReportAll = async (req, res) => {};
 
