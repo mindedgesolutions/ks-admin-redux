@@ -38,6 +38,7 @@ export { default as DsDeo } from "./application/admin/reports/ds/DsDeo";
 export { default as DsStaticAtFive } from "./application/admin/reports/ds/DsStaticAtFive";
 export { default as KsApplicationStatus } from "./application/admin/reports/ks/KsApplicationStatus";
 export { default as KsOrigination } from "./application/admin/reports/ks/KsOrigination";
+export { default as KsOriginationDetails } from "./application/admin/reports/ks/KsOriginationDetails";
 export { default as SdStaticAtFive } from "./application/admin/reports/sd/SdStaticAtFive";
 export { default as SdTotalDigitised } from "./application/admin/reports/sd/SdTotalDigitised";
 export { default as SdDeo } from "./application/admin/reports/sd/SdDeo";

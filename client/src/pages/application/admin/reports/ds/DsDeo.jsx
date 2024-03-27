@@ -93,15 +93,19 @@ const DsDeo = () => {
   ]);
 
   const gotoDeoList = (filterDist, filterSubdiv, filterBlock, count) => {
+    setIsLoading(true);
+
+    const selectSubdiv = filterSubdiv || Number(queryParams.get("subdiv"));
+    const selectBlock = filterBlock || Number(queryParams.get("block"));
+
     const dist = districts.find(
       (c) => c.district_code === filterDist
     ).district_name;
     const subdiv = subdivs?.find(
-      (c) => c.subdiv_code === filterSubdiv || Number(queryParams.get("subdiv"))
+      (c) => c.subdiv_code === selectSubdiv
     )?.subdiv_name;
-    const block = blocks?.find(
-      (c) =>
-        c.block_mun_code === filterBlock || Number(queryParams.get("block"))
+    const block = blocks.find(
+      (c) => c.block_mun_code === selectBlock
     )?.block_mun_name;
 
     dispatch(unsetSearch());
@@ -129,6 +133,7 @@ const DsDeo = () => {
         },
       })
     );
+    setIsLoading(false);
     navigate(`/admin/reports/ds/deo-list/${id}`);
   };
 

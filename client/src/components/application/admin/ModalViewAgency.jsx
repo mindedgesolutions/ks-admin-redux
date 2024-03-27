@@ -11,8 +11,8 @@ const ModalViewAgency = ({ activeTab }) => {
 
   return (
     <div className={`tab-pane ${activeTab === "agency" ? "active show" : ""}`}>
-      <div className="row row-cards mt-1">
-        <div className="mb-3 col-md-6 m-0 p-0">
+      <div className="row row-cards m-0 p-0">
+        <div className="mb-3 col-md-12 m-0 p-0">
           <label className="datagrid-title m-0 p-0">Engaged as : </label>
           <label className="form-label m-0 p-0">{engagedAs}</label>
         </div>

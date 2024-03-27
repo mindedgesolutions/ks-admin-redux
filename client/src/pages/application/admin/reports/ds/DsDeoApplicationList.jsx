@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  Form,
+  Link,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import {
   ModalViewApplication,
   PaginationContainer,
@@ -20,11 +26,14 @@ import {
   setJobs,
 } from "../../../../../features/deo/deoSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { IoIosSearch } from "react-icons/io";
+import { IoReloadSharp } from "react-icons/io5";
 
 // Main component starts ------
 const DsDeoApplicationList = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { religions, countries, states, jobs } = useSelector(
     (store) => store.deo
   );
@@ -33,8 +42,9 @@ const DsDeoApplicationList = () => {
   const [result, setResult] = useState([]);
   const [metaData, setMetaData] = useState([]);
   const filter = JSON.parse(localStorage.getItem("filter"));
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
   const queryParams = new URLSearchParams(search);
+  const [searchString, setSearchString] = useState(queryParams.get("s") || "");
 
   const idLabel = Number(id) === 7 ? `VII` : `VIII`;
   const page = filter.page ? `?page=${Number(filter.page)}` : ``;
@@ -54,9 +64,9 @@ const DsDeoApplicationList = () => {
           userId: filter.userId,
           version: filter.version,
           page: queryParams.get("page") || "",
+          quickSearch: queryParams.get("s") || "",
         },
       });
-      console.log(response.data.data.rows);
       setResult(response.data.data.rows);
       setMetaData(response.data.meta);
 
@@ -88,6 +98,11 @@ const DsDeoApplicationList = () => {
     }
   };
 
+  const removeSearch = () => {
+    setSearchString("");
+    navigate(pathname);
+  };
+
   const pageCount = metaData?.totalPages;
   const currentPage = metaData?.currentPage;
 
@@ -98,7 +113,7 @@ const DsDeoApplicationList = () => {
 
   useEffect(() => {
     fetchReport();
-  }, [queryParams.get("page")]);
+  }, [queryParams.get("page"), queryParams.get("s")]);
 
   const showDeoModal = (id) => {
     const app = result.find((c) => c.id === id);
@@ -119,6 +134,39 @@ const DsDeoApplicationList = () => {
               Total{" "}
               <span className="text-warning mx-1">{metaData.totalRecords}</span>{" "}
               applications found
+              <div className="col-auto ms-auto d-print-none">
+                <Form method="GET">
+                  <div className="btn-list">
+                    <span className="d-none d-sm-inline">
+                      <div className="input-icon">
+                        <input
+                          type="text"
+                          name="s"
+                          value={searchString}
+                          className="form-control"
+                          placeholder="Search by name..."
+                          onChange={(e) => setSearchString(e.target.value)}
+                        />
+                      </div>
+                    </span>
+                    <span className="d-none d-sm-inline">
+                      <button
+                        type="submit"
+                        className="btn btn-primary d-none d-sm-inline-block me-2"
+                      >
+                        <IoIosSearch className="fs-3" />
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-default d-none d-sm-inline-block"
+                        onClick={removeSearch}
+                      >
+                        <IoReloadSharp className="fs-3" />
+                      </button>
+                    </span>
+                  </div>
+                </Form>
+              </div>
             </div>
 
             <div className="card-body p-2">

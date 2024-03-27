@@ -177,7 +177,7 @@ const FilterBlockDate = ({ resetUrl, startDate, endDate, setResult }) => {
                 </select>
               </div>
               <div className="mb-2 col-sm-3 col-md-3">
-                <label htmlFor="block" className="form-label required">
+                <label htmlFor="block" className="form-label">
                   {blLabel || "Block"}
                 </label>
                 <select

@@ -5,6 +5,7 @@ const initialState = {
   title: null,
   reportData: [],
   reportAllData: [],
+  reportDataMultiple: {},
   search: {},
   deoFilter: {},
   deoLabels: {},
@@ -21,6 +22,15 @@ const reportSlice = createSlice({
     setReportData: (state, action) => {
       state.reportData = action.payload;
     },
+    unsetReportData: (state) => {
+      state.reportData = [];
+    },
+    setReportDataMultiple: (state, action) => {
+      state.reportDataMultiple = action.payload;
+    },
+    unsetReportDataMultiple: (state) => {
+      state.reportDataMultiple = {};
+    },
     setReportAllData: (state, action) => {
       state.reportAllData = action.payload;
     },
@@ -32,7 +42,10 @@ const reportSlice = createSlice({
       localStorage.setItem("filter", state.deoFilter);
       localStorage.setItem("labels", state.deoLabels);
     },
-    unsetSearch: () => {
+    unsetSearch: (state) => {
+      state.search = {};
+      state.deoFilter = {};
+      state.deoLabels = {};
       localStorage.removeItem("search");
       localStorage.removeItem("filter");
       localStorage.removeItem("labels");
@@ -43,6 +56,9 @@ const reportSlice = createSlice({
 export const {
   setReport,
   setReportData,
+  unsetReportData,
+  setReportDataMultiple,
+  unsetReportDataMultiple,
   setReportAllData,
   setSearch,
   unsetSearch,
