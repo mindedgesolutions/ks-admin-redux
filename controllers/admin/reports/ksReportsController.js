@@ -44,6 +44,7 @@ export const ksApplicationStatusReport = async (req, res) => {
       [start, end]
     );
   }
+  console.log(data);
 
   res.status(StatusCodes.OK).json({ data });
 };

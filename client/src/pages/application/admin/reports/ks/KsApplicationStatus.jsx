@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   ExportBtnGroup,
   FilterBlockDate,
+  ReportTableLoader,
   UserPageHeader,
   UserPageWrapper,
 } from "../../../../../components";
@@ -202,7 +203,6 @@ const KsApplicationStatus = () => {
                                 ?.toUpperCase();
                             }
                             // Set column 2 and 3 values end ------
-
                             return (
                               <tr key={nanoid()}>
                                 <td>{index + 1}.</td>
