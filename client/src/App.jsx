@@ -13,6 +13,7 @@ import { loader as viewLoader } from "./pages/application/user/application/OverV
 
 import { loader as adminLayout } from "./pages/application/admin/AdminLayout";
 import { loader as deoListLoader } from "./pages/application/admin/reports/ds/DsDeoList";
+import { loader as ksOriginDetails } from "./pages/application/admin/reports/ks/KsOriginationDetails";
 
 // Actions ------
 import { action as otpLogin } from "./components/website/LoginForm";
@@ -132,6 +133,11 @@ const router = createBrowserRouter([
             element: <Ks.BskApplicationStatus />,
           },
           { path: "ks/origination", element: <Ks.KsOrigination /> },
+          {
+            path: "ks/origination-details",
+            element: <Ks.KsOriginationDetails />,
+            loader: ksOriginDetails(store),
+          },
           {
             path: "ks/application-status",
             element: <Ks.KsApplicationStatus />,

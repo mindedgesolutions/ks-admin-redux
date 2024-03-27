@@ -18,6 +18,7 @@ import {
   ksApplicationStatusReport,
   ksApplicationStatusReportAll,
   ksOrigination,
+  ksOriginationDetails,
 } from "../controllers/admin/reports/ksReportsController.js";
 
 // DS starts ------
@@ -40,6 +41,7 @@ router.get("/bsk-application-status-all", bskApplicationStatusReportAll);
 router.get("/ks-application-status", ksApplicationStatusReport);
 router.get("/ks-application-status-all", ksApplicationStatusReportAll);
 router.get("/ks-origination", ksOrigination);
+router.get("/ks-origination-details", ksOriginationDetails);
 // KS ends ------
 
 export default router;
