@@ -14,37 +14,125 @@ export const ksApplicationStatusReport = async (req, res) => {
 
   if (dist === process.env.ALL_DISTRICTS_CODE) {
     data = await pool.query(
-      `select sm.district_name,
-      sm.district_code,
-      sm.subdiv_name,
-      aldt.pcnt,
-      aldt.dcucnt,
-      aldt.ucnt,
-      aldt.rcnt,
-      aldt.acnt
+      `SELECT dm.district_name,
+      dm.district_code,
+      wmp.provisional,
+      wmd.docuploaded,
+      wmu.underprocess,
+      wmr.rejected,
+      wms.permanent
       from master_district dm
       left join (
-        select mstr.permanent_dist,
-        count(case when rm.status in ('P') then 1 else null end) as pcnt,
-        count(case when rm.status in ('A', 'BA') then 1 else null end) as dcucnt,
-        count(case when rm.status in ('B', 'BP', 'BI') then 1 else null end) as ucnt,
-        count(case when rm.status in ('R') then 1 else null end) as rcnt,
-        count(case when rm.status in ('C') then 1 else null end) as acnt
-        from (
-          select max(id) as rmid, application_id 
-          from k_migrant_worker_remark_master	krm	
-          where status in ('P','A','B','BI','BP','BA','C','R') and krm.remark_date_l 
-          between $1 and $2 group by application_id
-        ) as t
-        join k_migrant_worker_remark_master rm on rm.id = t.rmid
-        join k_migrant_worker_master mstr on mstr.id = t.application_id
-        group by mstr.permanent_dist
-      ) as aldt on aldt.permanent_dist = dm.district_code
-      where bm.is_active = 1 order by sm.district_name, sm.subdiv_name`,
+        select count(krm.id) AS provisional, kwm.permanent_dist from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('P') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_dist
+      ) AS wmp ON wmp.permanent_dist = dm.district_code
+      left join (
+        select count(krm.id) AS docuploaded, kwm.permanent_dist from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('A', 'BA') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_dist
+      ) AS wmd ON wmd.permanent_dist = dm.district_code
+      left join (
+        select count(krm.id) AS underprocess, kwm.permanent_dist from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('B', 'BP', 'BI') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_dist
+      ) AS wmu ON wmu.permanent_dist = dm.district_code
+      left join (
+        select count(krm.id) AS rejected, kwm.permanent_dist from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('R') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_dist
+      ) AS wmr ON wmr.permanent_dist = dm.district_code
+      left join (
+        select count(krm.id) AS permanent, kwm.permanent_dist from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('C') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_dist
+      ) AS wms ON wms.permanent_dist = dm.district_code
+      where dm.is_active=1 AND dm.state_code=1 order by dm.district_name`,
       [start, end]
     );
+  } else {
+    if (dist && !subdiv) {
+      data = await pool.query(
+        `SELECT sm.district_name,
+        sm.subdiv_code,
+        sm.subdiv_name,
+        wmp.provisional,
+        wmd.docuploaded,
+        wmu.underprocess,
+        wmr.rejected,
+        wms.permanent
+        FROM master_subdivision sm
+        LEFT JOIN (
+          select count(krm.id) AS provisional, kwm.permanent_subdivision from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('P') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_subdivision
+        ) AS wmp ON wmp.permanent_subdivision = sm.subdiv_code
+        LEFT JOIN (
+          select count(krm.id) AS docuploaded, kwm.permanent_subdivision from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('A', 'BA') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_subdivision
+        ) AS wmd ON wmd.permanent_subdivision = sm.subdiv_code
+        LEFT JOIN (
+          select count(krm.id) AS underprocess, kwm.permanent_subdivision from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('B', 'BP', 'BI') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_subdivision
+        ) AS wmu ON wmu.permanent_subdivision = sm.subdiv_code
+        LEFT JOIN (
+          select count(krm.id) AS rejected, kwm.permanent_subdivision from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('R') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_subdivision
+        ) AS wmr ON wmr.permanent_subdivision = sm.subdiv_code
+        LEFT JOIN (
+          select count(krm.id) AS permanent, kwm.permanent_subdivision from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('C') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_subdivision
+        ) AS wms ON wms.permanent_subdivision = sm.subdiv_code
+        WHERE sm.is_active=1 AND sm.district_code=$3 ORDER BY sm.subdiv_name`,
+        [start, end, Number(dist)]
+      );
+    } else if (subdiv && !block) {
+      data = await pool.query(
+        `SELECT sm.subdiv_name,
+        bm.block_mun_code,
+        bm.block_mun_name,
+        wmp.provisional,
+        wmd.docuploaded,
+        wmu.underprocess,
+        wmr.rejected,
+        wms.permanent
+        FROM master_block_mun bm
+        JOIN master_subdivision sm ON sm.subdiv_code=bm.subdiv_code
+        left join (
+          select count(krm.id) AS provisional, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('P') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+        ) AS wmp ON wmp.permanent_areacode = bm.block_mun_code
+        left join (
+          select count(krm.id) AS docuploaded, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('A', 'BA') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+        ) AS wmd ON wmd.permanent_areacode = bm.block_mun_code
+        left join (
+          select count(krm.id) AS underprocess, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('B', 'BP', 'BI') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+        ) AS wmu ON wmu.permanent_areacode = bm.block_mun_code
+        left join (
+          select count(krm.id) AS rejected, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('R') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+        ) AS wmr ON wmr.permanent_areacode = bm.block_mun_code
+        left join (
+          select count(krm.id) AS permanent, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('C') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+        ) AS wms ON wms.permanent_areacode = bm.block_mun_code
+        where sm.is_active=1 and bm.is_active=1 and sm.subdiv_code=$3 order by bm.block_mun_name`,
+        [start, end, Number(subdiv)]
+      );
+    } else if (block) {
+      data = await pool.query(
+        `select vm.village_ward_name,
+        vm.village_ward_code,
+        vm.block_mun_code,
+        bm.block_mun_name,
+        wmp.provisional,
+        wmd.docuploaded,
+        wmu.underprocess,
+        wmr.rejected,
+        wms.permanent
+        from master_village_ward as vm
+        join master_block_mun as bm on bm.block_mun_code=vm.block_mun_code
+        left join (
+          select count(krm.id) AS provisional, kwm.permanent_villward from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('P') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_villward
+        ) as wmp on wmp.permanent_villward = vm.village_ward_code
+        left join (
+          select count(krm.id) AS docuploaded, kwm.permanent_villward from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('A', 'BA') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_villward
+        ) as wmd on wmd.permanent_villward = vm.village_ward_code
+        left join (
+          select count(krm.id) AS underprocess, kwm.permanent_villward from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('B', 'BP', 'BI') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_villward
+        ) as wmu on wmu.permanent_villward = vm.village_ward_code
+        left join (
+          select count(krm.id) AS rejected, kwm.permanent_villward from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('R') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_villward
+        ) as wmr on wmr.permanent_villward = vm.village_ward_code
+        left join (
+          select count(krm.id) AS permanent, kwm.permanent_villward from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('C') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_villward
+        ) as wms on wms.permanent_villward = vm.village_ward_code
+        where vm.is_active=1 and bm.is_active=1 and bm.block_mun_code=$3 order by vm.village_ward_name`,
+        [start, end, Number(block)]
+      );
+    }
   }
-  console.log(data);
 
   res.status(StatusCodes.OK).json({ data });
 };
