@@ -112,12 +112,12 @@ export const reports = [
     id: 5,
     title: "Special Drive Reports",
     children: [
-      {
-        title: "Static cumulative report at 5pm - (Annexure II)",
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
-        url: "/admin/reports/sd/static",
-      },
+      // {
+      //   title: "Static cumulative report at 5pm - (Annexure II)",
+      //   description:
+      //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi unde ratione numquam",
+      //   url: "/admin/reports/sd/static",
+      // },
       {
         title: "Special Drive : Total Digitised",
         description:

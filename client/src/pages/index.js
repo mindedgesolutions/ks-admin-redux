@@ -42,6 +42,7 @@ export { default as KsOriginationDetails } from "./application/admin/reports/ks/
 export { default as SdStaticAtFive } from "./application/admin/reports/sd/SdStaticAtFive";
 export { default as SdTotalDigitised } from "./application/admin/reports/sd/SdTotalDigitised";
 export { default as SdDeo } from "./application/admin/reports/sd/SdDeo";
+export { default as SdDeoList } from "./application/admin/reports/sd/SdDeoList";
 export { default as AnalysisSocialCategory } from "./application/admin/reports/analysis/AnalysisSocialCategory";
 export { default as AnalysisReligion } from "./application/admin/reports/analysis/AnalysisReligion";
 export { default as AnalysisGender } from "./application/admin/reports/analysis/AnalysisGender";

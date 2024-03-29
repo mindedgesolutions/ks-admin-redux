@@ -142,9 +142,10 @@ const router = createBrowserRouter([
             path: "ks/application-status",
             element: <Ks.KsApplicationStatus />,
           },
-          { path: "sd/static", element: <Ks.SdStaticAtFive /> },
+          // { path: "sd/static", element: <Ks.SdStaticAtFive /> },
           { path: "sd/digitised", element: <Ks.SdTotalDigitised /> },
           { path: "sd/deo", element: <Ks.SdDeo /> },
+          { path: "sd/deo-list", element: <Ks.SdDeoList /> },
           {
             path: "analysis/social-category",
             element: <Ks.AnalysisSocialCategory />,

@@ -4,6 +4,7 @@ import pool from "../../../db.js";
 import { StatusCodes } from "http-status-codes";
 import { formatEndDate, formatStartDate } from "../../../utils/functions.js";
 
+// KS Application report (WITH FILTERS) starts ------
 export const ksApplicationStatusReport = async (req, res) => {
   const { dist, subdiv, block, startDate, endDate } = req.query;
 
@@ -136,9 +137,52 @@ export const ksApplicationStatusReport = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data });
 };
+// KS Application report (WITH FILTERS) ends ------
 
-export const ksApplicationStatusReportAll = async (req, res) => {};
+// KS Application report (ALL 480 WARDS) starts ------
+export const ksApplicationStatusReportAll = async (req, res) => {
+  const { dist, subdiv, block, startDate, endDate } = req.query;
 
+  const start = formatStartDate(startDate);
+  const end = formatEndDate(endDate);
+
+  let data;
+
+  data = await pool.query(
+    `select sm.subdiv_name,
+    bm.block_mun_code,
+    bm.block_mun_name,
+    wmp.provisional,
+    wmd.docuploaded,
+    wmu.underprocess,
+    wmr.rejected,
+    wms.permanent
+    from master_block_mun as bm
+    join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
+    left join (
+      select count(krm.id) AS provisional, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('P') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+    ) as wmp on wmp.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(krm.id) AS docuploaded, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('A', 'BA') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+    ) as wmd on wmd.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(krm.id) AS underprocess, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('B', 'BP', 'BI') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+    ) as wmu on wmu.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(krm.id) AS rejected, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('R') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+    ) as wmr on wmr.permanent_areacode = bm.block_mun_code
+    left join (
+      select count(krm.id) AS permanent, kwm.permanent_areacode from k_migrant_worker_master kwm join k_migrant_worker_remark_master krm on kwm.id=krm.application_id where kwm.status is not null and kwm.status != 'I' and krm.status in ('C') and krm.remark_date_l between $1 AND $2 and kwm.is_active=1 group by kwm.permanent_areacode
+    ) as wms on wms.permanent_areacode = bm.block_mun_code
+    where sm.is_active=1 and bm.is_active=1 order by bm.block_mun_name`,
+    [start, end]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
+// Duare Sarkar (DS) Application report (ALL 480 WARDS) ends ------
+
+// KS Origination report (ALL 480 WARDS) starts ------
 export const ksOrigination = async (req, res) => {
   const { dist, subdiv, block } = req.query;
 
@@ -301,3 +345,4 @@ export const ksOriginationDetails = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data });
 };
+// KS Origination report (ALL 480 WARDS) ends ------
