@@ -60,7 +60,7 @@ const SdDeo = () => {
     if (queryParams.get("dist")) {
       setIsLoading(true);
       try {
-        const response = await customFetch.get(`/reports/deo-count`, {
+        const response = await customFetch.get(`/reports/sd-deo-count`, {
           params: {
             dist: queryParams.get("dist"),
             subdiv: queryParams.get("subdiv") || "",

@@ -21,6 +21,10 @@ import {
   ksOriginationDetails,
 } from "../controllers/admin/reports/ksReportsController.js";
 import {
+  sdDeoApplications,
+  sdDeoCount,
+  sdDeoEntries,
+  sdDeoList,
   sdTotalDigitised,
   sdTotalDigitisedAll,
 } from "../controllers/admin/reports/sdReportsController.js";
@@ -51,6 +55,10 @@ router.get("/ks-origination-details", ksOriginationDetails);
 // SD starts ------
 router.get("/sd-total-digitised", sdTotalDigitised);
 router.get("/sd-total-digitised-all", sdTotalDigitisedAll);
+router.get("/sd-deo-count", sdDeoCount);
+router.get("/sd-deo-list", sdDeoList);
+router.get("/sd-deo-entries", sdDeoEntries);
+router.get("/sd-deo-applications", sdDeoApplications);
 // SD ends ------
 
 export default router;
