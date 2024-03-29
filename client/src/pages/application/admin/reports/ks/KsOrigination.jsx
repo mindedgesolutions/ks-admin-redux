@@ -6,11 +6,16 @@ import {
   UserPageHeader,
   UserPageWrapper,
 } from "../../../../../components";
-import { Link, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import customFetch from "../../../../../utils/customFetch";
 import { splitErrors } from "../../../../../utils/showErrors";
-import { setReportData } from "../../../../../features/reports/reportSlice";
+import {
+  setReportData,
+  setSearch,
+  unsetReportData,
+  unsetSearch,
+} from "../../../../../features/reports/reportSlice";
 import { nanoid } from "nanoid";
 import { FaRegFolder } from "react-icons/fa6";
 
@@ -26,9 +31,14 @@ const KsOrigination = () => {
 
   const { search } = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(search);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState([]);
+
+  const { districts } = useSelector((store) => store.districts);
+  const { subdivs } = useSelector((store) => store.msubdivs);
+  const { blocks } = useSelector((store) => store.mblocks);
 
   // Set column labels start ------
   let colTwo = `DISTRICT`,
@@ -88,6 +98,46 @@ const KsOrigination = () => {
     queryParams.get("btype"),
     queryParams.get("block"),
   ]);
+
+  const gotoDetails = (filterDist, filterSubdiv, filterBlock) => {
+    const selectSubdiv = filterSubdiv || Number(queryParams.get("subdiv"));
+    const selectBlock = filterBlock || Number(queryParams.get("block"));
+
+    const dist = districts.find(
+      (c) => c.district_code === filterDist
+    ).district_name;
+    const subdiv = subdivs?.find(
+      (c) => c.subdiv_code === selectSubdiv
+    )?.subdiv_name;
+    const block = blocks?.find(
+      (c) => c.block_mun_code === selectBlock
+    )?.block_mun_name;
+
+    dispatch(unsetSearch());
+    dispatch(unsetReportData());
+
+    dispatch(
+      setSearch({
+        search: {
+          dist: queryParams.get("dist"),
+          subdiv: queryParams.get("subdiv") || null,
+          btype: queryParams.get("btype") || null,
+          block: queryParams.get("block") || null,
+        },
+        deoFilter: {
+          filterDist: filterDist,
+          filterSubdiv: filterSubdiv || "",
+          filterBlock: filterBlock || "",
+        },
+        deoLabels: {
+          dist: dist,
+          subdiv: subdiv || null,
+          block: block || null,
+        },
+      })
+    );
+    navigate(`/admin/reports/ks/origination-details`);
+  };
 
   return (
     <>
@@ -179,6 +229,13 @@ const KsOrigination = () => {
                                     title="View"
                                     className="me-2 fs-3 text-yellow cursor-pointer"
                                     size={16}
+                                    onClick={() =>
+                                      gotoDetails(
+                                        row?.district_code,
+                                        row?.subdiv_code,
+                                        row?.block_mun_code
+                                      )
+                                    }
                                   />
                                 </td>
                               </tr>

@@ -18,7 +18,12 @@ import {
   ksApplicationStatusReport,
   ksApplicationStatusReportAll,
   ksOrigination,
+  ksOriginationDetails,
 } from "../controllers/admin/reports/ksReportsController.js";
+import {
+  sdTotalDigitised,
+  sdTotalDigitisedAll,
+} from "../controllers/admin/reports/sdReportsController.js";
 
 // DS starts ------
 router.get("/ds-application-status", dsApplicationStatusReport);
@@ -40,6 +45,12 @@ router.get("/bsk-application-status-all", bskApplicationStatusReportAll);
 router.get("/ks-application-status", ksApplicationStatusReport);
 router.get("/ks-application-status-all", ksApplicationStatusReportAll);
 router.get("/ks-origination", ksOrigination);
+router.get("/ks-origination-details", ksOriginationDetails);
 // KS ends ------
+
+// SD starts ------
+router.get("/sd-total-digitised", sdTotalDigitised);
+router.get("/sd-total-digitised-all", sdTotalDigitisedAll);
+// SD ends ------
 
 export default router;

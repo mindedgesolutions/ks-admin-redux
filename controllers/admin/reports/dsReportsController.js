@@ -171,7 +171,7 @@ export const dsApplicationStatusReportAll = async (req, res) => {
     from master_block_mun as bm
     join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
     left join (
-      select count(kwm.id) as provisional, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('P') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
+      select count(kwm.id) as provisional, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('C') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
     ) as wmp on wmp.permanent_areacode = bm.block_mun_code
     left join (
       select count(kwm.id) as docuploaded, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('A', 'BA') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
@@ -372,11 +372,11 @@ export const dsDeoEntries = async (req, res) => {
   let condition;
 
   if (dist && !subdiv && !block) {
-    condition = `wm.permanent_dist = ${Number(dist)}`;
+    condition = `district = ${Number(dist)}`;
   } else if (dist && subdiv && !block) {
-    condition = `wm.permanent_subdivision = ${Number(subdiv)}`;
+    condition = `subdivision = ${Number(subdiv)}`;
   } else if (dist && subdiv && block) {
-    condition = `wm.permanent_areacode = ${Number(block)}`;
+    condition = `block_mun = ${Number(block)}`;
   }
 
   const data = await pool.query(
@@ -385,10 +385,9 @@ export const dsDeoEntries = async (req, res) => {
     count(case when dmp.application_status in ('C') then 1 else null end) approved,
     count(case when dmp.application_status in ('R') then 1 else null end) reject,
     count(case when dmp.application_status in ('A','BA') then 1 else null end) submitted,
-    dmp.created_by
+    created_by
     from k_duaresarkar_application_mapping dmp 
-    join k_migrant_worker_master wm on wm.id = dmp.application_id
-    where dmp.flag=$1 and dmp.is_active=1 and dmp.service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition} group by dmp.created_by`,
+    where flag=$1 and service_provided='Y' and application_status is not null and application_status!='I' and ${condition} group by created_by`,
     [dbFlag]
   );
 
@@ -396,16 +395,7 @@ export const dsDeoEntries = async (req, res) => {
 };
 
 export const dsDeoApplications = async (req, res) => {
-  const {
-    block,
-    dist,
-    subdiv,
-    status,
-    userId,
-    version,
-    page,
-    quickSearch,
-  } = req.query;
+  const { block, dist, subdiv, status, userId, version, page } = req.query;
 
   const pagination = paginationLogic(page, null);
   const dbFlag = Number(version) === 7 ? `DS-SEP2023` : `DS-DEC2023`;
@@ -417,7 +407,7 @@ export const dsDeoApplications = async (req, res) => {
       statusCond = `dmp.application_status in ('P', 'BI', 'BP', 'B')`;
       break;
     case "submitted":
-      statusCond = `dmp.application_status in ('A','BA')`;
+      statusCond = `dmp.application_status in ('A','B')`;
       break;
     case "approved":
       statusCond = `dmp.application_status in ('C')`;
@@ -435,13 +425,6 @@ export const dsDeoApplications = async (req, res) => {
     condition = `wm.permanent_areacode = ${Number(block)}`;
   }
 
-  // const search = quickSearch
-  //   ? ` and wm.name ilike '%${quickSearch}%' or wm.mobile::text ilike '%${Number(
-  //       quickSearch
-  //     )}%' or wm.identification_number ilike '%${quickSearch}%'`
-  //   : ``;
-  const search = quickSearch ? ` and wm.name ilike '%${quickSearch}%'` : ``;
-
   const data = await pool.query(
     `SELECT wm.*,
     wd.*,
@@ -449,44 +432,23 @@ export const dsDeoApplications = async (req, res) => {
     mbm.block_mun_name,
     mvw.village_ward_name,
     mps.ps_name,
-    json_agg(
-      json_build_object(
-        'scheme_id', kas.scheme_id,
-        'scheme_name', json_build_object(
-          'scheme_name', msc.schemes_name
-        )
-      )
-    ) filter (where kas.scheme_id is not null and kas.member_id is null) as scheme_details,
-    json_agg(
-      json_build_object(
-        'member_name', mfd.member_name,
-        'member_gender', mfd.member_gender,
-        'member_age', mfd.member_age,
-        'member_aadhar_no', mfd.member_aadhar_no,
-        'member_relationship', mfd.member_relationship
-      )
-    ) as family_details,
-    mwn.*
-    from k_duaresarkar_application_mapping dmp
-    left join k_migrant_worker_master wm on wm.id = dmp.application_id
-    left join k_migrant_work_details wd on wd.application_id = dmp.application_id
-    left join master_subdivision ms on wm.permanent_subdivision = ms.subdiv_code
-    left join master_block_mun mbm on wm.permanent_areacode = mbm.block_mun_code
-    left join master_village_ward mvw on wm.permanent_villward = mvw.village_ward_code
-    left join master_policestation mps on wm.permanent_ps = mps.ps_code 
-    left join k_migrant_worker_nominees mwn on wm.id = mwn.application_id 
-    left join k_availed_schemes kas on wm.id = kas.application_id
-    left join master_schemes msc on kas.scheme_id = msc.id
-    left join k_migrant_family_info mfd on wm.id = mfd.application_id
-    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and dmp.service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition} ${search} group by wm.id, wd.id, ms.subdiv_name, mbm.block_mun_name, mvw.village_ward_name, mps.ps_name, mwn.id offset $3 limit $4`,
+    kas.scheme_id
+    from k_duaresarkar_application_mapping as dmp
+    join k_migrant_worker_master as wm on wm.id = dmp.application_id
+    join k_migrant_work_details wd on wd.application_id = dmp.application_id
+    join master_subdivision ms on wm.permanent_subdivision = ms.subdiv_code
+    join master_block_mun mbm on wm.permanent_areacode = mbm.block_mun_code
+    join master_village_ward mvw on wm.permanent_villward = mvw.village_ward_code
+    join master_policestation mps on wm.permanent_ps = mps.ps_code 
+    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition} offset $3 limit $4`,
     [userId, dbFlag, pagination.offset, pagination.pageLimit]
   );
 
   const records = await pool.query(
-    `SELECT dmp.id
+    `SELECT wm.id
     from k_duaresarkar_application_mapping as dmp
-    join k_migrant_worker_master wm on wm.id = dmp.application_id
-    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and dmp.service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition} ${search}`,
+    join k_migrant_worker_master as wm on wm.id = dmp.application_id
+    where ${statusCond} and dmp.created_by=$1 and dmp.flag=$2 and dmp.is_active=1 and service_provided='Y' and dmp.application_status is not null and dmp.application_status!='I' and ${condition}`,
     [userId, dbFlag]
   );
 
