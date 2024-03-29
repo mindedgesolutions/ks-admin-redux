@@ -171,7 +171,7 @@ export const dsApplicationStatusReportAll = async (req, res) => {
     from master_block_mun as bm
     join master_subdivision as sm on sm.subdiv_code=bm.subdiv_code
     left join (
-      select count(kwm.id) as provisional, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('C') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
+      select count(kwm.id) as provisional, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('P') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
     ) as wmp on wmp.permanent_areacode = bm.block_mun_code
     left join (
       select count(kwm.id) as docuploaded, kwm.permanent_areacode from k_migrant_worker_master kwm JOIN k_duaresarkar_application_mapping kdm ON kwm.id=kdm.application_id WHERE kwm.status IS NOT NULL and kwm.status in ('A', 'BA') AND kdm.created_date between $2 AND $3 AND kwm.flag=$4 AND kdm.is_active=$1 AND kdm.service_provided='Y' group by kwm.permanent_areacode
@@ -432,7 +432,27 @@ export const dsDeoApplications = async (req, res) => {
     mbm.block_mun_name,
     mvw.village_ward_name,
     mps.ps_name,
-    kas.scheme_id
+    (
+      select json_agg(scheme_id) from k_availed_schemes kas where kas.application_id = wm.id and kas.member_id IS NULL
+    ) AS schemes,
+    (
+      select json_agg(family_details) from 
+      (
+        select * from k_migrant_family_info kmf where kmf.application_id = wm.id
+      ) as family_details
+    ) as family_details,
+    (
+      select json_agg(
+        json_build_object(
+          'member_id', kmf.id,
+          'availed_schemes', (
+            select json_agg(scheme_id) from k_availed_schemes kas where kas.application_id = wm.id and kas.member_id = kmf.id
+          )
+        )
+      )
+      from k_migrant_family_info kmf 
+      where kmf.application_id = wm.id
+    ) as family_details
     from k_duaresarkar_application_mapping as dmp
     join k_migrant_worker_master as wm on wm.id = dmp.application_id
     join k_migrant_work_details wd on wd.application_id = dmp.application_id

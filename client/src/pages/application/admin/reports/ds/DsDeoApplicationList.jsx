@@ -97,6 +97,7 @@ const DsDeoApplicationList = () => {
       return error;
     }
   };
+  console.log(result);
 
   const removeSearch = () => {
     setSearchString("");

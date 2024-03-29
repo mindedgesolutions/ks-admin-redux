@@ -97,3 +97,28 @@ export const sdTotalDigitisedAll = async (req, res) => {
   res.status(StatusCodes.OK).json({ data });
 };
 // SD Digitised report (ALL 480 WARDS) ends ------
+
+export const sdDeoCount = async (req, res) => {
+  const { dist, subdiv, block } = req.query;
+
+  let data;
+  if (dist === process.env.ALL_DISTRICTS_CODE) {
+    data = await pool.query(
+      `SELECT dm.district_name,
+      dm.district_code,
+      deo.deocount
+      from master_district dm
+      LEFT JOIN (
+        SELECT count(dui.id) AS deocount, dui.allotted_district FROM k_duaresarkar_user_info dui GROUP BY dui.allotted_district
+      ) AS deo ON deo.allotted_district = dm.district_code
+      WHERE dm.is_active=$1 AND dm.state_code=1 ORDER BY dm.district_name`,
+      [1]
+    );
+  }
+};
+
+export const sdDeoList = async (req, res) => {};
+
+export const sdDeoEntries = async (req, res) => {};
+
+export const sdDeoApplications = async (req, res) => {};
