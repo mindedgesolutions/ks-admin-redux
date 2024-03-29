@@ -31,7 +31,7 @@ export { default as UpdateProfile } from "./application/admin/profile/UpdateProf
 export { default as ChangePassword } from "./application/admin/profile/ChangePassword";
 export { default as AdminNotifications } from "./application/admin/profile/AdminNotifications";
 export { default as AllReports } from "./application/admin/reports/AllReports";
-export { default as AllApplications } from "./application/admin/reports/AllApplications";
+export { default as AllApplications } from "./application/admin/application/AllApplications";
 export { default as BskApplicationStatus } from "./application/admin/reports/bsk/BskApplicationStatus";
 export { default as DsApplicationStatus } from "./application/admin/reports/ds/DsApplicationStatus";
 export { default as DsDeo } from "./application/admin/reports/ds/DsDeo";
@@ -50,7 +50,7 @@ export { default as AnalysisRuralUrban } from "./application/admin/reports/analy
 export { default as AnalysisDestination } from "./application/admin/reports/analysis/AnalysisDestination";
 export { default as SsjsApplicationStatus } from "./application/admin/reports/ssjs/SsjsApplicationStatus";
 export { default as SsjsDeo } from "./application/admin/reports/ssjs/SsjsDeo";
-export { default as SearchApplication } from "./application/admin/SearchApplication";
+export { default as SearchApplication } from "./application/admin/application/SearchApplication";
 export { default as DsDeoList } from "./application/admin/reports/ds/DsDeoList";
 export { default as DsDeoApplicationList } from "./application/admin/reports/ds/DsDeoApplicationList";
 // Admin related ends ------
